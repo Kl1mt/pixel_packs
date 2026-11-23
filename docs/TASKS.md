@@ -12,7 +12,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T01 | Monorepo scaffold & tooling | T00 | done |
 | T02 | Game rules core (odds, pack roll, pity, scores) | T01 | done |
 | T03 | Card set design: Mossgrove & Starhollow (26 cards) | T02 | done |
-| T04 | PixelLab pipeline + style anchors | T01, T03 | todo |
+| T04 | PixelLab pipeline + style anchors | T01, T03 | done |
 | T05 | Card art batch | T04 | todo |
 | T06 | Frames, packs, UI art + style tile | T04 | todo |
 | T07 | Client design system & app shell | T06 | todo |
@@ -131,6 +131,33 @@ Docs: §19
 - **Palettes**: the master palette (~32 colours) plus Mossgrove and Starhollow sub-palettes.
 - **Style anchors**: generate 3–4 candidates per realm (e.g. 1 Common + 1 Legendary, a few variations each). The **user picks** the anchors.
 - **Done when**: the anchors are approved and committed, the manifest shows the spend, and the handoff notes record the exact `style_description` and parameters.
+- **Handoff notes (2026-11-23)**:
+  - **Spend**: 40 of 40 generations (4 × `/generate-image-v2` at 10 each). PixelLab balance went from 1163 to 1123. Everything is logged in `tools/artgen/manifest.json` (`pnpm --filter @pixel-packs/artgen start spend`).
+  - **Budget finding (open in GDD §27)**: the Pro image endpoints charge 10 generations **per call** (16 candidates of one subject at 64×64), not per image. T05's 22 remaining cards therefore need ≈220 generations (+10 per retry), not ≤ 70. Settle T05's budget with the user before it starts.
+  - **Tool**: `tools/artgen` (see its README).
+    - Commands: `balance`, `run <spec> --budget n [--only a,b] [--dry-run]`, `import`, `gallery` (local server on :5180; approve/reject writes the manifest), `export-gallery`, `review`, `promote` (copies an approved candidate, never overwrites), `spend`.
+    - Code: `src/api/` (client with retry/backoff and job polling, Zod schemas, `ENDPOINT_COST`), `spec.ts`, `manifest.ts`, `run.ts`, `prompt.ts` (the §19 template), `png.ts` (stats + numbered contact sheets), `gallery/`, `anchors.ts`.
+    - The start script sets `NODE_USE_ENV_PROXY=1` so Node's `fetch` goes through the cloud proxy that injects the key. Locally, `PIXELLAB_API_KEY` is sent instead.
+  - **Palettes**: `packages/shared/src/config/palettes.ts` holds `MASTER_PALETTE` (32 named colours), `REALM_PALETTES` (16 each for Mossgrove and Starhollow), `masterPaletteHex()` and `realmPaletteHex(realm)`. T07 can build its tokens from it.
+  - **Anchors** (user picks A1, A4, B5, C2, C7, D5, D14): `tools/artgen/anchors/<realm>/*.png`, listed in `tools/artgen/anchors.json`.
+    - Mossgrove: Burr Hoglet #1 and #4, Grandmother Morel #5.
+    - Starhollow: Yawning Dormouse #2 and #7, Lady Lunamoth #5 and #14.
+    - The first pick of each card is also its final card art: `apps/client/public/assets/cards/{MOS-003,MOS-012,STA-003,STA-012}.png`. T05 therefore has 22 cards left.
+    - Lunamoth #14 has 7 opaque pixels on its right edge (a wing tip is clipped). The user kept it as a style reference, and it is not used as card art.
+    - The candidates were made with `/generate-image-v2` at 64×64, `no_background: true`, the realm palette as `target_palette` and the §19 prompt template. Seeds: Hoglet 1101, Morel 1112, Dormouse 1203, Lunamoth 1212.
+    - The Hoglet call was a manual probe. It sent the same Mossgrove colours in a different order, with the palette name "Mossgrove" and `style_options` (ignored without a style image). It is recorded with the exact body that was sent.
+  - **T05 parameters** (from `anchors.json`):
+    - Endpoint `/generate-with-style-v2`, one call per card. The output is 64×64 (it follows the anchors).
+    - `style_images`: that realm's anchors (3 for Mossgrove, 4 for Starhollow; the API allows at most 4).
+    - `target_palette`: `realmPaletteHex(realm)`, sent with the realm palette's `name`.
+    - `no_background: true`.
+    - `description`: `cardArtPrompt(card.artPrompt)`.
+    - A recorded seed per job.
+    - `style_description` (exact text):
+      > Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.
+  - **Baseline**: the art doesn't share one feet baseline yet. The bottom opaque row is y = 54 for Hoglet and y = 61 for the others. T05/T07 should align the art to a common baseline when placing it in the frame (e.g. bottom-align the bbox), not regenerate it.
+  - **Repo contents**: all 64 candidates and their contact sheets stay in `tools/artgen/candidates/anchors/` (≈560 KB) so the manifest's review history resolves.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` pass.
 
 ### T05 — Card art batch · M · budget ≤ 70
 Docs: §19
