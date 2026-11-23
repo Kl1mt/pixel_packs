@@ -521,6 +521,38 @@
           "review": "rejected"
         }
       ]
+    },
+    {
+      "id": "t06/icon-gold",
+      "spec": "t06",
+      "job": "icon-gold",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a single round gold coin with a small embossed acorn, slight 3/4 tilt, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6041,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6041,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:02:07.899Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-gold/01.png",
+          "review": "pending"
+        }
+      ]
     }
   ]
 }
