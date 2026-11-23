@@ -18,6 +18,7 @@ const app = await buildApp(
     mailer: createConsoleMailer(),
     appOrigin: config.APP_ORIGIN,
     cookieSecure: config.COOKIE_SECURE,
+    allowDevOverrides: config.NODE_ENV !== 'production',
   },
   { logger: { level: config.LOG_LEVEL } },
 );

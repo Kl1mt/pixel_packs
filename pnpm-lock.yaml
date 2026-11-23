@@ -111,6 +111,16 @@ importers:
         version: 4.6.7
 
   tools/admin:
+    dependencies:
+      '@pixel-packs/server':
+        specifier: workspace:*
+        version: link:../../apps/server
+      '@pixel-packs/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
       tsx:
         specifier: ^4.23.15
