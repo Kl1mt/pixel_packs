@@ -384,7 +384,7 @@ Docs: §5, §7, §16
   - Design decisions are in GDD §29 (T12 rows).
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (303 tests), client `build` (scene is its own chunk) and client `e2e` (12 tests, 2 new in `e2e/opening.spec.ts`: drag tear → flips → Reveal all → results → revealed; Starhollow click fallback → reload → Resume reveal → Skip; free pack, buying, `/debug` forcing → Epic Void featured with live shader).
 
-### T13 — Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers · L · budget ≤ 20 (VFX)
+### T13 — Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers · L · budget ≤ 20 (VFX) · done
 Docs: §5, §6, §7
 - **Starhollow theme**: the moon clasp turns, stardust swirls.
 - **Rarity moments**:
@@ -394,6 +394,18 @@ Docs: §5, §6, §7
 - **Variant stingers**: Foil glint, Prismatic rainbow wash, Void implosion, Glitch tear + "ERR_LUCK_OVERFLOW".
 - Reduced-effects versions of all of the above.
 - **Done when**: every rarity × variant can be forced and has been reviewed with screenshots.
+- **Handoff notes (2026-11-23)**:
+  - **PixelLab: 4 generations** (balance 764 → 760), all `create-image-pixflux`, master palette, first candidates approved (spec `tools/artgen/specs/t13.json`, manifest `t13/*`): `public/assets/moments/crest-{mossgrove,starhollow}.png` (32×32) and `vignette-{umbra,stump}.png` (64×64). pixflux costs 1 at 64×64 too. The moon clasp, rays, cutscene skies, shockwave and stingers are drawn in code. T20 can reuse the crests for the frame socket.
+  - **Screenshots** (`e2e/moments.spec.ts` rewrites the PNGs; frames are held with `?at=`, so they're stable): `docs/opening/moments/` — `legendary-{1-rays,2-descend,3-crest}`, `mythic-{1-takeover,2-freeze,3-starhollow-eclipse,3-mossgrove-bloom,4-shockwave,5-crest}`, `stinger-{foil,prismatic,void,glitch}`, `reduced-{legendary,mythic,glitch}`, `starhollow-tear{,-clasp,-burst}`. GIFs (made by hand from live screenshot frames, not by e2e): `legendary`, `mythic-{starhollow,mossgrove}`, `stinger-{foil,prismatic,void,glitch}`, `starhollow-tear`.
+  - **Timeline** (`opening/moment.ts`, pure + tested): `momentPlan(card, reduced)` → beats with durations (Legendary `dim rays descend crest`; Mythic `takeover freeze cutscene shockwave descend crest`; then the variant's stinger), `beatAt(plan, ms)`, `cardShown()` (the card is hidden until `descend`). Common–Epic normal cards have no moment, so their flip stays quick.
+  - **Drawing**: `momentScene.ts` (engine: two canvases at `CARD_SCALE`, back under the spotlight card and front over it, a `PixelBuffer` framebuffer blitted per frame; `frozenAt` holds a frame), `momentFx.ts` (dim, god-rays, shockwave, foil glint, rainbow wash, void implosion, glitch noise), `cutscenes.ts` (sprites from PNGs trimmed to their opaque box, crest burst, the two Mythic cutscenes, code fallbacks if art is missing), `pixels.ts` (framebuffer, Bayer dither, seeded RNG, midpoint ring). No alpha anywhere: "half dark" is a dither, so every pixel is a palette colour.
+  - **React**: `RevealMoment.tsx` (canvases, "Skip animation" — also a tap anywhere —, the ERR_LUCK_OVERFLOW banner, an aria-live label) mounted by `RevealStage` for the current card; the figure gets `data-arrival waiting|arriving|landed` (CSS `descend-spin`), `.reveal` gets `data-beat` (CSS camera shake, Glitch UI corruption, all off when `data-reduced`). `RevealStage` reports `onBusy`, and `OpeningScene` pauses "Reveal all" while a moment plays; Flip / Reveal all / See results are disabled meanwhile. Styles in `opening/moment.css`.
+  - **Starhollow** (`opening/starhollow.ts`, `STARHOLLOW_THEME` in `themes.ts`): `claspPixels()` redraws the satchel's moon medallion (centre measured on the sprite: 33.5, 42) turning ¾ round with the tear, full moon once open; `Stardust` orbits the pack and flies out on the burst. `PackTheme` gained `clasp` and `stardust`. `packMood()` now returns `mythic` too (harder shake, rose-gold leak).
+  - **Moment lab** `/debug/moments` (public, lazy, `pages/MomentLab.tsx` + `momentLabParams.ts`): `scene=reveal|tear`, `rarity`, `variant`, `realm`, `fx=settings|full|reduced`, `at` (ms, -1 = live), Replay. It fakes an opening locally; real forcing is still `/debug` "Dev forcing", which covers every rarity × variant.
+  - **For T14**: sound hooks are the beats — `RevealMoment` `onBeat` (dim/takeover = swell, rays, descend = whoosh, crest = burst, freeze = tick, shockwave = boom, and one per stinger); the Starhollow clasp turn is the tear progress (`onProgress`).
+  - **Not done / for later**: the other three realms' Mythic cutscenes and crests (they fall back to the Starhollow sky and a code crest) belong with those realms; the Mythic pack's staged opening is still T21. The T12 questions (vine density, results layout) were left alone.
+  - Design decisions are in GDD §29 (T13 rows).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (331 tests), client `build` and `e2e` (23 tests, 4 new: key frames full + reduced with a stillness check, the Starhollow tear, a live moment + skip, a forced Mythic Glitch in a real pack holding "Reveal all").
 
 ### T14 — Audio · M · budget ≤ 40
 Docs: §20

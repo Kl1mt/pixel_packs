@@ -4813,6 +4813,140 @@
           "review": "pending"
         }
       ]
+    },
+    {
+      "id": "t13/crest-mossgrove",
+      "spec": "t13",
+      "job": "crest-mossgrove",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "round heraldic medallion crest of a cozy mossy forest realm: a carved oak wood ring framing a single bright green leaf with a tiny mushroom, front view, centered, symmetric, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 13001,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail"
+      },
+      "seed": 13001,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T21:29:10.373Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t13/crest-mossgrove/01.png",
+          "review": "approved",
+          "note": "T13 moment art, first candidate"
+        }
+      ]
+    },
+    {
+      "id": "t13/crest-starhollow",
+      "spec": "t13",
+      "job": "crest-starhollow",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "round heraldic medallion crest of a sleepy night realm: a silver ring framing a pale crescent moon and two tiny stars on deep indigo, front view, centered, symmetric, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 13002,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail"
+      },
+      "seed": 13002,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T21:29:20.123Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t13/crest-starhollow/01.png",
+          "review": "approved",
+          "note": "T13 moment art, first candidate"
+        }
+      ]
+    },
+    {
+      "id": "t13/vignette-umbra",
+      "spec": "t13",
+      "job": "vignette-umbra",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "a huge round dark indigo bear curled up asleep on the ground, side view, eyes closed, peaceful, a few tiny silver stars in its fur, low and wide silhouette filling the width, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 64,
+          "height": 64
+        },
+        "seed": 13011,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "view": "side"
+      },
+      "seed": 13011,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T21:29:31.704Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t13/vignette-umbra/01.png",
+          "review": "approved",
+          "note": "T13 moment art, first candidate"
+        }
+      ]
+    },
+    {
+      "id": "t13/vignette-stump",
+      "spec": "t13",
+      "job": "vignette-stump",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "a wide old hollow tree stump house with a small round wooden door and a tiny lit window, moss and little mushrooms on top, roots spreading at the base, side view, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 64,
+          "height": 64
+        },
+        "seed": 13012,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "medium detail",
+        "view": "side"
+      },
+      "seed": 13012,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T21:29:45.366Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t13/vignette-stump/01.png",
+          "review": "approved",
+          "note": "T13 moment art, first candidate"
+        }
+      ]
     }
   ]
 }

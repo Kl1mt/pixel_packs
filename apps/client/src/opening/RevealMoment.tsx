@@ -6,7 +6,16 @@ import { MomentScene } from './momentScene.js';
 import './moment.css';
 
 /** Generated moment art in `public/assets/moments/` (T13); missing art is drawn in code. */
-const MOMENT_ART: Partial<Record<Realm, { crest?: string; vignette?: string }>> = {};
+const MOMENT_ART: Partial<Record<Realm, { crest?: string; vignette?: string }>> = {
+  mossgrove: {
+    crest: '/assets/moments/crest-mossgrove.png',
+    vignette: '/assets/moments/vignette-stump.png',
+  },
+  starhollow: {
+    crest: '/assets/moments/crest-starhollow.png',
+    vignette: '/assets/moments/vignette-umbra.png',
+  },
+};
 
 const loadSprite = async (src: string | undefined) => {
   if (!src) return null;

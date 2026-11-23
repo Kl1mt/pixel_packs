@@ -32,7 +32,17 @@ export function spriteFrom(img: HTMLImageElement): Sprite | null {
       const hex = `#${[d[i], d[i + 1], d[i + 2]].map((v) => (v ?? 0).toString(16).padStart(2, '0')).join('')}`;
       pixels.push({ x, y, c: rgba(hex) });
     }
-  return { w: c.width, h: c.height, pixels };
+  return trimmed(pixels);
+}
+
+/** Crops a sprite to its opaque pixels, so it can stand on the ground by its real feet. */
+function trimmed(pixels: SpritePixel[]): Sprite | null {
+  if (pixels.length === 0) return null;
+  const x0 = Math.min(...pixels.map((p) => p.x));
+  const y0 = Math.min(...pixels.map((p) => p.y));
+  const w = Math.max(...pixels.map((p) => p.x)) - x0 + 1;
+  const h = Math.max(...pixels.map((p) => p.y)) - y0 + 1;
+  return { w, h, pixels: pixels.map((p) => ({ ...p, x: p.x - x0, y: p.y - y0 })) };
 }
 
 export function drawSprite(buf: PixelBuffer, s: Sprite, x: number, y: number): void {
@@ -131,11 +141,13 @@ function eclipse(
   still: boolean,
   art: RealmArt,
 ): void {
+  // Night above, a dithered glow of indigo and periwinkle down to the horizon.
   for (let y = r.y; y < r.y + r.h; y++) {
     const band = (y - r.y) / r.h;
-    const col = band < 0.45 ? C.night : band < 0.7 ? C.indigo : C.periwinkle;
+    const a = Math.min(1, Math.max(0, (band - 0.3) / 0.3));
+    const b = Math.min(1, Math.max(0, (band - 0.62) / 0.2));
     for (let x = r.x; x < r.x + r.w; x++)
-      buf.set(x, y, dithered(x, y, band < 0.45 ? 1 : band < 0.55 ? 0.5 : 1) ? col : C.night);
+      buf.set(x, y, dithered(x, y, b) ? C.periwinkle : dithered(x, y, a) ? C.indigo : C.night);
   }
   const rnd = seeded(3);
   for (let i = 0; i < 40; i++) {
@@ -176,7 +188,7 @@ function eclipse(
   }
   const ground = hills(buf, r, C.indigo, C.night, C.periwinkle);
   const bear = art.vignette;
-  if (bear) drawSprite(buf, bear, Math.round(moon.x - bear.w / 2), ground + 10 - bear.h);
+  if (bear) drawSprite(buf, bear, Math.round(moon.x - bear.w / 2), ground + 6 - bear.h);
   else sleepingLump(buf, moon.x, ground + 4);
   if (!still && Math.floor(t / 500) % 2 === 0)
     sparkle(buf, moon.x + 26, ground - 18, 1, C.lavender);
@@ -221,7 +233,7 @@ function bloom(
       buf.set(x, y, i > reach - 3 ? C.glow : C.lichen);
     }
   const stump = art.vignette;
-  const top = stump ? ground + 8 - stump.h : ground - 26;
+  const top = stump ? ground + 6 - stump.h : ground - 26;
   if (stump) drawSprite(buf, stump, Math.round(cx - stump.w / 2), top);
   else
     for (let y = top; y < ground + 6; y++)
