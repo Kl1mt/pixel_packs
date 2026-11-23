@@ -70,6 +70,21 @@ const UiAssetJob = JobBase.extend({
     height: z.number().int().min(192).max(688),
   }),
   elements: z.array(z.string()).optional(),
+  /** Shape template in editor coords (longer side 0–512), passed through as `pieces`. */
+  pieces: z
+    .array(
+      z.object({
+        id: z.string(),
+        kind: z.literal('rounded_rect'),
+        label: z.string().optional(),
+        x: z.number(),
+        y: z.number(),
+        w: z.number(),
+        h: z.number(),
+        radius: z.number().optional(),
+      }),
+    )
+    .optional(),
   styleImage: z.string().optional(),
 });
 

@@ -133,6 +133,18 @@ export interface UiAssetBody {
   description: string;
   image_size: { width: number; height: number };
   elements?: string[] | undefined;
+  pieces?:
+    | {
+        id: string;
+        kind: 'rounded_rect';
+        label?: string | undefined;
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+        radius?: number | undefined;
+      }[]
+    | undefined;
   color_palette?: string | undefined;
   target_palette?: TargetPalette | undefined;
   style_image?: ApiImage | undefined;

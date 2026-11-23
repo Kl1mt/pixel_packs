@@ -145,6 +145,7 @@ export async function buildRequest(job: JobSpec): Promise<BuiltRequest> {
         ...common,
         image_size: job.size,
         elements: job.elements,
+        pieces: job.pieces,
         style_image: style?.image,
         name: job.id,
       };

@@ -11,6 +11,8 @@ import { promote } from './promote.js';
 import { planJobs, runSpec } from './run.js';
 import { loadSpec } from './spec.js';
 import { uiSplit } from './ui.js';
+import { composeT06, T06_PACK_NUMBERS } from './compose/t06.js';
+import { buildStyleTile } from './styleTile/build.js';
 
 const USAGE = `artgen <command>
   balance                                  show remaining PixelLab generations
@@ -22,6 +24,8 @@ const USAGE = `artgen <command>
   export-gallery <out.html>                read-only gallery with embedded images
   review <entry> <index> <approved|rejected|pending> [note]
   promote <entry> <index> <dest.png>       copy an approved candidate to its final path
+  compose-t06                              build T06's final frames/packs/UI/icons/font from candidates
+  style-tile                               write the static style tile page (apps/client/public/style-tile.html)
   ui-split <entry>                         split a create-ui-asset template into elements (free)
   spend                                    total generations logged in the manifest`;
 
@@ -133,6 +137,14 @@ async function main(argv: string[]): Promise<void> {
       if (!entryId || !index || !dest) throw new Error(USAGE);
       await promote(await readManifest(), entryId, Number(index), dest);
       log(`${entryId} #${index} → ${dest}`);
+      return;
+    }
+    case 'compose-t06': {
+      await composeT06(log);
+      return;
+    }
+    case 'style-tile': {
+      log(`wrote ${await buildStyleTile(T06_PACK_NUMBERS)}`);
       return;
     }
     case 'ui-split': {

@@ -74,6 +74,50 @@
       "outDir": "tools/artgen/candidates/t06/ui-template"
     },
     {
+      "id": "ui-pieces",
+      "endpoint": "create-ui-asset",
+      "palette": "master",
+      "seed": 6022,
+      "size": {
+        "width": 256,
+        "height": 256
+      },
+      "pieces": [
+        {
+          "id": "parchment",
+          "kind": "rounded_rect",
+          "label": "parchment panel",
+          "x": 16,
+          "y": 16,
+          "w": 232,
+          "h": 232,
+          "radius": 8
+        },
+        {
+          "id": "wood",
+          "kind": "rounded_rect",
+          "label": "wood panel",
+          "x": 264,
+          "y": 16,
+          "w": 232,
+          "h": 232,
+          "radius": 8
+        },
+        {
+          "id": "button",
+          "kind": "rounded_rect",
+          "label": "button",
+          "x": 16,
+          "y": 296,
+          "w": 160,
+          "h": 48,
+          "radius": 6
+        }
+      ],
+      "description": "cozy storybook fantasy game UI pieces in chunky pixel art, three separate pieces with empty centres: (1) parchment panel: cream parchment paper with a thin dark brown ink border and slightly worn edges; (2) wood panel: warm carved wood planks inside a darker wood frame with small brass corner rivets; (3) button: a chunky wooden button with a brass trim and a hard 2 px dark bottom edge. Muted earthy colours, 1 px dark plum outline, no text, no letters, no icons, no gradients, no glow",
+      "outDir": "tools/artgen/candidates/t06/ui-pieces"
+    },
+    {
       "id": "font-heading",
       "endpoint": "generate-font-pro",
       "seed": 6031,
@@ -202,6 +246,30 @@
       "detail": "low detail",
       "description": "game UI icon, a pointing hand cursor arrow, a small white glove with the index finger pointing up-left, as a mouse pointer, centered, bold simple shapes, cozy storybook pixel art, no text",
       "outDir": "tools/artgen/candidates/t06/icon-cursor"
+    },
+    {
+      "id": "button-states",
+      "endpoint": "ui-assets/states",
+      "palette": "master",
+      "seed": 6023,
+      "description": "rest/hover/pressed/disabled states of the ui-pieces button",
+      "elementIds": ["53713692-e53c-4b5a-818f-31ca11cdb8d7"],
+      "states": [
+        {
+          "name": "hover",
+          "description": "the same button, slightly lighter warm wood and a brighter brass trim highlight; same size and shape, no glow"
+        },
+        {
+          "name": "pressed",
+          "description": "pushed in: the face sits 2 px lower and the dark bottom edge is only 1 px thick, wood a little darker; same outline and size"
+        },
+        {
+          "name": "disabled",
+          "description": "greyed, faded wood with dull grey-brown trim, lower contrast; same size and shape"
+        }
+      ],
+      "gridSide": 256,
+      "outDir": "tools/artgen/candidates/t06/button-states"
     }
   ]
 }
