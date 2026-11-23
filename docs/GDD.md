@@ -84,6 +84,10 @@ Lore frame: the **Wandering Post**, a courier service of moths and messenger bir
 
 Each realm also has a sub-palette (§19), a village building (§11) and realm battle bonuses (§10).
 
+**Realm lore (M1 realms)**
+- **Mossgrove**: A deep, damp old forest where the ground is soft with moss and every stump is somebody's house. Mossgrovers are slow to anger and quick to mend: snails carry gardens, hedgehogs knit thorny jumpers, and mushrooms hum things back to health. The Wandering Post leaves its packs at the Hollow Stump, wrapped in vines that unwrap for the right paws.
+- **Starhollow**: A valley where it is always a little after bedtime. Moths read by lantern light, wisps drift between sleeping night beasts, and the stars are said to be the dreams of Umbra, the great bear asleep at the bottom of the Hollow. Nothing that fades here is truly gone, only dreaming — which is why Void cards are said to come from Starhollow's deepest dark.
+
 ## 4. Cards & set structure
 **Set 1 (name TBD) = 65 cards, 13 per realm**: 4 Common · 3 Uncommon · 2 Rare · 2 Epic · 1 Legendary · 1 Mythic.
 
@@ -489,3 +493,5 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T02: dusting a ★2/★3 copy gives its ★1-equivalents (×3/×9) times the ★1 value, so fusing never changes dust value |
 | 2026-11-23 | T02: the collection score's +50 % for ★3 is rounded half up per entry (scores stay integers) |
 | 2026-11-23 | T02: the pack RNG is Web Crypto `getRandomValues` with rejection sampling (same guarantee as `crypto.randomInt`, and the shared package stays isomorphic) |
+| 2026-11-23 | T03: in M1 a card's base ATK + HP equals its rarity's power budget exactly; abilities cost nothing until the M4 cost table (which may shift stats) |
+| 2026-11-23 | T03: ability semantics — shield N absorbs the next N damage; thorns N deals N back to each attacker; regen N heals N at the end of every tick; weaken lowers ATK (not below 0); buffHp raises max and current HP; heal never exceeds max HP. Damage/weaken only target enemies, all other effects only allies or self |
