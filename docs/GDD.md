@@ -377,13 +377,14 @@ Every step can be skipped. In scripted packs only the forced slot is scripted; e
 - Budget in generations: M1 ≈ 450 (T05 card art ≤ 260, see §29) · M2 ≈ 250 · M4 ≈ 350 · M5 ≈ 150, so ~1 190 in total against 1 163 left on 2026-11-23. Whether the allotment renews monthly is still open (§27).
 
 ## 20. Audio
-- **Music** (`/music`, instrumental, looped with `/music/{id}/loop`), in a cozy lo-fi chiptune style:
+- **Music**, instrumental and looped, in a cozy lo-fi chiptune style:
   - M1: home, binder, pack opening (a base loop plus rarity layers).
   - Later: battle, village, per-realm themes.
-- **SFX** (`/sound-effects`):
+- **SFX**:
   - Pack opening: tear, card slide, flip, 6 rarity stingers, 4 variant stingers.
   - UI and rewards: button hover/press, coin/gem/dust gain, fusion, error.
-- Playback uses Howler.js with audio sprites, separate music and SFX volumes, and mute. Audio starts after the first user interaction (browser autoplay rules).
+- **Source (T14)**: PixelLab's `/music` and `/sound-effects` need a tier 2 plan (we are on tier 1), so M1 audio is **written in code**. Music is a Web Audio chiptune synth playing tracks written as data (`apps/client/src/audio/music/`). SFX are rendered offline by artgen's sfxr-style synth (`tools/artgen/src/sfx/synth/`) into one sprite. Any sound or track can later be swapped for a PixelLab or recorded file without touching the hooks (§29).
+- Playback uses Howler.js with one SFX audio sprite (`/assets/audio/sfx.{webm,mp3}`), separate master, music and SFX volumes, and mute. Audio starts after the first user interaction (browser autoplay rules).
 
 ## 21. Tech architecture
 - **Monorepo** (pnpm workspaces, TypeScript strict):
@@ -447,7 +448,7 @@ The task breakdown is in `docs/TASKS.md`.
 **Open questions**
 - Game name and the name of Set 1.
 - Does the PixelLab allotment renew monthly?
-- Do PixelLab's terms allow commercial use of the generated art and audio? (Check before monetising.)
+- Do PixelLab's terms allow commercial use of the generated art? (Check before monetising.) M1 audio is our own code-synth (T14), so this only matters for audio if PixelLab audio is used later (it needs a tier 2 plan).
 - Which payment provider?
 - Loot-box rules per region: odds disclosure is covered; age ratings and regional restrictions are not yet.
 - Privacy policy and imprint for the public launch.
@@ -564,3 +565,5 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T16: the five starter cards are the commons Pebble Snail, Pillow Wisp, Burr Hoglet, Dusk Moth and Button Cap (3 Mossgrove + 2 Starhollow), a caravan front → back: shield tank, faint-buffer, thorns, enemy-weakener, back-row healer. Plain ★1, no stamp, account-bound; granted once, when the player reaches the starter step or skips past it |
 | 2026-11-23 | T16: skipping: the courier has "Skip", the scripted packs "Save it for later" (both packs stay on the shelf and stay scripted whenever opened), the tour "Skip the tour", and "Skip the welcome" ends the whole flow (starter cards still granted). The courier is the Mail Moth (STA-008) art on a parchment letter; no new art |
 | 2026-11-23 | T16: Home = the satchel (realm packs with counts + "Open packs" → Packs), the free-pack timer (big "Ready"/countdown, 16-segment stepped bar, "Take <realm>"), the daily post (7 tiles, claimed ones stamped "Got it") and the purse. Right after onboarding the timer gets a dashed frame and an "Every 8 hours!" note (3 small nudges). Quests and the season bar wait for their milestones |
+| 2026-11-23 | T14: PixelLab audio needs a tier 2 plan (`/music` per its docs; `/sound-effects` answered 403 although the docs say tier 1), so M1 music and SFX are written in code: a Web Audio chiptune synth for music (home loop 84 bpm F major, opening loop 100 bpm D minor with `epic` and `golden` layers by the pack's best rarity) and an offline sfxr-style synth for the SFX (§20's 20 plus 7 for T13's moments and tears) (rendered by `artgen sfx-synth` into one Howler sprite). 0 generations spent. The PixelLab path (`artgen sfx`, `sfx-sprite`) is kept for a later plan upgrade. The user has not yet chosen between this and upgrading the plan |
+| 2026-11-23 | T14: settings gain `muted` (mute keeps the volume levels). UI sounds come from one delegated listener for `.btn`, nav links and `[data-sound="press"]` (hover only for mouse pointers, throttled). Flips play flip → rarity stinger (+90 ms); T13's moment beats carry the rest (swell, rays, whoosh, tick, boom; the Legendary/Mythic stinger at the crest; variant stingers on their beat). The tear clicks the Starhollow clasp or rustles the Mossgrove vines at each quarter. "Skip" is silent. Currency gains (gold, gems, dust) play their sound whenever the wallet goes up. Fusion has its sound but no event until fusion exists |

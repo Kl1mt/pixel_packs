@@ -86,6 +86,11 @@ Written in T04 (2026-11-23) from `https://api.pixellab.ai/v2/llms.txt`, selected
 | `POST /create-character-pro` | Pro character redraw | 10 / 15 / 25 by art size |
 | `/vfx` | battle VFX | look up before use |
 
+## Audio (T14) — needs tier 2
+- `POST /sound-effects` `{ prompt, seconds 0.5–30, name? }` → `202 { background_job_id, quoted_generations, sound_effect: { id } }`. Poll `GET /sound-effects/{id}` until `status` is `completed` (WAV at `audio_url`, no auth, plus `duration_ms`) or `failed`. Documented cost: 0.614 generations per second, rounded up (≤1.6 s → 1, 3.2 s → 2, 10 s → 7, 30 s → 19).
+- `POST /music` `{ style, instrumental, length_s?, bpm?, exclude? }` → two takes, 10 generations. `POST /music/{id}/loop` → two looping takes with `loop_start_s` / `loop_end_s`, 4 generations.
+- **Measured (2026-11-23)**: on our Tier 1 plan, `POST /sound-effects` answers `403 {"detail":"Music and sound effects need a tier 2 subscription or higher"}`, although its docs say tier 1. Nothing is charged. So M1 audio is synthesised in code (GDD §20, §29). `artgen sfx` / `sfx-sprite` (spec `tools/artgen/specs/t14-sfx.json`) are ready for when the plan allows it.
+
 ## Budget implications (found in T04)
 - The GDD §19 budget assumed about 1 generation per image. The Pro image endpoints cost **10 per call** (16 candidates of one subject). So:
   - **card art costs about 10 per card**: T05's 22 remaining cards ≈ 220 generations, not 70;

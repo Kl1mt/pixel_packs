@@ -30,7 +30,9 @@ let n = 0;
 /** A fresh, unique player identity. */
 export function newIdentity() {
   n += 1;
-  const tag = `${Date.now().toString(36)}${String(n)}`;
+  // Hex only: the username blocklist reads digits as letters (5→s, 4→a…) and matches
+  // substrings, so a base-36 tag could spell a blocked word; a–f plus those digits cannot.
+  const tag = `${Date.now().toString(16)}${String(n)}`;
   return {
     email: `e2e${tag}@example.com`,
     username: `e2e_${tag}`.slice(0, 20),

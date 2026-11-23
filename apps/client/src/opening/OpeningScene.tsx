@@ -1,12 +1,20 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
-import type { PackOpening } from '@pixel-packs/shared';
+import type { OpenedCard, PackOpening } from '@pixel-packs/shared';
+import { audio, useMusic } from '../audio/audio.js';
+import { flipSounds, moodLayers } from '../audio/events.js';
 import { economyApi } from '../economy/api.js';
 import { economyStore } from '../economy/useEconomy.js';
 import { useReducedCardEffects } from '../render/CardStage.js';
 import { RevealStage } from './RevealStage.js';
 import { SummaryStage } from './SummaryStage.js';
 import { TearStage } from './TearStage.js';
-import { initialReveal, packMood, revealReducer, revealSequence } from './reveal.js';
+import {
+  initialReveal,
+  packMood,
+  revealReducer,
+  revealSequence,
+  type RevealState,
+} from './reveal.js';
 import { packArt, themeFor } from './themes.js';
 import './opening.css';
 
@@ -38,6 +46,8 @@ export function OpeningScene(p: OpeningSceneProps) {
   const root = useRef<HTMLDivElement>(null);
   const marked = useRef<string | null>(null);
   const [busy, setBusy] = useState(false);
+  useMusic('opening', moodLayers(packMood(opening)));
+  useOpeningSounds(state, sequence);
 
   useEffect(() => {
     root.current?.focus();
@@ -85,6 +95,7 @@ export function OpeningScene(p: OpeningSceneProps) {
           mood={packMood(opening)}
           reduced={reduced}
           onTorn={() => {
+            audio.play('open.tear');
             dispatch({ type: 'torn' });
           }}
         />
@@ -121,4 +132,20 @@ export function OpeningScene(p: OpeningSceneProps) {
       )}
     </div>
   );
+}
+
+/** SFX for the scene (GDD §20): the stack slides in, then each flip and its stingers. */
+function useOpeningSounds(state: RevealState, sequence: readonly OpenedCard[]) {
+  const shown = useRef(state.flipped);
+  useEffect(() => {
+    if (state.phase === 'reveal') audio.play('open.slide');
+  }, [state.phase]);
+  useEffect(() => {
+    const prev = shown.current;
+    shown.current = state.flipped;
+    // One flip at a time; "Skip" jumps to the end silently.
+    if (state.phase !== 'reveal' || state.flipped !== prev + 1) return;
+    const card = sequence[state.flipped - 1];
+    if (card) for (const [id, delay] of flipSounds(card)) audio.play(id, delay);
+  }, [state.phase, state.flipped, sequence]);
 }

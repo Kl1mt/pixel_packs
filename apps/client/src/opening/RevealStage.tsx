@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { audio } from '../audio/audio.js';
+import { beatSounds } from '../audio/events.js';
 import type { OpenedCard } from '@pixel-packs/shared';
 import { Button } from '../components/Button.js';
 import { Card, CardBack } from '../components/Card.js';
@@ -180,7 +182,10 @@ export function RevealStage(p: RevealStageProps) {
           reduced={p.reduced}
           frozenAt={p.momentFrozenAt}
           target={() => flip.current}
-          onBeat={setBeat}
+          onBeat={(at) => {
+            setBeat(at);
+            if (at) for (const id of beatSounds(at.beat, current)) audio.play(id);
+          }}
           onDone={() => {
             setBeat(null);
             setFinished((f) => new Set(f).add(current.slot));

@@ -103,7 +103,9 @@ let playerCounter = 0;
 /** Registers a fresh player and returns the logged-in client and the user id. */
 export async function newPlayer(app: FastifyInstance): Promise<{ c: Client; userId: string }> {
   playerCounter += 1;
-  const tag = `${Date.now().toString(36)}${playerCounter}`;
+  // Hex only: the username blocklist reads digits as letters (5→s, 4→a…) and matches
+  // substrings, so a base-36 tag could spell a blocked word; a–f plus those digits cannot.
+  const tag = `${Date.now().toString(16)}${playerCounter}`;
   const c = new Client(app);
   await c.csrf();
   const res = await c.post('/api/auth/register', {
