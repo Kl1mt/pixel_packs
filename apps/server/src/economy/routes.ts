@@ -5,7 +5,8 @@ import {
   ClaimFreePackRequestSchema,
   DustRequestSchema,
   OpenPackRequestSchema,
-  PullHistoryQuerySchema,
+  PullHistoryFilteredQuerySchema,
+  type CollectionResponse,
   type DustExtrasPreview,
   type DustResponse,
   type EconomyState,
@@ -17,7 +18,9 @@ import { requireAuth } from '../auth/plugin.js';
 import type { EconomyCtx } from './context.js';
 import { dustCopies, dustExtras, previewDustExtras } from './dust.js';
 import { oddsResponse } from './odds.js';
-import { markRevealed, openPack, pendingOpening, pullHistory } from './opening.js';
+import { collection } from './collection.js';
+import { pullHistory } from './history.js';
+import { markRevealed, openPack, pendingOpening } from './opening.js';
 import { buyPacks, claimCalendar, claimFreePack, economyState } from './state.js';
 
 /** Per-IP limits (GDD §22). */
@@ -76,9 +79,13 @@ export function registerEconomyRoutes(app: FastifyInstance, ctx: EconomyCtx): vo
 
   app.get('/api/packs/history', (req): Promise<PullHistoryResponse> => {
     const { user } = requireAuth(req);
-    const { limit: n, cursor } = PullHistoryQuerySchema.parse(req.query);
-    return pullHistory(ctx, user.id, n, cursor);
+    const { limit: n, cursor, ...filter } = PullHistoryFilteredQuerySchema.parse(req.query);
+    return pullHistory(ctx, user.id, n, cursor, filter);
   });
+
+  app.get('/api/cards', (req): Promise<CollectionResponse> =>
+    collection(ctx, requireAuth(req).user.id),
+  );
 
   app.post('/api/cards/dust', limit(LIMITS.mutate), (req): Promise<DustResponse> => {
     const { user } = requireAuth(req);
