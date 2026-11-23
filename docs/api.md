@@ -72,7 +72,19 @@ All routes except the odds need a session (`401 unauthorized`). Schemas: `packag
 - `EconomyState` = `{ wallet { gold, dust, gems }, packs [{ packTypeId, count }], freePack { stored, max, nextAt }, calendar { day 1–7, claimedToday, nextResetAt, rewards[7] }, pity [{ group, packsSinceLegendaryPlus, packsSinceMythic, legendaryHardPity, mythicSoftPityStart, mythicHardPity }], pendingOpeningId }`.
 - `opening` = `{ id, packTypeId, scripted, pityTrigger, cards[5] (slot order), revealOrder [slots], createdAt, revealedAt }`; each card is `{ slot, featured, cardId, realm, rarity, variant, userCardId, mintNumber, edition, isNew }`. The result is stored before the response, so the client animates a finished roll; on load, `pendingOpeningId` / `openings/pending` drives "Resume reveal", and the client posts `revealed` when the reveal ends.
 - A new account gets a starter satchel (one Mossgrove and one Starhollow pack) and one free pack ready. Its first two realm-pack openings are the scripted onboarding packs (`scripted: true`, no pity).
-- Every change writes `ledger` rows (`reason`: `starterSatchel`, `freePack`, `calendar`, `buyPack`, `openPack`, `pull`, `dust`, `dustExtras`, `admin:grant`).
+- Every change writes `ledger` rows (`reason`: `starterSatchel`, `starterCards`, `freePack`, `calendar`, `buyPack`, `openPack`, `pull`, `dust`, `dustExtras`, `admin:grant`).
+- `calendar.day`: before today's claim, the day the claim will pay; after it (`claimedToday`), the day just paid.
+
+### Onboarding (T16)
+Both need a session (`401`). Schemas: `packages/shared/src/api/onboarding.ts`. The stage lives on `users.onboarding_stage`; `scriptedPacksOpened` is `users.onboarding_step` (T08).
+
+| Method & path | Body | Success | Errors |
+|---|---|---|---|
+| `GET /api/onboarding` | — | `200 { stage, scriptedPacksOpened, starterCards }` | — |
+| `POST /api/onboarding/advance` | `{ stage }` | `200` the same shape; moves forward only (an earlier stage is a no-op) | `400 badRequest` |
+
+- `stage` is `courier → packs → tour → starter → done` (GDD §17). The client shows `/welcome` until `done`.
+- The first time a player reaches `starter` or `done` (skipping counts), the five account-bound starter cards (`STARTER_CARDS`, `rules/onboarding.ts`) are granted in one transaction: plain, ★1, no stamp, `source: 'starter'`, `accountBound: true`, ledger reason `starterCards`. `starterCards` lists them (in caravan order) from then on, else `null`. They are granted once per account, even after `pnpm admin reset-onboarding` (which sets the stage back to `courier` and the scripted packs to 0).
 
 ### Admin CLI (`tools/admin`)
 ```sh

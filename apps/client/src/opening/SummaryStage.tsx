@@ -13,6 +13,8 @@ export interface SummaryStageProps {
   opening: PackOpening;
   /** Another pack of the same type is in the inventory. */
   canOpenAnother: boolean;
+  /** Label of the leave button (onboarding says where it goes next). */
+  doneLabel?: string | undefined;
   onOpenAnother: () => void;
   onDone: () => void;
 }
@@ -31,6 +33,7 @@ const plural = (n: number, one: string, many: string) => `${String(n)} ${n === 1
 export function SummaryStage({
   opening,
   canOpenAnother,
+  doneLabel = 'Back to the shelf',
   onOpenAnother,
   onDone,
 }: SummaryStageProps) {
@@ -131,7 +134,7 @@ export function SummaryStage({
 
       <div className="summary__actions">
         {canOpenAnother && <Button onClick={onOpenAnother}>Open another</Button>}
-        <Button onClick={onDone}>Back to the shelf</Button>
+        <Button onClick={onDone}>{doneLabel}</Button>
       </div>
     </div>
   );

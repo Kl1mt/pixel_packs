@@ -18,7 +18,7 @@ import {
 const USAGE = `usage: pnpm admin <command> …
   grant <user> <gold|dust|gems> <amount> [note]   add currency (negative removes)
   grant-packs <user> <packTypeId> <count> [note]   e.g. realm:mossgrove, mythic
-  reset-onboarding <user>                          next two realm packs are scripted again
+  reset-onboarding <user>                          courier again, next two realm packs scripted
   odds-override <user> <packs> [rarity] [variant]  dev only; packs 0 clears it
 <user> is an email or a username.`;
 

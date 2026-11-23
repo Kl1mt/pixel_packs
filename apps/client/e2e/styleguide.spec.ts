@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { OUT, loggedIn, settle } from './helpers.js';
+import { OUT, loggedIn, settle, skipOnboarding } from './helpers.js';
 
 test('style guide renders the approved style-tile parts', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -20,6 +20,7 @@ test('style guide renders the approved style-tile parts', async ({ page }) => {
 test('app shell: navigation, routing and the phone layout', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await loggedIn(page);
+  await skipOnboarding(page);
   await page.goto('/');
   await settle(page);
   const nav = page.getByRole('navigation', { name: 'Main' });
@@ -28,10 +29,11 @@ test('app shell: navigation, routing and the phone layout', async ({ page }) => 
 
   await nav.getByRole('link', { name: 'Binder' }).click();
   await expect(page).toHaveURL(/\/binder$/);
-  await expect(page.getByRole('heading', { name: 'Nothing tucked in yet' })).toBeVisible();
+  // Onboarding (skipped) still hands out the starter cards: 3 on the Mossgrove page.
+  await expect(page.locator('.pocket--owned')).toHaveCount(3);
 
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Nothing tucked in yet' })).toBeVisible();
+  await expect(page.locator('.pocket--owned')).toHaveCount(3);
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
 

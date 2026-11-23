@@ -4,6 +4,7 @@ export * from './api/auth.js';
 export * from './api/economy.js';
 export * from './api/dev.js';
 export * from './api/collection.js';
+export * from './api/onboarding.js';
 export { isUsernameBlocked, normalizeUsername } from './api/usernameBlocklist.js';
 
 export * from './model/enums.js';
@@ -44,3 +45,4 @@ export * from './config/statDigits.js';
 export * from './config/badgeGlyphs.js';
 export { CARD_ART_DROP } from './data/cards/artLayout.js';
 export * from './rules/binder.js';
+export * from './rules/onboarding.js';

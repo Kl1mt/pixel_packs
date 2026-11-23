@@ -55,9 +55,15 @@ export async function grantPacks(
   });
 }
 
-/** Back to step 0: the next two realm packs are the scripted onboarding packs again. */
+/**
+ * Back to the start: the courier greets the player again and the next two realm packs
+ * are the scripted onboarding packs. Starter cards already granted are not granted twice.
+ */
 export async function resetOnboarding(db: Db, userId: string): Promise<void> {
-  await db.update(users).set({ onboardingStep: 0 }).where(eq(users.id, userId));
+  await db
+    .update(users)
+    .set({ onboardingStep: 0, onboardingStage: 'courier' })
+    .where(eq(users.id, userId));
 }
 
 export interface OddsOverride {

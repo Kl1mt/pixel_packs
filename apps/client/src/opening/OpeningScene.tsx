@@ -16,6 +16,8 @@ export interface OpeningSceneProps {
   resumed: boolean;
   packName: string;
   canOpenAnother: boolean;
+  /** Label of the results' leave button; defaults to "Back to the shelf". */
+  doneLabel?: string;
   onOpenAnother: () => void;
   onClose: () => void;
 }
@@ -109,6 +111,7 @@ export function OpeningScene(p: OpeningSceneProps) {
         <SummaryStage
           opening={opening}
           canOpenAnother={p.canOpenAnother}
+          doneLabel={p.doneLabel}
           onOpenAnother={p.onOpenAnother}
           onDone={p.onClose}
         />

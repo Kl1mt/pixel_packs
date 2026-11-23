@@ -24,7 +24,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T13 | Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers | T12 | todo |
 | T14 | Audio | T12 | todo |
 | T15 | Binder, card inspect & pull history | T10, T11 | todo |
-| T16 | Home & onboarding | T09, T12, T15 | todo |
+| T16 | Home & onboarding | T09, T12, T15 | done |
 | T17 | Character & idle-animation trial | T05 | todo |
 | T18 | M1 QA & polish | all M1 | todo |
 | T20 | Realm crest in the card crest socket | T11 | todo |
@@ -422,12 +422,25 @@ Docs: §9, §12
   - Design decisions are in GDD §29 (T15 rows). Open point for the user: the inspect 3D tilt (§12) vs. T11's "no 3D rotation" — kept to inspect only.
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (304 tests), client `build` and `e2e` (13 tests) pass.
 
-### T16 — Home & onboarding · M
+### T16 — Home & onboarding · M · done
 Docs: §16, §17
 - **Home screen**: Open Packs button, free-pack timer, daily calendar UI, wallet.
 - **Onboarding flow**: courier intro, 2 scripted packs, binder tour, 5 account-bound starter cards; every step skippable.
 - **E2E test**: a new user goes through onboarding to the home screen.
 - **Done when**: a new account gets from registering to the home screen in ≤ 90 s.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.** The courier is the Mail Moth card art (STA-008); everything else reuses packs, panels and cards.
+  - **Screenshots** (`pnpm --filter @pixel-packs/client e2e` rewrites them): `docs/onboarding/{courier,pack-1,tour-1,tour-2,starter-cards,home-welcome,home,home-claimed,home-phone}.png`. The E2E run takes ~10 s from "Sign up" to Home (limit 90 s).
+  - **API** (`docs/api.md` → Onboarding): `GET /api/onboarding`, `POST /api/onboarding/advance { stage }` (`apps/server/src/onboarding/`). Stages `courier → packs → tour → starter → done`, forward only, stored in `users.onboarding_stage` (migration `0003_wandering_vapor.sql`, plus `users.starter_cards_at`). Reaching `starter` or `done` grants the five account-bound starter cards once (ledger `starterCards`). `pnpm admin reset-onboarding` now also sets the stage back to `courier` (cards are never granted twice). `economy/collection.ts` exports `liveCopies(db, userId, where?)`.
+  - **Shared**: `api/onboarding.ts` (schemas, `ONBOARDING_STAGES`), `rules/onboarding.ts` (`STARTER_CARDS` in caravan order, `advanceStage`, `grantsStarterCards`; tested).
+  - **Client**:
+    - `onboarding/`: `WelcomePage` (lazy route `/welcome`; "Skip the welcome" ends the whole flow), `Courier` (3 lines, Next / Skip), `ScriptedPacks` (opens the next scripted pack in the T12 `OpeningScene`; "Save it for later" skips both packs, which stay on the shelf and stay scripted), `BinderTour` (mounted by `BinderPage` on `/binder?tour=1`: 2 parchment notes on `.binder__realms` and the first `.pocket--owned`, with a dashed frame; "Skip the tour"), `StarterCards`, `useOnboarding` (app-wide store, cleared with the economy store on user change), `api.ts`.
+    - `home/`: `FreePackTimer` (Ready / countdown, 16-segment bar, "Take <realm>", refreshes the economy when the timer runs out), `DailyCalendar` (7 tiles, "Open today's letter"), `format.ts` (`countdownText`, `timerFill`, `calendarTiles`; tested). `pages/HomePage.tsx` = satchel counter + Open packs, timer, calendar, purse; it redirects to `/welcome` until onboarding is done. `/?welcome=1` highlights the timer (§17 step 5).
+    - `OpeningScene` / `SummaryStage` take an optional `doneLabel` (default "Back to the shelf"). `economyApi.claimCalendar()` added.
+  - **E2E**: `e2e/onboarding.spec.ts` (full flow by UI with timing and scripted-pack checks; step-by-step skips; "Skip the welcome"; Home free pack + calendar + phone). `helpers.ts` has `apiPost` and `skipOnboarding`; the shell test skips onboarding first, and the auth test now expects a logged-in, not-yet-onboarded player to land on the welcome flow.
+  - **Not done** (later milestones per §16): quests and the season bar on Home.
+  - **For T13/T14**: the welcome flow uses `OpeningScene` unchanged apart from `doneLabel`, so new reveals and sounds show up in onboarding too.
+  - Design decisions are in GDD §29 (T16 rows).
 
 ### T17 — Character & idle-animation trial · M · budget ≤ 30
 Docs: §19
