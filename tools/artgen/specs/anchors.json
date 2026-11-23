@@ -1,0 +1,42 @@
+{
+  "id": "anchors",
+  "description": "T04 style-anchor candidates: one Common and one Legendary per M1 realm, 16 candidates per job (64×64 /generate-image-v2, realm palette).",
+  "jobs": [
+    {
+      "id": "mos-003-burr-hoglet",
+      "endpoint": "generate-image-v2",
+      "cardId": "MOS-003",
+      "palette": "mossgrove",
+      "seed": 1101,
+      "size": { "width": 64, "height": 64 },
+      "outDir": "tools/artgen/candidates/anchors/mos-003-burr-hoglet"
+    },
+    {
+      "id": "mos-012-grandmother-morel",
+      "endpoint": "generate-image-v2",
+      "cardId": "MOS-012",
+      "palette": "mossgrove",
+      "seed": 1112,
+      "size": { "width": 64, "height": 64 },
+      "outDir": "tools/artgen/candidates/anchors/mos-012-grandmother-morel"
+    },
+    {
+      "id": "sta-003-yawning-dormouse",
+      "endpoint": "generate-image-v2",
+      "cardId": "STA-003",
+      "palette": "starhollow",
+      "seed": 1203,
+      "size": { "width": 64, "height": 64 },
+      "outDir": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse"
+    },
+    {
+      "id": "sta-012-lady-lunamoth",
+      "endpoint": "generate-image-v2",
+      "cardId": "STA-012",
+      "palette": "starhollow",
+      "seed": 1212,
+      "size": { "width": 64, "height": 64 },
+      "outDir": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth"
+    }
+  ]
+}

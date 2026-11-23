@@ -9,6 +9,7 @@ export * from './model/card.js';
 export * from './model/pack.js';
 export * from './config/odds.js';
 export * from './config/power.js';
+export * from './config/palettes.js';
 export * from './config/economy.js';
 export * from './data/cards/index.js';
 export * from './rng/rng.js';

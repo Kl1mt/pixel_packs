@@ -1,0 +1,25 @@
+{
+  "approvedOn": "2026-11-23",
+  "endpoint": "generate-with-style-v2",
+  "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+  "noBackground": true,
+  "realms": {
+    "mossgrove": {
+      "palette": "mossgrove",
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ]
+    },
+    "starhollow": {
+      "palette": "starhollow",
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ]
+    }
+  }
+}

@@ -5,3 +5,5 @@ coverage/
 apps/server/drizzle/meta/
 # Hand-written docs keep their own layout (small diffs for tables and lists).
 *.md
+# Machine-written by tools/artgen.
+tools/artgen/manifest.json

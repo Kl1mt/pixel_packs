@@ -452,6 +452,7 @@ The task breakdown is in `docs/TASKS.md`.
 - Loot-box rules per region: odds disclosure is covered; age ratings and regional restrictions are not yet.
 - Privacy policy and imprint for the public launch.
 - Realm completion spread (econ-sim v0, T02): the medians hit the §8 targets (≈8 days for the 12 non-Mythic cards, ≈19 for the Mythic), but the p90 is ≈16 / 33 days, and crafting barely helps in M1 because only copies beyond 9 are dusted. Revisit when quests and the calendar are tuned.
+- **PixelLab budget per card (T04)**: `/generate-image-v2` and `/generate-with-style-v2` cost 10 generations per call (16 candidates of one subject at 64×64), not ~1 per image. Card art is therefore ≈10 per card (+10 per retry): T05 needs ≈220 for its 22 cards instead of ≤ 70, and the M1 estimate (≈260) is short by ≈150. Decide T05's budget (or a cheaper endpoint such as pixflux at 1 generation) before T05 starts. Costs: `docs/pixellab-api-notes.md`.
 - Behind the Cloudflare Tunnel (§24), the server must trust the proxy's client-IP header (Fastify `trustProxy`, `CF-Connecting-IP`), or every request shares one rate-limit bucket. Decide in the deploy task.
 
 **User to-dos** (when a task needs them)
@@ -511,3 +512,5 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T10: owned copies are never deleted; dusting sets `removed_at`. Account-bound (starter) copies can't be dusted. "Dust extras" counts every copy towards the 9 equivalents and dusts only plain copies beyond, lowest stars first. NEW marks only the first copy of a card the player didn't own |
 | 2026-11-23 | T10: pull history lists revealed openings only (no spoilers); "Resume reveal" serves the latest unrevealed one |
 | 2026-11-23 | T10: dev odds overrides (`tools/admin`) force the featured slot like a scripted pack (no pity) and are ignored in production |
+| 2026-11-23 | T04: style anchors are per realm — Mossgrove: Burr Hoglet ×2 + Grandmother Morel; Starhollow: Yawning Dormouse ×2 + Lady Lunamoth ×2 (user picks). Card art uses only its own realm's anchors as `style_images` (≤ 4), plus the shared `style_description` in `tools/artgen/anchors.json`. The first pick per anchor card is that card's final art |
+| 2026-11-23 | T04: master palette of 32 named colours, with 16-colour Mossgrove and Starhollow sub-palettes, in `packages/shared/src/config/palettes.ts`; sent as `target_palette` with the palette name |
