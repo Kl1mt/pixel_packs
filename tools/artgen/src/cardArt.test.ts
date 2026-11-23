@@ -14,7 +14,8 @@ describe('card art', async () => {
   const manifest = await readManifest();
   const approved = await Promise.all(
     manifest.entries
-      .flatMap((e) => e.outputs.filter((o) => o.review === 'approved'))
+      // Only images: approved outputs can also be other files (e.g. T06's font.ttf).
+      .flatMap((e) => e.outputs.filter((o) => o.review === 'approved' && o.file.endsWith('.png')))
       .map(async (o) => decodePng(await readFile(fromRepo(o.file)))),
   );
   const cards = CARD_CATALOG.filter((c) => ENABLED_REALMS.includes(c.realm));
