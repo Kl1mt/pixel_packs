@@ -114,6 +114,10 @@ importers:
         version: 4.23.15
 
   tools/econ-sim:
+    dependencies:
+      '@pixel-packs/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
     devDependencies:
       tsx:
         specifier: ^4.23.15
