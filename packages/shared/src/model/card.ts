@@ -30,6 +30,10 @@ export const AbilityTargetSchema = z.enum([
   'randomEnemy',
 ]);
 
+export type AbilityTrigger = z.infer<typeof AbilityTriggerSchema>;
+export type AbilityEffect = z.infer<typeof AbilityEffectSchema>;
+export type AbilityTarget = z.infer<typeof AbilityTargetSchema>;
+
 /** `every` (ticks) is required for `support` abilities and forbidden otherwise. */
 export const AbilitySchema = z
   .object({

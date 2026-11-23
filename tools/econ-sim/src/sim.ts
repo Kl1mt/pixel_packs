@@ -4,7 +4,7 @@ import {
   FRESH_PITY,
   MAX_EQUIVALENTS,
   buildCatalogIndex,
-  buildPlaceholderCatalog,
+  CARD_CATALOG,
   createSeededRng,
   dustValue,
   rollPack,
@@ -122,7 +122,7 @@ export function simulatePlayer(
 }
 
 export function simulate(params: SimParams): PlayerResult[] {
-  const catalog = buildPlaceholderCatalog(params.enabledRealms);
+  const catalog = CARD_CATALOG.filter((c) => params.enabledRealms.includes(c.realm));
   const index = buildCatalogIndex(catalog, params.enabledRealms);
   const realmCards = catalog.filter((c) => c.realm === params.realm && !c.flags.event);
   const rng = createSeededRng(params.seed);

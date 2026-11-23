@@ -11,7 +11,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T00 | Design docs & working agreement | — | done |
 | T01 | Monorepo scaffold & tooling | T00 | done |
 | T02 | Game rules core (odds, pack roll, pity, scores) | T01 | done |
-| T03 | Card set design: Mossgrove & Starhollow (26 cards) | T02 | todo |
+| T03 | Card set design: Mossgrove & Starhollow (26 cards) | T02 | done |
 | T04 | PixelLab pipeline + style anchors | T01, T03 | todo |
 | T05 | Card art batch | T04 | todo |
 | T06 | Frames, packs, UI art + style tile | T04 | todo |
@@ -97,7 +97,7 @@ Docs: §4, §5, §6, §7, §9 (dust values), §15, §17 (scripted packs)
     With the calendar at its low end (20 gold/day, 3.2 packs/day): 10 / 17 days for the 12, 21 / 37 days for all 13. So the §8 targets (≈1 week, Mythic ≈3 weeks) hold at the median, but the p90 is about twice the target, and crafting barely helps in M1 because "Dust extras" only dusts copies beyond 9 (≈2.4k dust by day 21 vs 12k for a Mythic). Worth a look when T10/M2 tune the calendar and quests (added to GDD §27).
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (63 tests; 100k-roll stats run in ~2 s) pass.
 
-### T03 — Card set design: Mossgrove & Starhollow · M
+### T03 — Card set design: Mossgrove & Starhollow · M · done
 Docs: §3, §4, §10 (ability semantics)
 - **Cards**: 26 cards (13 per realm, composition as in §4) in `packages/shared/src/data/cards/{mossgrove,starhollow}.ts`. Each card has:
   - name and rarity;
@@ -110,6 +110,15 @@ Docs: §3, §4, §10 (ability semantics)
 - **Lore**: a short blurb for each of the two realms in GDD §3.
 - **User approval**: present the list as a table (names, concepts, rarities) and get approval before any art is made.
 - **Done when**: tests pass and the user has approved the list.
+- **Handoff notes (2026-11-23)**:
+  - The user approved the 26-card list, the realm lore (now in GDD §3) and the two design decisions in GDD §29 (ATK + HP = power budget exactly in M1; ability semantics and enemy/ally target rule).
+  - Data: `packages/shared/src/data/cards/{mossgrove,starhollow}.ts` via `defineRealmCards()` (`define.ts` fills id, `set1`, realm and flags; every card is craftable, none are event cards). `CARD_CATALOG`, `MOSSGROVE_CARDS`, `STARHOLLOW_CARDS`, `SET_ID` are exported from the package root. `POWER_BUDGET` lives in `config/power.ts`.
+  - Rules text: `rules/rulesText.ts` — `abilityRulesText(ability)` (e.g. "When hurt: gain +1 ATK."), `cardRulesText(card)` (one line per ability), `isAbilityTargetValid()` and `KEYWORD_REMINDERS` (tooltip text for shield/thorns/regen/weaken). T11/T15 should render rules text from these, never hand-written strings.
+  - Tests: `data/cards/catalog.test.ts` (Zod parse, `buildCatalogIndex`, id numbering by rarity, unique names, power budget, valid targets, flavour ≤ 90, art prompt present and free of style words) and `rules/rulesText.test.ts`.
+  - `artPrompt` is the critter description only; T04/T05 wrap it in the GDD §19 template.
+  - `tools/econ-sim` now uses `CARD_CATALOG` instead of the placeholder catalog (results unchanged: 9/15 days median/p90 for the 12 non-Mythic cards, 19/33 for all 13). `buildPlaceholderCatalog()` stays for generic rule tests.
+  - Not done here (T10's job, per T08's notes): point `SERVER_CATALOG` in `apps/server/src/catalog.ts` at `CARD_CATALOG`.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (104 tests) pass.
 
 ### T04 — PixelLab pipeline + style anchors · L · budget ≤ 40
 Docs: §19
