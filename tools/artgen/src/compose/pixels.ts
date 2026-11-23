@@ -100,3 +100,16 @@ export function cropToMainBody(png: PNG): PNG {
   const cy = widest(spans(cols.height, rowEmpty));
   return cy ? crop(cols, 0, cy[0], cols.width, cy[1] - cy[0] + 1) : cols;
 }
+
+/** WCAG 2 contrast ratio between two colours (1–21). */
+export function contrastRatio(a: Rgba, b: Rgba): number {
+  const lum = ([r, g, bl]: Rgba) => {
+    const ch = (v: number) => {
+      const c = v / 255;
+      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    };
+    return 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(bl);
+  };
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return ((hi ?? 0) + 0.05) / ((lo ?? 0) + 0.05);
+}

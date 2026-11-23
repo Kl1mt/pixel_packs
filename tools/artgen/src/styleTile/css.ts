@@ -86,7 +86,7 @@ h2 { font-size: var(--heading); margin-bottom: ${u(6)}; }
 .card .rules { ${rect(CARD_FACE.rules)}
   font: 13px/1.25 var(--font-body); text-align: center; display: grid; place-content: center; }
 .card .stat { display: grid; place-items: center;
-  font: var(--heading)/1 var(--font-heading); color: var(--glow); text-shadow: ${u(1)} ${u(1)} 0 var(--ink); }
+  font: var(--heading)/1 var(--font-heading); color: var(--ink); }
 
 .home { display: grid; grid-template-columns: 1fr 1.3fr; gap: ${u(6)}; background: var(--mossDeep); padding: ${u(6)}; border: ${u(2)} solid var(--ink); box-shadow: ${u(3)} ${u(3)} 0 var(--ink); }
 .home .topbar { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: ${u(6)}; }
