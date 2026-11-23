@@ -14,7 +14,7 @@ import { uiSplit } from './ui.js';
 import { composeT06, T06_PACK_NUMBERS } from './compose/t06.js';
 import { buildStyleTile } from './styleTile/build.js';
 import { writeArtLayout } from './artLayout/artLayout.js';
-import { characterBoardCommand, characterCommand } from './character/cli.js';
+import { characterBoardCommand, characterCommand, characterLaneCommand } from './character/cli.js';
 
 const USAGE = `artgen <command>
   balance                                  show remaining PixelLab generations
@@ -35,6 +35,8 @@ const USAGE = `artgen <command>
   character <spec.json> --budget <n> [--only a,b] [--dry-run]
                                            create characters + animations (T17, /create-character-v3)
   character-board <spec.json> <out.png>    animated side-by-side APNG of a character spec (free)
+  character-lane <spec.json> <outDir> <left> <right> […]
+                                           mock battle lane APNGs per character pair (free)
   spend                                    total generations logged in the manifest`;
 
 const log = (msg: string) => {
@@ -171,6 +173,10 @@ async function main(argv: string[]): Promise<void> {
     case 'character': {
       const args = { rest, budget: values.budget, only: values.only, dryRun: values['dry-run'] };
       await characterCommand(client, args, log);
+      return;
+    }
+    case 'character-lane': {
+      await characterLaneCommand(rest, log);
       return;
     }
     case 'character-board': {

@@ -3,6 +3,9 @@ import { readManifest } from '../manifest.js';
 import { fromRepo } from '../paths.js';
 import { writeCharacterBoard } from './board.js';
 import { animationStats } from './stats.js';
+import { laneApng, stackLanes, viewLane } from './lane.js';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { planCharacterJobs, runCharacterSpec } from './run.js';
 import { loadCharacterSpec } from './spec.js';
 
@@ -63,4 +66,32 @@ export async function characterBoardCommand(
       `${s.id.padEnd(26)} ${String(s.frames)}f ${s.size} feet y ${s.baselines.join(',')} · bbox w ${s.bboxW.join('–')} h ${s.bboxH.join('–')} · ${String(s.colours)} colours${s.touchesEdge ? ' · TOUCHES EDGE' : ''}`,
     );
   }
+}
+
+/**
+ * `artgen character-lane <spec> <outDir> <left> <right> [<left> <right>…]`: one mock
+ * battle lane APNG per character pair (lane-1.png, …) plus all lanes stacked (lanes.png).
+ */
+export async function characterLaneCommand(
+  rest: string[],
+  log: (msg: string) => void,
+): Promise<void> {
+  const [specPath, outDir, ...pairs] = rest;
+  if (!specPath || !outDir || pairs.length < 2 || pairs.length % 2 !== 0)
+    throw new Error('character-lane needs <spec> <outDir> <left> <right> [...]');
+  const spec = await loadCharacterSpec(fromRepo(specPath));
+  const manifest = await readManifest();
+  const dir = fromRepo(outDir);
+  await mkdir(dir, { recursive: true });
+  const lanes = [];
+  for (let i = 0; i < pairs.length; i += 2) {
+    const [l, r] = [pairs[i] ?? '', pairs[i + 1] ?? ''];
+    const lane = await viewLane(spec, manifest, l, r);
+    lanes.push(lane);
+    const file = join(outDir, `lane-${l}-vs-${r}.png`);
+    await writeFile(fromRepo(file), laneApng(lane));
+    log(`wrote ${file}`);
+  }
+  await writeFile(join(dir, 'lanes.png'), laneApng(stackLanes(lanes)));
+  log(`wrote ${join(outDir, 'lanes.png')}`);
 }

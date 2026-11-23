@@ -14,7 +14,7 @@ export function bottomRow(png: PNG): number {
   return -1;
 }
 
-function blank(width: number, height: number): PNG {
+export function blank(width: number, height: number): PNG {
   const png = new PNG({ width, height });
   for (let i = 0; i < width * height; i++) png.data.set([...BG, 255], i * 4);
   return png;
