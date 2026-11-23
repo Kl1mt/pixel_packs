@@ -40,6 +40,7 @@ Pixel Packs is a cozy pixel-fantasy pack-opening and collecting browser game. Tr
 - `pnpm dev` — client on :5173 + server on :3001; Vite proxies `/api` to the server.
 - `pnpm typecheck` · `pnpm lint` (ESLint + Prettier check) · `pnpm test` (all Vitest projects) · `pnpm build` · `pnpm format`.
 - `pnpm db:migrate` — apply migrations. PGlite by default (`apps/server/.data/pglite`); set `DATABASE_URL` for Postgres.
+- `pnpm --filter @pixel-packs/client e2e` — Playwright checks + screenshots (`docs/styleguide/`); `/styleguide` is the living style guide.
 - `pnpm admin <command>` — admin CLI (grant currency/packs, reset onboarding, dev odds override); see `docs/api.md`.
 - `pnpm --filter @pixel-packs/server db:generate` — create a migration from `apps/server/src/db/schema.ts`.
 - One package: `pnpm --filter @pixel-packs/<client|server|shared|artgen|econ-sim|admin> <script>`; one test project: `pnpm test --project shared`.

@@ -79,3 +79,12 @@ export function frameMaterialHex(rarity: Rarity): { ramp: string[]; pip: string 
   const m = FRAME_MATERIALS[rarity];
   return { ramp: m.ramp.map((c) => MASTER_PALETTE[c]), pip: MASTER_PALETTE[m.pip] };
 }
+
+/**
+ * Card-name size in screen px at `CARD_SCALE` (3×): 20 px for most names, smaller
+ * for long ones so even "Umbra, the Dreaming Bear" keeps a 3 art px margin inside
+ * the banner (T06; checked for the whole catalog).
+ */
+export function cardNameSize(name: string): 16 | 18 | 20 {
+  return name.length <= 15 ? 20 : name.length <= 19 ? 18 : 16;
+}

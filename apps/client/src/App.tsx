@@ -1,35 +1,26 @@
-import { useEffect, useState } from 'react';
-import { fetchHealth } from './api.js';
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import { AppShell } from './shell/AppShell.js';
+import { BinderPage } from './pages/BinderPage.js';
+import { HomePage } from './pages/HomePage.js';
+import { NotFoundPage } from './pages/NotFoundPage.js';
+import { PacksPage } from './pages/PacksPage.js';
+import { SettingsPage } from './pages/SettingsPage.js';
+import { StyleguidePage } from './pages/StyleguidePage.js';
 
-type Status = { kind: 'loading' } | { kind: 'ok'; db: string } | { kind: 'error'; message: string };
+const router = createBrowserRouter([
+  {
+    element: <AppShell />,
+    children: [
+      { path: '/', element: <HomePage /> },
+      { path: '/packs', element: <PacksPage /> },
+      { path: '/binder', element: <BinderPage /> },
+      { path: '/settings', element: <SettingsPage /> },
+      { path: '/styleguide', element: <StyleguidePage /> },
+      { path: '*', element: <NotFoundPage /> },
+    ],
+  },
+]);
 
 export function App() {
-  const [status, setStatus] = useState<Status>({ kind: 'loading' });
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchHealth()
-      .then((h) => {
-        if (!cancelled) setStatus({ kind: 'ok', db: h.db });
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          setStatus({ kind: 'error', message: err instanceof Error ? err.message : String(err) });
-        }
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return (
-    <main>
-      <h1>Pixel Packs</h1>
-      <p data-testid="health">
-        {status.kind === 'loading' && 'Checking server…'}
-        {status.kind === 'ok' && `Server ok (${status.db})`}
-        {status.kind === 'error' && `Server unreachable: ${status.message}`}
-      </p>
-    </main>
-  );
+  return <RouterProvider router={router} />;
 }

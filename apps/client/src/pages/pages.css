@@ -1,0 +1,241 @@
+/* Page layouts (placeholders until T12/T15/T16) and the style guide. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-6);
+}
+
+.cap {
+  display: block;
+  text-align: center;
+  font-size: var(--small);
+  color: var(--role-textMuted);
+  margin-top: var(--sp-2);
+}
+
+.panel--wood .cap {
+  color: var(--role-textOnWoodMuted);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+
+.narrow {
+  max-width: 720px;
+}
+
+/* A red pin holding the parchment (hand-placed detail, §16). */
+.pinned {
+  position: relative;
+}
+
+.pinned::before {
+  content: '';
+  position: absolute;
+  left: var(--sp-4);
+  top: calc(-1 * var(--sp-2));
+  width: calc(5 * var(--art-px));
+  height: calc(5 * var(--art-px));
+  background: var(--berry);
+  border: var(--art-px) solid var(--ink);
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-3) 0 var(--sp-6);
+}
+
+.shelf {
+  list-style: none;
+  margin: 0 0 var(--sp-4);
+  padding: 0 0 var(--sp-2);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  border-bottom: calc(4 * var(--art-px)) solid var(--bark);
+  box-shadow: 0 var(--art-px) 0 var(--barkDeep);
+}
+
+.shelf__pack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shelf__label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--small);
+  color: var(--glow);
+}
+
+.empty {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.empty__art {
+  transform: rotate(-4deg);
+}
+
+.settings fieldset {
+  border: 0;
+  margin: 0 0 var(--sp-8);
+  padding: 0;
+}
+
+.settings legend {
+  padding: 0;
+  margin-bottom: var(--sp-4);
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-2);
+}
+
+.choice input,
+.slider input {
+  accent-color: var(--wood);
+}
+
+.choice input {
+  width: var(--sp-8);
+  height: var(--sp-8);
+  margin: 0;
+}
+
+.slider {
+  display: grid;
+  grid-template-columns: 9em minmax(0, 1fr) 3ch;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+
+/* Style guide */
+.guide {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-8);
+}
+
+.guide__head {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-8);
+}
+
+.guide__head .page-title {
+  margin: 0;
+}
+
+.muted-on-ground {
+  color: var(--straw);
+  margin: 0;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.on-ground {
+  color: var(--glow);
+  margin-bottom: var(--sp-6);
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+.swatch {
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.swatch i {
+  display: block;
+  height: var(--sp-12);
+  border: var(--art-px) solid var(--ink);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--sp-1);
+}
+
+.strip {
+  display: flex;
+  margin: var(--sp-3) 0 var(--sp-1);
+  border: var(--art-px) solid var(--ink);
+}
+
+.strip i {
+  flex: 1;
+  height: var(--sp-8);
+}
+
+.types p {
+  margin: 0 0 var(--sp-3);
+}
+
+.types .label {
+  display: block;
+  font: var(--small) var(--font-body);
+  color: var(--role-textMuted);
+}
+
+.panel .panel {
+  margin: var(--sp-4) 0;
+  color: var(--ink);
+}
+
+.icons,
+.panel .row + .row {
+  margin-top: var(--sp-4);
+}
+
+.fragment {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: var(--sp-6);
+  background: var(--mossDeep);
+  padding: var(--sp-6);
+  border: var(--art-px) solid var(--ink);
+  box-shadow: var(--shadow-md);
+}
+
+.fragment__bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+}
+
+@media (max-width: 900px) {
+  .split,
+  .guide,
+  .fragment {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .swatches {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

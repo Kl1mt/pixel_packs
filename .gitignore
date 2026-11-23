@@ -10,3 +10,6 @@ coverage/
 *.log
 .DS_Store
 .vite/
+# Playwright
+apps/client/test-results/
+apps/client/playwright-report/

@@ -38,3 +38,4 @@ export { buildPlaceholderCatalog } from './testing/placeholderCatalog.js';
 export * from './config/cardFace.js';
 export * from './config/uiArt.js';
 export * from './config/statDigits.js';
+export { CARD_ART_DROP } from './data/cards/artLayout.js';

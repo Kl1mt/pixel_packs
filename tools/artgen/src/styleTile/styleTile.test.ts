@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { CARD_CATALOG, CARD_FACE, statDigitPixels } from '@pixel-packs/shared';
-import { nameSize, styleTileHtml } from './html.js';
+import { CARD_CATALOG, CARD_FACE, cardNameSize, statDigitPixels } from '@pixel-packs/shared';
+import { styleTileHtml } from './html.js';
 
 describe('style tile', () => {
   it('sizes card names so the longest still gets the 16 px floor, never less', () => {
-    const sizes = CARD_CATALOG.map((c) => nameSize(c.name));
+    const sizes = CARD_CATALOG.map((c) => cardNameSize(c.name));
     expect(Math.min(...sizes)).toBeGreaterThanOrEqual(16);
     const longest = [...CARD_CATALOG].sort((a, b) => b.name.length - a.name.length)[0];
-    expect(longest && nameSize(longest.name)).toBe(16);
+    expect(longest && cardNameSize(longest.name)).toBe(16);
   });
 
   it('draws ATK/HP as chunky pixel digits and no longer shows the badge comparison', () => {
