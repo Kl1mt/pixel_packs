@@ -12,6 +12,7 @@ import {
   type Rarity,
   type Realm,
 } from '@pixel-packs/shared';
+import { BADGE_VARIANTS, pixelsSvg, type BadgeVariant } from './badges.js';
 import { styleTileCss } from './css.js';
 
 /** Inputs the generator can't read from shared config. */
@@ -20,6 +21,15 @@ export interface StyleTileInput {
   artDrop: Record<string, number>;
   /** Candidate numbers shown as the current pack picks. */
   packPicks: { mossgrove: number; starhollow: number };
+  /** Light interior pixels of the ATK/HP circles (for the dark-circle badge variant). */
+  badgeMask?: { atk: { x: number; y: number }[]; hp: { x: number; y: number }[] };
+}
+
+interface CardOptions {
+  rarity?: Rarity;
+  atk?: number;
+  hp?: number;
+  badge?: BadgeVariant;
 }
 
 const esc = (s: string) =>
@@ -42,10 +52,27 @@ export function nameSize(name: string): number {
   return name.length <= 15 ? 20 : name.length <= 19 ? 18 : 16;
 }
 
-function card(id: string, rarity: Rarity | undefined, input: StyleTileInput): string {
+function card(id: string, opts: CardOptions, input: StyleTileInput): string {
   const c = CARD_CATALOG.find((x) => x.id === id);
   if (!c) throw new Error(`unknown card ${id}`);
-  const r = rarity ?? c.rarity;
+  const r = opts.rarity ?? c.rarity;
+  const atk = opts.atk ?? c.atk;
+  const hp = opts.hp ?? c.hp;
+  const badge = opts.badge;
+  const mask = input.badgeMask ?? { atk: [], hp: [] };
+  const withColour = (m: { x: number; y: number }[]) => m.map((p) => ({ ...p, c: '' }));
+  const overlay = badge
+    ? pixelsSvg(
+        badge.pixels(
+          atk,
+          hp,
+          { atk: withColour(mask.atk), hp: withColour(mask.hp) },
+          MASTER_PALETTE[FRAME_MATERIALS[r].ramp[3]],
+        ),
+      )
+    : '';
+  const textStats = !badge || badge.fontPx !== undefined;
+  const statStyle = (v: number) => (badge?.fontPx ? `;font-size:${String(badge.fontPx(v))}px` : '');
   const [sky, ground] = BACKDROP[c.realm] ?? [MASTER_PALETTE.cream, MASTER_PALETTE.straw];
   const drop = input.artDrop[id] ?? 0;
   const s = (n: number) => `calc(${String(n)}px * var(--card))`;
@@ -58,8 +85,13 @@ function card(id: string, rarity: Rarity | undefined, input: StyleTileInput): st
   <img class="frame" src="/assets/frames/${r}.png" alt="">
   <div class="name" style="--name-size:${String(nameSize(c.name))}px">${esc(c.name)}</div>
   <div class="rules">${rules.map((l) => `<span>${esc(l)}</span>`).join('')}</div>
-  <div class="stat" style="${at(CARD_FACE.atk)}">${String(c.atk)}</div>
-  <div class="stat" style="${at(CARD_FACE.hp)}">${String(c.hp)}</div>
+  ${overlay}
+  ${
+    textStats
+      ? `<div class="stat" style="${at(CARD_FACE.atk)}${statStyle(atk)}">${String(atk)}</div>
+  <div class="stat" style="${at(CARD_FACE.hp)}${statStyle(hp)}">${String(hp)}</div>`
+      : ''
+  }
 </figure>`;
 }
 
@@ -105,13 +137,28 @@ function uiParts(): string {
 </section>`;
 }
 
+/** Numbered ATK/HP badge variants for the user to pick (single and two-digit values). */
+function badgeVariants(input: StyleTileInput): string {
+  const items = BADGE_VARIANTS.map(
+    (
+      v,
+    ) => `<div class="variant"><h3 class="num" style="font-size:var(--heading)">${String(v.n)}</h3>
+    <p class="small">${esc(v.title)}</p>
+    <div class="row">${card('MOS-012', { badge: v }, input)}${card('MOS-012', { badge: v, atk: 10, hp: 12 }, input)}</div></div>`,
+  ).join('');
+  return `<section class="panel-parchment wide"><h2>ATK/HP badge variants</h2>
+  <p>Pick one by number. Each shows Grandmother Morel as-is (3 / 9) and with two-digit values (10 / 12), at the real 3× size.</p>
+  <div class="variants">${items}</div>
+</section>`;
+}
+
 function cards(input: StyleTileInput): string {
   const frames = RARITIES.map(
     (r) =>
       `<span><img class="px" src="/assets/frames/${r}.png" alt="${r} frame" width="192" height="256"><span class="cap">${r} · ${FRAME_MATERIALS[r].name}</span></span>`,
   ).join('');
   return `<section class="panel-parchment wide"><h2>Cards</h2>
-  <div class="row">${card('MOS-012', undefined, input)}${card('STA-003', undefined, input)}
+  <div class="row">${card('MOS-012', {}, input)}${card('STA-003', {}, input)}
   <span><img class="px" src="/assets/frames/back.png" alt="card back" width="288" height="384"><span class="cap">card back</span></span></div>
   <p class="small">Cards at 3×. Rarity shows as frame material plus 1–6 pips, never by colour alone. The art is bottom-aligned on the window's bottom row.</p>
   <div class="row">${frames}</div>
@@ -160,6 +207,7 @@ export function styleTileHtml(input: StyleTileInput): string {
   ${typeScale()}
   ${uiParts()}
   ${cards(input)}
+  ${badgeVariants(input)}
   ${home(input)}
 </main>
 </body>
