@@ -1,8 +1,9 @@
 import { and, eq, gt, isNull, sql } from 'drizzle-orm';
-import type { PublicUser, RegisterRequest } from '@pixel-packs/shared';
+import { initialFreePackAnchor, type PublicUser, type RegisterRequest } from '@pixel-packs/shared';
 import type { Db } from '../db/client.js';
 import { emailTokens, sessions, users, wallets, type EmailTokenPurpose } from '../db/schema.js';
 import { HttpError } from '../http/errors.js';
+import { grantStarterSatchel } from '../economy/db.js';
 import { hashToken, randomToken } from './crypto.js';
 import { hashPassword, verifyPassword } from './password.js';
 
@@ -132,7 +133,10 @@ export function createAuthService(db: Db, now: () => Date = () => new Date()): A
             .values({ email: input.email, username: input.username, passwordHash })
             .returning();
           if (!user) throw new Error('insert returned no user');
-          await tx.insert(wallets).values({ userId: user.id });
+          await tx
+            .insert(wallets)
+            .values({ userId: user.id, freePackAnchor: initialFreePackAnchor(now()) });
+          await grantStarterSatchel(tx, user.id);
           const session = await createSession(tx, user.id, userAgent);
           const verifyToken = await insertEmailToken(tx, user.id, 'verifyEmail');
           return { user, session, verifyToken };

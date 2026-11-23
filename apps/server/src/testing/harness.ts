@@ -1,8 +1,10 @@
 import type { FastifyInstance, InjectOptions, LightMyRequestResponse } from 'fastify';
-import { CSRF_HEADER } from '@pixel-packs/shared';
+import { CSRF_HEADER, type Rng } from '@pixel-packs/shared';
 import { buildApp } from '../app.js';
 import { createDb, type DbHandle } from '../db/client.js';
 import { runMigrations } from '../db/migrate.js';
+import { syncCatalog, syncPackTypes } from '../db/sync.js';
+import { SERVER_CATALOG } from '../catalog.js';
 import { createMemoryMailer, type MailMessage } from '../mail/mailer.js';
 
 export interface TestApp {
@@ -14,10 +16,12 @@ export interface TestApp {
 
 /** A fresh in-memory PGlite database with migrations, plus the app on top. */
 export async function createTestApp(
-  opts: { rateLimit?: boolean; now?: () => Date } = {},
+  opts: { rateLimit?: boolean; now?: () => Date; rng?: Rng; databaseUrl?: string } = {},
 ): Promise<TestApp> {
-  const db = createDb({ pgliteDir: 'memory://' });
+  const db = createDb({ pgliteDir: 'memory://', databaseUrl: opts.databaseUrl });
   await runMigrations(db);
+  await syncCatalog(db.db, SERVER_CATALOG);
+  await syncPackTypes(db.db);
   const mailer = createMemoryMailer();
   const app = await buildApp({
     db,
@@ -25,7 +29,9 @@ export async function createTestApp(
     appOrigin: 'http://app.test',
     cookieSecure: false,
     rateLimit: opts.rateLimit ?? false,
+    allowDevOverrides: true,
     ...(opts.now ? { now: opts.now } : {}),
+    ...(opts.rng ? { rng: opts.rng } : {}),
   });
   return {
     app,
@@ -82,3 +88,24 @@ export function tokenFromMail(mail: MailMessage | undefined): string {
   if (!match?.[1]) throw new Error('no token in mail');
   return match[1];
 }
+
+let playerCounter = 0;
+
+/** Registers a fresh player and returns the logged-in client and the user id. */
+export async function newPlayer(app: FastifyInstance): Promise<{ c: Client; userId: string }> {
+  playerCounter += 1;
+  const tag = `${Date.now().toString(36)}${playerCounter}`;
+  const c = new Client(app);
+  await c.csrf();
+  const res = await c.post('/api/auth/register', {
+    email: `p${tag}@example.com`,
+    username: `p_${tag}`.slice(0, 20),
+    password: 'correct horse battery',
+  });
+  if (res.statusCode !== 201) throw new Error(`register failed: ${res.body}`);
+  return { c, userId: res.json<{ user: { id: string } }>().user.id };
+}
+
+let keyCounter = 0;
+/** A fresh idempotency key. */
+export const key = () => `key-${Date.now().toString(36)}-${(keyCounter += 1)}`;

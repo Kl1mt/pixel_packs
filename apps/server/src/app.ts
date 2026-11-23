@@ -1,7 +1,15 @@
 import Fastify, { type FastifyInstance, type FastifyServerOptions } from 'fastify';
 import cookie from '@fastify/cookie';
 import rateLimit from '@fastify/rate-limit';
-import { HealthResponseSchema, type HealthResponse } from '@pixel-packs/shared';
+import {
+  HealthResponseSchema,
+  createCryptoRng,
+  type CatalogIndex,
+  type HealthResponse,
+  type Rng,
+} from '@pixel-packs/shared';
+import { SERVER_CATALOG_INDEX } from './catalog.js';
+import { registerEconomyRoutes } from './economy/routes.js';
 import type { DbHandle } from './db/client.js';
 import type { Mailer } from './mail/mailer.js';
 import { registerErrorHandler } from './http/errors.js';
@@ -17,6 +25,11 @@ export interface AppDeps {
   /** Per-route rate limits; tests switch them off except where they test them. */
   rateLimit?: boolean;
   now?: () => Date;
+  /** Pack RNG; defaults to the crypto RNG. Tests inject a seeded one. */
+  rng?: Rng;
+  catalogIndex?: CatalogIndex;
+  /** Honour `tools/admin` odds overrides; must be false in production. */
+  allowDevOverrides?: boolean;
 }
 
 /** Builds the Fastify app without listening, so tests can use `app.inject`. */
@@ -44,6 +57,13 @@ export async function buildApp(
   });
 
   registerAuthRoutes(app, { auth, mailer: deps.mailer, cookies, appOrigin: deps.appOrigin });
+  registerEconomyRoutes(app, {
+    db: deps.db.db,
+    now: deps.now ?? (() => new Date()),
+    rng: deps.rng ?? createCryptoRng(),
+    index: deps.catalogIndex ?? SERVER_CATALOG_INDEX,
+    allowDevOverrides: deps.allowDevOverrides ?? false,
+  });
 
   return app;
 }
