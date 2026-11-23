@@ -16,7 +16,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T05 | Card art batch | T04 | todo |
 | T06 | Frames, packs, UI art + style tile | T04 | todo |
 | T07 | Client design system & app shell | T06 | todo |
-| T08 | Database & email auth (API) | T02 | todo |
+| T08 | Database & email auth (API) | T02 | done |
 | T09 | Auth screens + Discord login | T07, T08 | todo |
 | T10 | Economy & pack API | T03, T08 | todo |
 | T11 | Card renderer & variant shaders | T05, T07 | todo |
@@ -147,13 +147,23 @@ Docs: §16, §18
 - **`/styleguide` route**, with a Playwright screenshot.
 - **Done when**: the styleguide matches the approved style tile and the screenshot has been checked against §16.
 
-### T08 — Database & email auth (API) · M
+### T08 — Database & email auth (API) · M · done
 Docs: §21, §22
 - **Drizzle schema + migrations**: users, sessions, wallets, ledger, cards (with catalog sync), user_cards (all traits, including mint and edition columns), pack_types, pack_inventory, pack_openings, pity_counters, mint_counters, daily_claims, seasons (seeded with Season 0).
 - **Auth endpoints**: register, login, logout and me, with argon2id, session cookies, CSRF protection and rate limits.
 - **Email flows**: verification and password reset, sent through a console mail transport.
 - **Integration tests** on PGlite.
 - **Done when**: tests pass and the auth flow works with curl.
+- **Handoff notes (2026-11-23)**:
+  - Schema in `apps/server/src/db/schema/{auth,economy}.ts` (re-exported by `schema.ts`); one migration `drizzle/0000_tricky_prism.sql`, with a hand-appended `INSERT` for Season 0. Extra table: `email_tokens`. Extra columns worth knowing: `users.onboarding_step`, `pack_types.{pity_group, release_season, enabled}`, `pack_openings.{idempotency_key (unique per user), cards jsonb, revealed_at}`, `user_cards.{edition_season, mint_number (unique per card+variant), pack_opening_id}`, `ledger.{currency, delta, user_card_id, pack_type_id, reason, ref_id, meta}`, `daily_claims.claim_key` (unique per user+kind, for no double claims). Wallet balances and pack counts have `>= 0` CHECKs. No prices on `pack_types` yet — T10 adds what it needs with a new migration.
+  - Startup (`main.ts`): migrate → `syncCatalog(db, SERVER_CATALOG)` → `syncPackTypes(db)` (`db/sync.ts`). `SERVER_CATALOG` in `src/catalog.ts` is **empty**; **T10 must point it at the T03 catalog**. Removed cards are marked `retired`, never deleted. Pack type ids: `realm:<realm>`, `mythic` (`packTypeId()`).
+  - Auth: `src/auth/{crypto,password,service,plugin,routes,emails}.ts`, `src/mail/mailer.ts` (console + memory mailers), `src/http/errors.ts` (`HttpError`, JSON error handler incl. Zod → 400). `requireAuth(req)` gives `{ user, sessionId }` or throws 401 — use it in T10's routes. `buildApp(deps)` is now async and takes `{ db, mailer, appOrigin, cookieSecure, rateLimit?, now? }`. Rate limits are per route via `config.rateLimit` (`@fastify/rate-limit`, `global: false`).
+  - Shared: request/response schemas, `CSRF_HEADER`, `ApiErrorCode` and the username blocklist in `packages/shared/src/api/{auth,usernameBlocklist}.ts`. Endpoints and a curl walk-through are in `docs/api.md` (T10 adds its section there).
+  - Tests: `src/testing/harness.ts` gives `createTestApp()` (in-memory PGlite + migrations, memory mailer, injectable clock) and a cookie-jar `Client` that sends the CSRF header. Integration tests run on PGlite only; CI still applies the migration to Postgres 17.
+  - New env: `NODE_ENV`, `APP_ORIGIN` (email links), `COOKIE_SECURE` (default on in production). Deps: `@node-rs/argon2` (prebuilt binaries, works on Windows), `@fastify/cookie`, `@fastify/rate-limit`.
+  - T09 needs client pages at `/verify-email?token=` and `/reset-password?token=`; the client must fetch `GET /api/auth/csrf` before its first mutation.
+  - Design details settled here are in GDD §29 (T08 rows); the `trustProxy` question for the deploy is in §27.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (91 tests) pass; the curl flow (csrf → register → me → verify-email → logout → login, plus a rejected POST without the CSRF header) works against `pnpm start` on PGlite.
 
 ### T09 — Auth screens + Discord login · M
 Docs: §16, §22
