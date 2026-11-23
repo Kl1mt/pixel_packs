@@ -5857,6 +5857,94 @@
           "review": "pending"
         }
       ]
+    },
+    {
+      "id": "t17/mos-012-side-hurt-east",
+      "spec": "t17",
+      "job": "mos-012-side-hurt-east",
+      "endpoint": "characters/animations",
+      "params": {
+        "character_id": "581e45c1-78f7-49e1-8bfa-7c4f5fefa771",
+        "mode": "v3",
+        "animation_name": "hurt-east",
+        "action_description": "Always faces east (right) and never turns. Recoils west from a hit with a flinch, then returns to the base pose. No camera movement and nothing leaves the canvas. No background and no ground shadow. Feet stay on the same fixed baseline. The first and last frame are the base pose.",
+        "frame_count": 4,
+        "directions": [
+          "east"
+        ],
+        "keep_first_frame": false,
+        "seed": 17024,
+        "target_palette": {
+          "name": "Mossgrove: moss, bark, berry",
+          "colors": [
+            "#1e1a26",
+            "#8c8191",
+            "#e8e0d5",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#a8344a",
+            "#d95f5f",
+            "#8f87d1"
+          ]
+        }
+      },
+      "seed": 17024,
+      "status": "completed",
+      "backgroundJobId": "36c15458-427c-4c8f-92fe-bb2a1b647e64",
+      "cost": {
+        "generations": 1,
+        "usd": 0
+      },
+      "createdAt": "2026-11-23T20:22:23.473Z",
+      "extra": {
+        "characterId": "581e45c1-78f7-49e1-8bfa-7c4f5fefa771",
+        "animationGroupId": "5a27d265-ca58-470d-a94d-7ce854e95493",
+        "frames": 4,
+        "frameSize": {
+          "width": 88,
+          "height": 88
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/mos-012-side/hurt-east/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/mos-012-side/hurt-east/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/mos-012-side/hurt-east/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/mos-012-side/hurt-east/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/t17/mos-012-side/hurt-east/sheet.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/t17/mos-012-side/hurt-east/preview.png",
+          "review": "pending"
+        }
+      ]
     }
   ]
 }
