@@ -1,0 +1,106 @@
+{
+  "id": "t14-sfx",
+  "style": "Sound effect for a cozy, whimsical pixel-art fantasy card game: soft, warm and gentle, clean and close-up, dry with no reverb tail, no voices",
+  "clips": [
+    {
+      "id": "open.tear",
+      "prompt": "A paper card pack being torn open in one quick satisfying rip, crinkly foil wrapper, with a tiny soft pop at the end",
+      "seconds": 1.5
+    },
+    {
+      "id": "open.slide",
+      "prompt": "A single playing card sliding quickly across a wooden table, a light papery swish",
+      "seconds": 0.6
+    },
+    {
+      "id": "open.flip",
+      "prompt": "A single playing card flipped over with a crisp light snap of thick paper",
+      "seconds": 0.5
+    },
+    {
+      "id": "rarity.common",
+      "prompt": "A tiny soft wooden tick, like a little wooden bead tapping a table, very short",
+      "seconds": 0.5
+    },
+    {
+      "id": "rarity.uncommon",
+      "prompt": "One soft high glass chime, a small bright ding that fades quickly",
+      "seconds": 1.2
+    },
+    {
+      "id": "rarity.rare",
+      "prompt": "Two quick rising sparkly glockenspiel notes with a soft shimmer, magical and pleased",
+      "seconds": 1.5
+    },
+    {
+      "id": "rarity.epic",
+      "prompt": "A magical rising harp glissando ending in a warm bright chime with sparkles, exciting reveal",
+      "seconds": 2.5
+    },
+    {
+      "id": "rarity.legendary",
+      "prompt": "A triumphant golden magical reveal: a soft whoosh rising into a bright bell chord with shimmering sparkles, joyful and grand but gentle",
+      "seconds": 3
+    },
+    {
+      "id": "rarity.mythic",
+      "prompt": "A mystical cosmic reveal: a deep soft swell rising into a choir-like shimmering bell chord with twinkling stars, awe and wonder",
+      "seconds": 3.2
+    },
+    {
+      "id": "variant.foil",
+      "prompt": "A quick bright metallic glint shimmer, a light sparkle sweep like light catching shiny foil",
+      "seconds": 1.5
+    },
+    {
+      "id": "variant.prismatic",
+      "prompt": "A rising rainbow shimmer: many tiny crystal bells cascading upward in a sweeping glittering wash",
+      "seconds": 2.5
+    },
+    {
+      "id": "variant.void",
+      "prompt": "A soft magical implosion: air being sucked inward into a small dark hole, a low hollow whoomp at the end",
+      "seconds": 2.5
+    },
+    {
+      "id": "variant.glitch",
+      "prompt": "A short digital glitch: retro 8-bit computer stutter, bitcrushed chirps and a quick static crackle",
+      "seconds": 1.5
+    },
+    {
+      "id": "ui.hover",
+      "prompt": "A tiny very soft wooden tick, a barely-there click for hovering over a button",
+      "seconds": 0.5
+    },
+    {
+      "id": "ui.press",
+      "prompt": "A soft satisfying wooden button press, a muted wooden clack",
+      "seconds": 0.5
+    },
+    {
+      "id": "reward.coin",
+      "prompt": "A few small gold coins clinking together into a little pile, bright and cheerful",
+      "seconds": 1
+    },
+    {
+      "id": "reward.gem",
+      "prompt": "A small crystal gem being picked up, a clear bright crystalline ting with a tiny sparkle",
+      "seconds": 1
+    },
+    {
+      "id": "reward.dust",
+      "prompt": "Soft magical dust swirling into a pouch, a gentle airy sparkly whoosh",
+      "seconds": 1.2
+    },
+    {
+      "id": "reward.fusion",
+      "prompt": "Two magical cards fusing together: a swirling magical whoosh building up into a warm bright chime",
+      "seconds": 2.5
+    },
+    {
+      "id": "ui.error",
+      "prompt": "A soft gentle low wooden double-bonk, a friendly 'not quite' sound, not harsh",
+      "seconds": 0.8
+    }
+  ]
+}

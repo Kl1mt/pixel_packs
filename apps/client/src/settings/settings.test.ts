@@ -33,6 +33,13 @@ describe('settings', () => {
     });
   });
 
+  it('reads settings saved before mute existed as unmuted', () => {
+    const raw = JSON.stringify({ ...DEFAULT_SETTINGS, muted: undefined, motion: 'full' });
+    expect(parseSettings(raw)).toEqual({ ...DEFAULT_SETTINGS, motion: 'full', muted: false });
+    const muted = JSON.stringify({ ...DEFAULT_SETTINGS, muted: true });
+    expect(parseSettings(muted).muted).toBe(true);
+  });
+
   it('resolves reduced motion from the choice and the OS setting', () => {
     expect(resolveReducedMotion('system', true)).toBe(true);
     expect(resolveReducedMotion('system', false)).toBe(false);

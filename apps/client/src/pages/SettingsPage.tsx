@@ -61,8 +61,18 @@ export function SettingsPage() {
         </fieldset>
         <fieldset>
           <legend>
-            <h2>Volume</h2>
+            <h2>Sound</h2>
           </legend>
+          <label className="choice">
+            <input
+              type="checkbox"
+              checked={settings.muted}
+              onChange={(e) => {
+                settingsStore.update({ muted: e.target.checked });
+              }}
+            />
+            Mute all sound
+          </label>
           {VOLUMES.map((v) => (
             <label key={v.key} className="slider">
               <span>{v.label}</span>

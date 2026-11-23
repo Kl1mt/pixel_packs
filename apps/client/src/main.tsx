@@ -4,6 +4,7 @@ import { App } from './App.js';
 import { sessionStore } from './auth/useSession.js';
 import { installTokens } from './design/tokens.js';
 import { economyStore } from './economy/useEconomy.js';
+import './audio/audio.js';
 import './design/global.css';
 import './components/components.css';
 import './shell/shell.css';

@@ -7,7 +7,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 /**
  * Chunky wood button (GDD §16): rest / hover / pressed / disabled art; pressed
- * moves down 1 art px while its dark edge shrinks. The click sound arrives in T14.
+ * moves down 1 art px while its dark edge shrinks. Hover and press sounds come
+ * from one delegated listener for every `.btn` (`audio/uiSounds.ts`).
  */
 export function Button({ className, forceState, type = 'button', ...rest }: ButtonProps) {
   const cls = ['btn', forceState && `is-${forceState}`, className].filter(Boolean).join(' ');
