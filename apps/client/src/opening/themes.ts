@@ -13,8 +13,8 @@ export interface WrapPixel {
 
 /**
  * How a pack opens (GDD §3, §7). The framework draws the pack, the tear, the light and
- * the particles; a theme adds its wrapping and colours. Mossgrove is the T12 theme;
- * Starhollow (T13) still uses the plain one.
+ * the particles; a theme adds its wrapping and colours. Mossgrove (T12): vines and
+ * petals. Starhollow (T13): the moon clasp turns and stardust swirls.
  */
 export interface PackTheme {
   id: string;
@@ -31,9 +31,13 @@ export interface PackTheme {
   burst: number;
   /** The mound the pack sits on (top highlight, body), or none. */
   ground: readonly [string, string] | null;
+  /** The moon clasp on the satchel turns as the seam tears (Starhollow). */
+  clasp: boolean;
+  /** Stardust motes swirling round the pack (0 = none). */
+  stardust: number;
 }
 
-/** Plain stitched-seam opening (Starhollow until T13). */
+/** Plain stitched-seam opening (the Mythic pack until T21). */
 export const PLAIN_THEME: PackTheme = {
   id: 'plain',
   seam: { y: 17, x0: 13, x1: 52 },
@@ -43,6 +47,19 @@ export const PLAIN_THEME: PackTheme = {
   ambient: 0,
   burst: 0,
   ground: null,
+  clasp: false,
+  stardust: 0,
+};
+
+/** Starhollow: the moon clasp turns as the seam tears, stardust swirls and flies up. */
+export const STARHOLLOW_THEME: PackTheme = {
+  ...PLAIN_THEME,
+  id: 'starhollow',
+  petals: [P.lavender, P.moonlight, P.silver],
+  burst: 18,
+  ground: [P.lilac, P.indigo],
+  clasp: true,
+  stardust: 44,
 };
 
 /** Pixels of one vine from `x0` to `x1`: y = y0 + slope·dx + a small wave, outlined in ink. */
@@ -103,10 +120,14 @@ export const MOSSGROVE_THEME: PackTheme = {
   ambient: 6,
   burst: 28,
   ground: [P.leaf, P.moss],
+  clasp: false,
+  stardust: 0,
 };
 
 export function themeFor(packTypeId: PackTypeId): PackTheme {
-  return packTypeId === 'realm:mossgrove' ? MOSSGROVE_THEME : PLAIN_THEME;
+  if (packTypeId === 'realm:mossgrove') return MOSSGROVE_THEME;
+  if (packTypeId === 'realm:starhollow') return STARHOLLOW_THEME;
+  return PLAIN_THEME;
 }
 
 /** The pack sprite of a pack type (the Mythic pack has no art yet, see TASKS). */

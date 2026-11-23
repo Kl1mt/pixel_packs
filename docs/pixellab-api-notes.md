@@ -60,7 +60,7 @@ Written in T04 (2026-11-23) from `https://api.pixellab.ai/v2/llms.txt`, selected
 ### `POST /create-image-pixflux` — cheap single image (T06 icons)
 - **Synchronous**: the response is `{ usage, image: Base64Image }`, no background job.
 - Body: `description`, `image_size` (area 32×32 to 400×400), `seed`, `no_background`, `color_image` (forced palette: an image containing the allowed colours; artgen sends a 1-px strip of the palette), `outline` (`single color black outline` · `single color outline` · `selective outline` · `lineless`), `shading` (`flat` … `highly detailed shading`), `detail` (`low` · `medium` · `highly detailed`), `view`, `init_image`.
-- **Cost (measured): 1 per image at 32×32.**
+- **Cost (measured): 1 per image at 32×32 and at 64×64** (T13: 4 calls, 2 of each).
 
 ### `POST /create-ui-asset` + `/ui-assets/{id}/split` + `/ui-assets/states` (T06 panels and button)
 - `create-ui-asset` body: `description`, `image_size` (192–688 per side), `pieces` (shape template in editor coords, longer side 0–512: `rounded_rect {id,kind,label,x,y,w,h,radius}`, `circle`, `polygon`), or `elements` (named scaffolds: button, panel, window…), `target_palette`, `style_image`, `seed`, `name`. Answers `{ background_job_id, ui_asset_id }`; after the job, `GET /ui-assets/{id}` has `image_url` (a public CDN PNG), `elements`, `states`, `split_preview`.

@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import type { PackOpening } from '@pixel-packs/shared';
 import { economyApi } from '../economy/api.js';
 import { economyStore } from '../economy/useEconomy.js';
@@ -37,13 +37,14 @@ export function OpeningScene(p: OpeningSceneProps) {
   const sequence = revealSequence(opening);
   const root = useRef<HTMLDivElement>(null);
   const marked = useRef<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     root.current?.focus();
   }, [state.phase]);
 
   useEffect(() => {
-    if (!state.auto) return;
+    if (!state.auto || busy) return;
     const t = setTimeout(
       () => {
         dispatch({ type: 'flip' });
@@ -53,7 +54,7 @@ export function OpeningScene(p: OpeningSceneProps) {
     return () => {
       clearTimeout(t);
     };
-  }, [state.auto, state.flipped, reduced]);
+  }, [state.auto, state.flipped, reduced, busy]);
 
   useEffect(() => {
     if (state.phase !== 'summary' || marked.current === opening.id) return;
@@ -93,6 +94,8 @@ export function OpeningScene(p: OpeningSceneProps) {
           sequence={sequence}
           flipped={state.flipped}
           auto={state.auto}
+          reduced={reduced}
+          onBusy={setBusy}
           onFlip={() => {
             dispatch({ type: 'flip' });
           }}
