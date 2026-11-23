@@ -16,7 +16,7 @@ const TOKEN_TTL_MS: Record<EmailTokenPurpose, number> = {
 const TOUCH_INTERVAL_MS = 10 * 60 * 1000;
 
 export type User = typeof users.$inferSelect;
-type Tx = Parameters<Parameters<Db['transaction']>[0]>[0];
+export type Tx = Parameters<Parameters<Db['transaction']>[0]>[0];
 
 export function toPublicUser(u: User): PublicUser {
   return {
@@ -52,7 +52,8 @@ export interface AuthService {
   resetPassword(token: string, password: string): Promise<boolean>;
 }
 
-function uniqueViolation(err: unknown): string | null {
+/** The violated unique constraint's name ('' if unknown), or null for other errors. */
+export function uniqueViolation(err: unknown): string | null {
   for (
     let e: unknown = err;
     typeof e === 'object' && e !== null;
@@ -64,22 +65,40 @@ function uniqueViolation(err: unknown): string | null {
   return null;
 }
 
+/** Stores a new session for the user and returns its cookie token. */
+export async function insertSession(
+  tx: Db | Tx,
+  userId: string,
+  at: Date,
+  userAgent?: string,
+): Promise<SessionInfo> {
+  const token = randomToken();
+  const expiresAt = new Date(at.getTime() + SESSION_TTL_MS);
+  await tx.insert(sessions).values({
+    id: hashToken(token),
+    userId,
+    expiresAt,
+    userAgent: userAgent?.slice(0, 256) ?? null,
+  });
+  return { token, expiresAt };
+}
+
+/** Creates a user with a wallet and the starter satchel (GDD §17). */
+export async function insertPlayer(
+  tx: Tx,
+  values: typeof users.$inferInsert,
+  at: Date,
+): Promise<User> {
+  const [user] = await tx.insert(users).values(values).returning();
+  if (!user) throw new Error('insert returned no user');
+  await tx.insert(wallets).values({ userId: user.id, freePackAnchor: initialFreePackAnchor(at) });
+  await grantStarterSatchel(tx, user.id);
+  return user;
+}
+
 export function createAuthService(db: Db, now: () => Date = () => new Date()): AuthService {
-  async function createSession(
-    tx: Db | Tx,
-    userId: string,
-    userAgent?: string,
-  ): Promise<SessionInfo> {
-    const token = randomToken();
-    const expiresAt = new Date(now().getTime() + SESSION_TTL_MS);
-    await tx.insert(sessions).values({
-      id: hashToken(token),
-      userId,
-      expiresAt,
-      userAgent: userAgent?.slice(0, 256) ?? null,
-    });
-    return { token, expiresAt };
-  }
+  const createSession = (tx: Db | Tx, userId: string, userAgent?: string) =>
+    insertSession(tx, userId, now(), userAgent);
 
   async function insertEmailToken(tx: Db | Tx, userId: string, purpose: EmailTokenPurpose) {
     const token = randomToken();
@@ -128,15 +147,11 @@ export function createAuthService(db: Db, now: () => Date = () => new Date()): A
       const passwordHash = await hashPassword(input.password);
       try {
         return await db.transaction(async (tx) => {
-          const [user] = await tx
-            .insert(users)
-            .values({ email: input.email, username: input.username, passwordHash })
-            .returning();
-          if (!user) throw new Error('insert returned no user');
-          await tx
-            .insert(wallets)
-            .values({ userId: user.id, freePackAnchor: initialFreePackAnchor(now()) });
-          await grantStarterSatchel(tx, user.id);
+          const user = await insertPlayer(
+            tx,
+            { email: input.email, username: input.username, passwordHash },
+            now(),
+          );
           const session = await createSession(tx, user.id, userAgent);
           const verifyToken = await insertEmailToken(tx, user.id, 'verifyEmail');
           return { user, session, verifyToken };

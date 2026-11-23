@@ -1,4 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
+import { AuthLayout } from './auth/AuthLayout.js';
+import { ForgotPasswordPage } from './auth/ForgotPasswordPage.js';
+import { GuestOnly, RequireAuth } from './auth/guards.js';
+import { LoginPage } from './auth/LoginPage.js';
+import { RegisterPage } from './auth/RegisterPage.js';
+import { ResetPasswordPage } from './auth/ResetPasswordPage.js';
+import { VerifyEmailPage } from './auth/VerifyEmailPage.js';
 import { AppShell } from './shell/AppShell.js';
 import { BinderPage } from './pages/BinderPage.js';
 import { HomePage } from './pages/HomePage.js';
@@ -9,13 +16,29 @@ import { StyleguidePage } from './pages/StyleguidePage.js';
 
 const router = createBrowserRouter([
   {
+    // Logged-out screens (T09). Email links land on reset/verify whether logged in or not.
+    element: <AuthLayout />,
+    children: [
+      { path: '/login', element: <GuestOnly children={<LoginPage />} /> },
+      { path: '/register', element: <GuestOnly children={<RegisterPage />} /> },
+      { path: '/forgot-password', element: <GuestOnly children={<ForgotPasswordPage />} /> },
+      { path: '/reset-password', element: <ResetPasswordPage /> },
+      { path: '/verify-email', element: <VerifyEmailPage /> },
+    ],
+  },
+  {
+    // The living style guide stays public, so its screenshot needs no account.
+    path: '/styleguide',
     element: <AppShell />,
+    children: [{ index: true, element: <StyleguidePage /> }],
+  },
+  {
+    element: <RequireAuth children={<AppShell />} />,
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/packs', element: <PacksPage /> },
       { path: '/binder', element: <BinderPage /> },
       { path: '/settings', element: <SettingsPage /> },
-      { path: '/styleguide', element: <StyleguidePage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

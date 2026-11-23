@@ -16,12 +16,17 @@ import { registerErrorHandler } from './http/errors.js';
 import { registerAuthHooks } from './auth/plugin.js';
 import { registerAuthRoutes } from './auth/routes.js';
 import { createAuthService } from './auth/service.js';
+import type { DiscordClient } from './auth/discord.js';
+import { registerDiscordRoutes } from './auth/discordRoutes.js';
+import { createOAuthService } from './auth/oauth.js';
 
 export interface AppDeps {
   db: DbHandle;
   mailer: Mailer;
   appOrigin: string;
   cookieSecure: boolean;
+  /** Discord OAuth client, or null/absent when no credentials are configured. */
+  discord?: DiscordClient | null;
   /** Per-route rate limits; tests switch them off except where they test them. */
   rateLimit?: boolean;
   now?: () => Date;
@@ -57,6 +62,14 @@ export async function buildApp(
   });
 
   registerAuthRoutes(app, { auth, mailer: deps.mailer, cookies, appOrigin: deps.appOrigin });
+  registerDiscordRoutes(app, {
+    auth,
+    oauth: createOAuthService(deps.db.db, deps.now),
+    discord: deps.discord ?? null,
+    mailer: deps.mailer,
+    cookies,
+    appOrigin: deps.appOrigin,
+  });
   registerEconomyRoutes(app, {
     db: deps.db.db,
     now: deps.now ?? (() => new Date()),

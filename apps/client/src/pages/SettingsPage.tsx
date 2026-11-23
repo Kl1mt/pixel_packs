@@ -1,5 +1,7 @@
 import { useEffect, useId, useState } from 'react';
 import { fetchHealth } from '../api.js';
+import { AccountPanel } from '../auth/AccountPanel.js';
+import { useSession } from '../auth/useSession.js';
 import { Button } from '../components/Button.js';
 import { Panel } from '../components/Panel.js';
 import type { MotionPreference, Settings } from '../settings/settings.js';
@@ -21,9 +23,11 @@ export function SettingsPage() {
   const settings = useSettings();
   const reduced = useReducedMotion();
   const id = useId();
+  const session = useSession();
   return (
     <>
       <h1 className="page-title">Settings</h1>
+      {session.status === 'user' && <AccountPanel user={session.user} />}
       <Panel className="narrow settings">
         <fieldset>
           <legend>

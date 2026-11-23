@@ -278,12 +278,31 @@ Docs: §21, §22
   - Design details settled here are in GDD §29 (T08 rows); the `trustProxy` question for the deploy is in §27.
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (91 tests) pass; the curl flow (csrf → register → me → verify-email → logout → login, plus a rejected POST without the CSRF header) works against `pnpm start` on PGlite.
 
-### T09 — Auth screens + Discord login · M
+### T09 — Auth screens + Discord login · M · done
 Docs: §16, §22
 - **Screens**: Login, Register and Reset, built with the design system.
 - **Discord OAuth**: oauth_accounts and account linking. The README explains how to create the Discord application; the **user puts the client ID and secret into `.env`**.
 - **E2E test** for email registration.
 - **Done when**: a user can register and log in in the browser. Discord login works once credentials are set, and is cleanly hidden without them.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.** No new art: the screens reuse panels, buttons, MOS-012, the card back and the Mossgrove pack.
+  - **Discord is not tested against the real Discord yet** — the user hasn't created the application. Everything up to the redirect was checked with dummy credentials; the callback is covered by integration tests with a fake Discord. **User to-do**: follow README → "Optional: Discord login", then try a real login (T18 QA can confirm).
+  - **Server** (`apps/server/src/auth/`):
+    - `oauth_accounts` table (migration `0002_chemical_thunderbird.sql`): `provider` (`discord`), `provider_user_id`, `provider_username`; unique per (provider, id) and per (user, provider).
+    - `discord.ts`: `DiscordClient` interface (`authorizeUrl`, `exchange`), the real fetch client (Zod-parsed token and `/users/@me`), `usernameBaseFromDiscord()`. `oauth.ts`: login / sign-up / link / unlink rules. `discordRoutes.ts`: `providers`, `linked`, `discord/start|callback|unlink` (table in `docs/api.md`).
+    - `state` is a random token in an httpOnly `pp_oauth` cookie (10 min, path `/api/auth/discord`), compared in constant time and cleared on every callback (single-use).
+    - `service.ts` now exports `insertSession()` / `insertPlayer()` (wallet + starter satchel) / `uniqueViolation()`, shared by register and Discord sign-up.
+    - Config: `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, optional `DISCORD_REDIRECT_URI` (default `${APP_ORIGIN}/api/auth/discord/callback`) → `config.discord` or `null`. `RATE_LIMIT=false` switches rate limits off outside production (E2E only).
+    - `buildApp({ discord })` takes the client (null = off); `createTestApp({ discord })` takes a fake.
+  - **Client** (`apps/client/src/`):
+    - `http.ts`: JSON client with a cached CSRF token (refetched and retried once on `403 csrf`), Zod-parsed answers, `ApiError { status, code }`. **Use it for every later API call** (T12+).
+    - `auth/`: `api.ts`, session store (`session.ts` + `useSession.ts`; `loading | guest | user | offline`, refreshed once in `main.tsx`), guards (`RequireAuth` → `/login?next=…`, `GuestOnly`), `AuthLayout` (wood bar, pinned parchment letter, a still life of card back + MOS-012 + pack, hidden below 1180 px), pages `/login`, `/register`, `/forgot-password`, `/reset-password?token=`, `/verify-email?token=`, `AccountPanel` (Settings → Account: verify status + resend, Discord link/unlink, log out), `DiscordButton` (renders nothing unless `/api/auth/providers` says `discord: true`).
+    - Components: `TextField` (label, hint, error with `aria-invalid`/`aria-describedby`), `Notice` (info / error).
+    - Routes: every in-game route needs a session; `/styleguide` stays public. The shell now fetches the wallet from `/api/economy` (badges show real balances) and shows a dismissible "verify your email" note for unverified players.
+  - **E2E**: `e2e/auth.spec.ts` (register → log out → wrong password → log in → reload; field errors; taken username; broken email links). Playwright now starts the server too (port 3101, `PGLITE_DIR=memory://`, no `.env`, no Discord, no rate limits) and Vite on 5174 proxies to it. The T07 shell tests log in first via `e2e/helpers.ts → loggedIn()`. Screenshots: `docs/styleguide/auth-{login,register,register-phone}.png`; `shell-home/phone` now show real balances and the verify note.
+  - **CI**: new `e2e` job (installs Chromium with `playwright install --with-deps`, uploads the report on failure).
+  - Design decisions are in GDD §29 (T09 rows).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build` and the client `e2e` (6 tests) pass; with dummy Discord credentials the real server reports `discord: true` and redirects to Discord with `state`.
 
 ### T10 — Economy & pack API · L · done
 Docs: §5, §6 (mint numbers), §7, §8, §9 (dust), §22

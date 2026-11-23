@@ -456,7 +456,7 @@ The task breakdown is in `docs/TASKS.md`.
 - Behind the Cloudflare Tunnel (§24), the server must trust the proxy's client-IP header (Fastify `trustProxy`, `CF-Connecting-IP`), or every request shares one rate-limit bucket. Decide in the deploy task.
 
 **User to-dos** (when a task needs them)
-- Create a Discord application for OAuth (T09; a guide will be in the README).
+- Create a Discord application for OAuth and put its client ID and secret into `.env` (guide: README → "Optional: Discord login"). Until then Discord login stays hidden.
 - Domain and SMTP provider (alpha deploy).
 - Approvals: card list (T03), style anchors (T04), card art (T05), style tile (T06), idle-loop keep/scrap (T17).
 
@@ -502,6 +502,10 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T08: register answers `409 emailTaken` (accepted small enumeration risk for clearer UX, behind a 5 / 10 min rate limit); login and reset requests never reveal whether an email exists |
 | 2026-11-23 | T08: usernames are 3–20 of `A–Z a–z 0–9 _`, unique ignoring case, filtered by a small blocklist (reserved names + slurs, leetspeak-normalised substring match); passwords 10–128 characters |
 | 2026-11-23 | T08: users carry `onboarding_step` (scripted packs opened); pack inventory is a count per (user, pack type); pack types are synced from shared config on start with release Season 0 |
+| 2026-11-23 | T09: Discord OAuth asks for `identify email`; `state` lives in a short-lived httpOnly cookie and is single-use. Without credentials the routes 404 and the client renders no Discord UI at all |
+| 2026-11-23 | T09: a Discord login whose email matches an existing account links to it only when both Discord and the account have verified that email; otherwise the player logs in with the password and links Discord in Settings (prevents account pre-hijacking) |
+| 2026-11-23 | T09: Discord sign-up creates an account without a password (username from the Discord handle, `_1234` tag on collisions); "Forgot password" sets one. Discord can't be unlinked while it is the only login method. A Discord account without an email can't sign up |
+| 2026-11-23 | T09: every in-game screen needs a session (guests go to `/login?next=…`); `/styleguide` stays public |
 | 2026-11-23 | T03: in M1 a card's base ATK + HP equals its rarity's power budget exactly; abilities cost nothing until the M4 cost table (which may shift stats) |
 | 2026-11-23 | T03: ability semantics — shield N absorbs the next N damage; thorns N deals N back to each attacker; regen N heals N at the end of every tick; weaken lowers ATK (not below 0); buffHp raises max and current HP; heal never exceeds max HP. Damage/weaken only target enemies, all other effects only allies or self |
 | 2026-11-23 | T10: pack prices live in shared `config/economy.ts` (realm 100 gold, Mythic 300 gems), not in `pack_types`; up to 10 packs per purchase, each purchase with an idempotency key |

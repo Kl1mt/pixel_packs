@@ -1,29 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
-
-const OUT = '../../docs/styleguide';
-
-/** Waits until the pixel font and every image have loaded, so screenshots are stable. */
-async function settle(page: Page) {
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-    await Promise.all(
-      Array.from(document.images)
-        .filter((img) => !img.complete)
-        .map(
-          (img) =>
-            new Promise<void>((resolve) => {
-              img.addEventListener(
-                'load',
-                () => {
-                  resolve();
-                },
-                { once: true },
-              );
-            }),
-        ),
-    );
-  });
-}
+import { expect, test } from '@playwright/test';
+import { OUT, loggedIn, settle } from './helpers.js';
 
 test('style guide renders the approved style-tile parts', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -43,6 +19,7 @@ test('style guide renders the approved style-tile parts', async ({ page }) => {
 
 test('app shell: navigation, routing and the phone layout', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
+  await loggedIn(page);
   await page.goto('/');
   await settle(page);
   const nav = page.getByRole('navigation', { name: 'Main' });
@@ -54,6 +31,7 @@ test('app shell: navigation, routing and the phone layout', async ({ page }) => 
   await expect(page.getByRole('heading', { name: 'Nothing tucked in yet' })).toBeVisible();
 
   await page.reload();
+  await expect(page.getByRole('heading', { name: 'Nothing tucked in yet' })).toBeVisible();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
 
@@ -64,6 +42,7 @@ test('app shell: navigation, routing and the phone layout', async ({ page }) => 
 });
 
 test('settings persist and switch motion off', async ({ page }) => {
+  await loggedIn(page);
   await page.goto('/settings');
   await page.getByLabel('Reduced').check();
   await expect(page.locator('html')).toHaveAttribute('data-motion', 'reduced');
