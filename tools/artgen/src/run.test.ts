@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { realmPaletteHex } from '@pixel-packs/shared';
+import type { GenerateImageV2Body } from './api/schemas.js';
 import { emptyManifest, type Entry } from './manifest.js';
 import { buildRequest, jobDescription, planJobs } from './run.js';
 import { JobSpecSchema, SpecFileSchema, type SpecFile } from './spec.js';
@@ -80,7 +81,7 @@ describe('buildRequest', () => {
   it('wraps the card prompt and passes the realm palette and seed', async () => {
     const [j] = spec([job('a', { seed: 42 })]).jobs;
     if (!j) throw new Error('no job');
-    const { body } = await buildRequest(j);
+    const body = (await buildRequest(j)).body as GenerateImageV2Body;
     expect(body.description).toBe(jobDescription(j));
     expect(body.description).toMatch(/^a baby hedgehog .*no scenery$/);
     expect(body.target_palette?.colors).toEqual(realmPaletteHex('mossgrove'));
@@ -91,6 +92,6 @@ describe('buildRequest', () => {
   it('omits the palette for palette "none"', async () => {
     const [j] = spec([job('a', { palette: 'none' })]).jobs;
     if (!j) throw new Error('no job');
-    expect((await buildRequest(j)).body.target_palette).toBeUndefined();
+    expect(((await buildRequest(j)).body as GenerateImageV2Body).target_palette).toBeUndefined();
   });
 });

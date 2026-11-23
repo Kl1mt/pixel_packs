@@ -288,7 +288,7 @@ Goal: simple, intuitive and modern with eye-candy, and clearly hand-crafted, **n
 **Do**
 - Use one **master palette** (~32 colours) for all art and UI. UI tokens only reference palette entries.
 - Use **one pixel scale per context** (e.g. 1 art pixel = 3 screen px in the UI). Never mix pixel sizes, and scale only by integers.
-- Use a pixel display font for headings and numbers, a readable body font at ≥ 16 px, and no more than ~4 text sizes.
+- Use a pixel display font for headings and numbers, a readable body font at ≥ 16 px (exception: compact card-face rules text, §29), and no more than ~4 text sizes.
 - Build panels as 9-slice pixel art made of materials (parchment, wood, cloth, brass) instead of flat boxes. Shadows are hard 2–4 px offsets, never blurred.
 - Make buttons chunky, with rest / hover / pressed states (pressed moves down 2 px and the shadow shrinks) and a click sound.
 - Use physical metaphors: a shop counter with a pack shelf, a binder book, a fusion workbench, a post office for trades.
@@ -364,9 +364,9 @@ Every step can be skipped. In scripted packs only the forced slot is scripted; e
 - **Binder idle loops** for Legendary/Mythic: south direction, 4–8 frames, staying inside the 64×64 window. Trialled in T17 and dropped if the consistency is poor.
 
 **Other assets**
-- Pack art and icons: `/generate-with-style-v2`.
+- Pack art: `/generate-with-style-v2` with the realm anchors (64×64). Icons: `/create-image-pixflux` at 32×32 (1 generation each), reduced to 16×16 in code (T06).
 - UI panels and buttons: `/create-ui-asset`, as 9-slice.
-- Rarity frames and card back: a generated base, hand-tuned if needed.
+- Rarity frames and card back: one generated base (`/create-image-pro-flash`), hand-tuned in code into all six materials (`artgen compose-t06`, T06).
 - Realm battle backdrops (M4) and VFX: `/vfx`.
 - Heading font: `/generate-font-pro`; fallback is an OFL-licensed pixel font, with its licence file in the repo.
 - Music and SFX: see §20.
@@ -518,3 +518,12 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T05: the user raised T05's cap to ≤ 260 for three regenerations (Lantern Shroom, Thistle Hedgehog, Lamplight Moth); the Lantern Shroom now holds a lantern, and the three art prompts were revised |
 | 2026-11-23 | T05: STA-008 "Post Moth" is renamed "Mail Moth" (name only; ID, stats and abilities unchanged; user decision) |
 | 2026-11-23 | T05: final art may be an approved candidate moved by whole pixels (no resampling), e.g. `promote --recentre` to centre a sprite that touches the canvas edge (STA-001); the catalog art test accepts such shifts |
+| 2026-11-23 | T06: budget raised from ≤ 60 to a hard cap of ≤ 100 generations (user); 85 used (75 planned + 10 for one UI retry with explicit `pieces`) |
+| 2026-11-23 | T06: the six rarity frames share one shape — one generated 96×128 base, hand-tuned in code (exact 64×64 window, 6 pip sockets) and recoloured per material: wood, copper (rose), silver, amethyst, gold, starmetal (teal). Layout in shared `CARD_FACE`, ramps in `FRAME_MATERIALS` (user-approved plan) |
+| 2026-11-23 | T06: icons are 16×16 art px, generated with pixflux at 32×32 and reduced in code with a fresh 1 px ink outline (user-approved plan) |
+| 2026-11-23 | T06: pack art is 64×64 (the style endpoint returns squares), shown at 3× (user-approved plan) |
+| 2026-11-23 | T06: pixel scales — menus/panels 1 art px = 2 screen px (`UI_SCALE`), cards and packs 3 (`CARD_SCALE`). Type scale of 4 sizes: Display 48 px and Heading/Numbers 32 px in the generated "Pixel Packs Hollow" font (16 px glyphs, integer multiples only); Body 18 px and Small 16 px in a storybook serif stack (Iowan Old Style / Palatino / Georgia) |
+| 2026-11-23 | T06: **exception to the §16 16 px body minimum** (user-approved): card-face rules text is compact (13 px) to fit two abilities in the 78×13 box at 3×; the full text at ≥ 16 px lives in card inspect (T11/T15) |
+| 2026-11-23 | T06: the user isn't happy with the fonts yet; they stay for now, and T19 revisits them (ask which font first) |
+| 2026-11-23 | T06: ATK/HP numbers on the card face are hand-pixelled chunky digits (5×7, 2 px vertical strokes; "1" is 3 wide), ink on the cream badge circles, drawn in art pixels (user pick, variant 2 of 4). They are centred in the 10×11 interior: vertically exact, horizontally ½ px left with the spare pixel on the right (all glyph runs are odd-width). Shared `STAT_DIGITS` / `statDigitPixels` |
+| 2026-11-23 | T06: the style tile (`apps/client/public/style-tile.html`, v4) is approved by the user; this clears the §16 approval gate for building screens (T07+) |

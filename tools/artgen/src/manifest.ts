@@ -29,6 +29,8 @@ export const EntrySchema = z.object({
   cost: z.object({ generations: z.number(), usd: z.number().optional() }),
   createdAt: z.string(),
   error: z.string().optional(),
+  /** Ids later steps need, e.g. `uiAssetId`, split `elements`, created `states`. */
+  extra: z.record(z.string(), z.unknown()).optional(),
   outputs: z.array(OutputSchema),
 });
 export type Entry = z.infer<typeof EntrySchema>;

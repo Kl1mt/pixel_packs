@@ -51,16 +51,40 @@ Written in T04 (2026-11-23) from `https://api.pixellab.ai/v2/llms.txt`, selected
 - With `colors` set, every pixel is snapped to the palette. The first anchor came back with 5–13 colours out of the 16-colour realm palette.
 - `name` "helps the look". `smart` (single images only) maps whole objects instead of nearest colour.
 
+### `POST /create-image-pro-flash` — one native pixel-art image (T06 frames, card back)
+- Body: `description`, `image_size` (native 16–128 sizes, custom 16–256 beta), `seed`, `no_background`, `target_palette`, optional `style_image {image, size, usage_description}` + `style_options {color_palette, outline, detail, shading}` (set `color_palette: false` when a palette is sent).
+- Background job; the result has `images` (one) and an `image_url`.
+- **Cost (measured, T06): 6 at 96×128.** `GET /pro-flash/cost?operation=create&width=&height=` quotes 5 up to 96×96 (incl. 64×96, 32×32) and 6 at 96×128.
+- A frame prompt is only loosely followed: the 96×128 frame came back with a 68×49 window and 4 sockets instead of an exact 64×64 window and 6, so frames are hand-tuned in code (`tools/artgen/src/compose/frames.ts`).
+
+### `POST /create-image-pixflux` — cheap single image (T06 icons)
+- **Synchronous**: the response is `{ usage, image: Base64Image }`, no background job.
+- Body: `description`, `image_size` (area 32×32 to 400×400), `seed`, `no_background`, `color_image` (forced palette: an image containing the allowed colours; artgen sends a 1-px strip of the palette), `outline` (`single color black outline` · `single color outline` · `selective outline` · `lineless`), `shading` (`flat` … `highly detailed shading`), `detail` (`low` · `medium` · `highly detailed`), `view`, `init_image`.
+- **Cost (measured): 1 per image at 32×32.**
+
+### `POST /create-ui-asset` + `/ui-assets/{id}/split` + `/ui-assets/states` (T06 panels and button)
+- `create-ui-asset` body: `description`, `image_size` (192–688 per side), `pieces` (shape template in editor coords, longer side 0–512: `rounded_rect {id,kind,label,x,y,w,h,radius}`, `circle`, `polygon`), or `elements` (named scaffolds: button, panel, window…), `target_palette`, `style_image`, `seed`, `name`. Answers `{ background_job_id, ui_asset_id }`; after the job, `GET /ui-assets/{id}` has `image_url` (a public CDN PNG), `elements`, `states`, `split_preview`.
+- **Cost (measured): 10 at 256×256** (documented: 10 ≤ 256, 15 ≤ 341, 25 above).
+- Without `pieces`, `elements: ["panel","window","button"]` produced one composite window (with stray pixel lettering), not three pieces. **Use `pieces`**: three rects gave clean parchment, wood and button pieces. Output is native 1 px art (a 160×48 editor rect → ≈86×30 px).
+- `POST /ui-assets/{id}/split` (body `{}` for the default boxes, or `{boxes}`): **free**; one element per piece, each with its own `image_url`. A template splits once.
+- `POST /ui-assets/states` `{ element_ids, states: [{name, description}], target_palette }`: all states of all elements in one grid. **Cost (measured): 10** for one 81×25 button × 3 states. `last_response.created_state_ids` lists the new assets; fetch each with `GET /ui-assets/{id}`. States come back cropped to the element's content.
+- `artgen ui-split <entry>` splits and downloads elements into the entry's `elements/` folder and records their ids in the manifest (`extra.elements`).
+
+### `POST /generate-font-pro` — heading font (T06)
+- Body: `description`, `weight` (`Bold` · `Regular`), `glyph_px` (8 · 12 · 16 · 24 · 32 · 64), `seed`, `font_name`.
+- Background job; `last_response.images[0]` is the 80-glyph atlas and `last_response.ttf_base64` the TrueType file.
+- **Cost (measured): 15.**
+
+### `POST /generate-with-style-v2` receipt (T06)
+- **Measured: 10 per call** at 64×64 (2 pack calls). This confirms the documented price.
+
 ## Other endpoints (for later tasks — documented costs, unverified)
 | Endpoint | Use | Cost (generations) |
 |---|---|---|
-| `POST /create-image-pixflux`, `/create-image-pixen` | cheap single image, `init_image`, forced palette | 1 |
-| `POST /create-image-pro-flash` | single image | 5 up to 96 px |
 | `POST /create-character-v3` | character from a 64×64 `reference_image` (T17) | ceil(w·h·8/65536), so 64×64 → 1; from text: 2 at 16–90 px |
 | `POST /characters/animations` (v3) | battle animations per direction (T17) | ceil(w·h·frames/65536) per direction, so 64 px × 8 frames ≈ 1 |
-| `POST /create-ui-asset` | 9-slice panels and buttons (T06) | 10 up to 256×256, 15 up to 341², 25 above |
 | `POST /create-character-pro` | Pro character redraw | 10 / 15 / 25 by art size |
-| fonts, `/vfx` | heading font, battle VFX | look up before use |
+| `/vfx` | battle VFX | look up before use |
 
 ## Budget implications (found in T04)
 - The GDD §19 budget assumed about 1 generation per image. The Pro image endpoints cost **10 per call** (16 candidates of one subject). So:

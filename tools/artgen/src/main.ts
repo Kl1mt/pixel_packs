@@ -10,6 +10,9 @@ import { importJob } from './importJob.js';
 import { promote } from './promote.js';
 import { planJobs, runSpec } from './run.js';
 import { loadSpec } from './spec.js';
+import { uiSplit } from './ui.js';
+import { composeT06, T06_PACK_NUMBERS } from './compose/t06.js';
+import { buildStyleTile } from './styleTile/build.js';
 
 const USAGE = `artgen <command>
   balance                                  show remaining PixelLab generations
@@ -23,6 +26,9 @@ const USAGE = `artgen <command>
   promote <entry> <index> <dest.png> [--recentre]
                                            copy an approved candidate to its final path
                                            (--recentre: centre it horizontally, whole pixels)
+  compose-t06                              build T06's final frames/packs/UI/icons/font from candidates
+  style-tile                               write the static style tile page (apps/client/public/style-tile.html)
+  ui-split <entry>                         split a create-ui-asset template into elements (free)
   spend                                    total generations logged in the manifest`;
 
 const log = (msg: string) => {
@@ -136,6 +142,20 @@ async function main(argv: string[]): Promise<void> {
         recentre: values.recentre,
       });
       log(`${entryId} #${index} → ${dest}${shift ? ` (shifted ${String(shift)} px)` : ''}`);
+      return;
+    }
+    case 'compose-t06': {
+      await composeT06(log);
+      return;
+    }
+    case 'style-tile': {
+      log(`wrote ${await buildStyleTile(T06_PACK_NUMBERS)}`);
+      return;
+    }
+    case 'ui-split': {
+      const [entryId] = rest;
+      if (!entryId) throw new Error(USAGE);
+      await uiSplit(client, await readManifest(), entryId, log);
       return;
     }
     case 'spend': {

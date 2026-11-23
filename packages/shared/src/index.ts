@@ -35,3 +35,6 @@ export * from './rules/edition.js';
 export * from './rules/rulesText.js';
 export * from './rules/expected.js';
 export { buildPlaceholderCatalog } from './testing/placeholderCatalog.js';
+export * from './config/cardFace.js';
+export * from './config/uiArt.js';
+export * from './config/statDigits.js';

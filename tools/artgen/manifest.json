@@ -1042,6 +1042,39 @@
       ]
     },
     {
+      "id": "t06/icon-gold",
+      "spec": "t06",
+      "job": "icon-gold",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a single round gold coin with a small embossed acorn, slight 3/4 tilt, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6041,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6041,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:02:07.899Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-gold/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
       "id": "cards/mos-006-thistle-hedgehog",
       "spec": "cards",
       "job": "mos-006-thistle-hedgehog",
@@ -1167,6 +1200,154 @@
           "index": 16,
           "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog/16.png",
           "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t06/frame-base",
+      "spec": "t06",
+      "job": "frame-base",
+      "endpoint": "create-image-pro-flash",
+      "params": {
+        "description": "front view of an empty fantasy trading card frame made of warm carved oak wood, filling the whole 96x128 canvas, flat and symmetric. A large empty square window in the upper half for artwork, a small round crest socket centered on the top edge, a plain name banner strip below the window, an empty text area below the banner, two small round badge sockets in the bottom-left and bottom-right corners, a row of six tiny empty round gem sockets centered along the bottom edge. cozy whimsical storybook pixel art, clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. No text, no letters, no creature, no picture inside the window, transparent window and background.",
+        "seed": 6001,
+        "no_background": true,
+        "target_palette": {
+          "name": "Pixel Packs master",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#e8e0d5",
+            "#fff8ec",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#6e2236",
+            "#a8344a",
+            "#d95f5f",
+            "#f2a0a0",
+            "#e8a33d",
+            "#f6d36b",
+            "#2c5e6b",
+            "#4f9a9a",
+            "#8fd0c2",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "image_size": {
+          "width": 96,
+          "height": 128
+        },
+        "style_image": "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "detail": true,
+          "shading": true
+        }
+      },
+      "seed": 6001,
+      "status": "completed",
+      "backgroundJobId": "c72f2c32-1f27-419d-bdf5-c2ff6b4d6fab",
+      "cost": {
+        "generations": 6
+      },
+      "createdAt": "2026-11-23T16:02:55.374Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/frame-base/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
+      "id": "t06/card-back",
+      "spec": "t06",
+      "job": "card-back",
+      "endpoint": "create-image-pro-flash",
+      "params": {
+        "description": "back side of a fantasy trading card filling the whole 96x128 canvas, flat front view, symmetric. Deep plum and night-blue cloth with a stitched warm gold border, small brass corner caps, and one round central emblem showing a little moth courier carrying a tiny satchel, surrounded by a ring of tiny stars and leaves. cozy whimsical storybook pixel art, clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. No text, no letters.",
+        "seed": 6002,
+        "no_background": false,
+        "target_palette": {
+          "name": "Pixel Packs master",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#e8e0d5",
+            "#fff8ec",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#6e2236",
+            "#a8344a",
+            "#d95f5f",
+            "#f2a0a0",
+            "#e8a33d",
+            "#f6d36b",
+            "#2c5e6b",
+            "#4f9a9a",
+            "#8fd0c2",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "image_size": {
+          "width": 96,
+          "height": 128
+        },
+        "style_image": "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "detail": true,
+          "shading": true
+        }
+      },
+      "seed": 6002,
+      "status": "completed",
+      "backgroundJobId": "5f7c8679-e891-41e4-aa2b-8ebee9fe7b39",
+      "cost": {
+        "generations": 6
+      },
+      "createdAt": "2026-11-23T16:03:12.353Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/card-back/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -1426,6 +1607,135 @@
         {
           "index": 16,
           "file": "tools/artgen/candidates/cards/mos-008-toadstool-elder/16.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t06/pack-mossgrove",
+      "spec": "t06",
+      "job": "pack-mossgrove",
+      "endpoint": "generate-with-style-v2",
+      "params": {
+        "description": "a sealed card pack shaped like a plump little cloth satchel of mossy green fabric, crimped and stitched top seam, a round stitched emblem of a leaf and a tiny mushroom on the front, a brass clasp, slightly bulging with cards inside, upright, centered, front view, cozy whimsical fantasy, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 6011,
+        "no_background": true,
+        "target_palette": {
+          "name": "Mossgrove: moss, bark, berry",
+          "colors": [
+            "#1e1a26",
+            "#8c8191",
+            "#e8e0d5",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#a8344a",
+            "#d95f5f",
+            "#8f87d1"
+          ]
+        },
+        "style_images": [
+          "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+          "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png",
+          "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png"
+        ],
+        "style_description": "Cozy whimsical storybook pixel art of a single sealed card pack as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text."
+      },
+      "seed": 6011,
+      "status": "completed",
+      "backgroundJobId": "edda33d8-e7a5-4c8c-a812-f8326227d9a5",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08159247703022428
+      },
+      "createdAt": "2026-11-23T16:08:33.125Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/05.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/t06/pack-mossgrove/16.png",
           "review": "pending"
         }
       ]
@@ -1691,6 +2001,136 @@
       ]
     },
     {
+      "id": "t06/pack-starhollow",
+      "spec": "t06",
+      "job": "pack-starhollow",
+      "endpoint": "generate-with-style-v2",
+      "params": {
+        "description": "a sealed card pack shaped like a plump little cloth satchel of deep night-blue velvet, crimped and stitched top seam, a round stitched emblem of a crescent moon with three tiny stars on the front, a silver clasp, slightly bulging with cards inside, upright, centered, front view, cozy whimsical fantasy, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 6012,
+        "no_background": true,
+        "target_palette": {
+          "name": "Starhollow: indigo, silver, lilac",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#fff8ec",
+            "#8a5a3c",
+            "#d95f5f",
+            "#e8a33d",
+            "#f6d36b",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "style_images": [
+          "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+          "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+          "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+          "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+        ],
+        "style_description": "Cozy whimsical storybook pixel art of a single sealed card pack as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text."
+      },
+      "seed": 6012,
+      "status": "completed",
+      "backgroundJobId": "ed8dee78-5e9d-4d79-a56e-3a304ce63fc9",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08360146273507013
+      },
+      "createdAt": "2026-11-23T16:10:36.951Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/06.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/t06/pack-starhollow/16.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
       "id": "cards/mos-011-bramblemum",
       "spec": "cards",
       "job": "mos-011-bramblemum",
@@ -1817,6 +2257,369 @@
           "index": 16,
           "file": "tools/artgen/candidates/cards/mos-011-bramblemum/16.png",
           "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t06/ui-template",
+      "spec": "t06",
+      "job": "ui-template",
+      "endpoint": "create-ui-asset",
+      "params": {
+        "description": "cozy storybook fantasy game UI in chunky pixel art: a cream parchment paper panel with a thin brown ink border and slightly worn edges; a carved warm wood panel with a darker wood frame and small brass corner rivets; a chunky wooden button with a brass trim and a hard 2 px dark bottom edge. Muted earthy colours, 1 px dark plum outline, no text, no icons, no gradients, no glow",
+        "seed": 6021,
+        "no_background": true,
+        "target_palette": {
+          "name": "Pixel Packs master",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#e8e0d5",
+            "#fff8ec",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#6e2236",
+            "#a8344a",
+            "#d95f5f",
+            "#f2a0a0",
+            "#e8a33d",
+            "#f6d36b",
+            "#2c5e6b",
+            "#4f9a9a",
+            "#8fd0c2",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "image_size": {
+          "width": 256,
+          "height": 256
+        },
+        "elements": [
+          "panel",
+          "window",
+          "button"
+        ],
+        "name": "ui-template"
+      },
+      "seed": 6021,
+      "status": "completed",
+      "backgroundJobId": "1aaaa3e9-6083-4931-8bb1-9ae761d99093",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08041911141077678
+      },
+      "createdAt": "2026-11-23T16:11:51.820Z",
+      "extra": {
+        "uiAssetId": "64d441d8-b94d-41c0-a0ec-c2b0a7ef7901",
+        "nineSlice": null,
+        "elements": [
+          {
+            "id": "8acd8ef4-0926-46b4-abec-aa4f05a066b8",
+            "name": "element 1",
+            "nineSlice": null,
+            "file": "tools/artgen/candidates/t06/ui-template/elements/01-element-1.png"
+          },
+          {
+            "id": "c19ed927-2e24-4307-87dd-c89e076492c9",
+            "name": "element 2",
+            "nineSlice": null,
+            "file": "tools/artgen/candidates/t06/ui-template/elements/02-element-2.png"
+          },
+          {
+            "id": "d43d2178-0c4d-4555-939a-e0d82013c43c",
+            "name": "Button",
+            "nineSlice": null,
+            "file": "tools/artgen/candidates/t06/ui-template/elements/03-button.png"
+          }
+        ]
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/ui-template/01.png",
+          "review": "rejected",
+          "note": "one composite window with stray lettering; retried as t06/ui-pieces"
+        }
+      ]
+    },
+    {
+      "id": "t06/font-heading",
+      "spec": "t06",
+      "job": "font-heading",
+      "endpoint": "generate-font-pro",
+      "params": {
+        "description": "cozy storybook fantasy pixel font for game headings and numbers, chunky hand-lettered strokes with small soft serifs, friendly rounded shapes, very readable",
+        "weight": "Bold",
+        "glyph_px": 16,
+        "seed": 6031,
+        "font_name": "Pixel Packs Hollow"
+      },
+      "seed": 6031,
+      "status": "completed",
+      "backgroundJobId": "1083bc09-fc0f-46f4-8ae0-773442ab5d70",
+      "cost": {
+        "generations": 15
+      },
+      "createdAt": "2026-11-23T16:12:41.880Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/font-heading/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t06/font-heading/font.ttf",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
+      "id": "t06/icon-gem",
+      "spec": "t06",
+      "job": "icon-gem",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a single faceted rose-pink gem crystal, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6042,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6042,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:12:52.834Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-gem/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
+      "id": "t06/icon-stardust",
+      "spec": "t06",
+      "job": "icon-stardust",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a small pile of glittering pale lilac stardust with two tiny four-point sparkles, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6043,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6043,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:13:03.801Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-stardust/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
+      "id": "t06/icon-timer",
+      "spec": "t06",
+      "job": "icon-timer",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a small brass hourglass with sand, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6044,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6044,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:13:27.293Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-timer/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
+      "id": "t06/icon-nav-home",
+      "spec": "t06",
+      "job": "icon-nav-home",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a tiny cozy cottage with a round door and a chimney, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6045,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6045,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:13:38.228Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-nav-home/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
+      "id": "t06/icon-nav-packs",
+      "spec": "t06",
+      "job": "icon-nav-packs",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a small sealed card pack shaped like a cloth satchel, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6046,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6046,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:13:51.899Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-nav-packs/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
+      "id": "t06/icon-nav-binder",
+      "spec": "t06",
+      "job": "icon-nav-binder",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a closed leather-bound book binder with a brass clasp, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6047,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6047,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:14:06.467Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-nav-binder/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
+      "id": "t06/icon-cursor",
+      "spec": "t06",
+      "job": "icon-cursor",
+      "endpoint": "create-image-pixflux",
+      "params": {
+        "description": "game UI icon, a pointing hand cursor arrow, a small white glove with the index finger pointing up-left, as a mouse pointer, centered, bold simple shapes, cozy storybook pixel art, no text",
+        "image_size": {
+          "width": 32,
+          "height": 32
+        },
+        "seed": 6048,
+        "no_background": true,
+        "color_image": "palette:master",
+        "outline": "single color black outline",
+        "shading": "basic shading",
+        "detail": "low detail"
+      },
+      "seed": 6048,
+      "status": "completed",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T16:14:20.045Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/icon-cursor/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -2213,6 +3016,131 @@
       ]
     },
     {
+      "id": "t06/ui-pieces",
+      "spec": "t06",
+      "job": "ui-pieces",
+      "endpoint": "create-ui-asset",
+      "params": {
+        "description": "cozy storybook fantasy game UI pieces in chunky pixel art, three separate pieces with empty centres: (1) parchment panel: cream parchment paper with a thin dark brown ink border and slightly worn edges; (2) wood panel: warm carved wood planks inside a darker wood frame with small brass corner rivets; (3) button: a chunky wooden button with a brass trim and a hard 2 px dark bottom edge. Muted earthy colours, 1 px dark plum outline, no text, no letters, no icons, no gradients, no glow",
+        "seed": 6022,
+        "no_background": true,
+        "target_palette": {
+          "name": "Pixel Packs master",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#e8e0d5",
+            "#fff8ec",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#6e2236",
+            "#a8344a",
+            "#d95f5f",
+            "#f2a0a0",
+            "#e8a33d",
+            "#f6d36b",
+            "#2c5e6b",
+            "#4f9a9a",
+            "#8fd0c2",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "image_size": {
+          "width": 256,
+          "height": 256
+        },
+        "pieces": [
+          {
+            "id": "parchment",
+            "kind": "rounded_rect",
+            "label": "parchment panel",
+            "x": 16,
+            "y": 16,
+            "w": 232,
+            "h": 232,
+            "radius": 8
+          },
+          {
+            "id": "wood",
+            "kind": "rounded_rect",
+            "label": "wood panel",
+            "x": 264,
+            "y": 16,
+            "w": 232,
+            "h": 232,
+            "radius": 8
+          },
+          {
+            "id": "button",
+            "kind": "rounded_rect",
+            "label": "button",
+            "x": 16,
+            "y": 296,
+            "w": 160,
+            "h": 48,
+            "radius": 6
+          }
+        ],
+        "name": "ui-pieces"
+      },
+      "seed": 6022,
+      "status": "completed",
+      "backgroundJobId": "768b961d-08f6-4843-8604-4616ba58aa07",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08025390164057414
+      },
+      "createdAt": "2026-11-23T16:19:23.424Z",
+      "extra": {
+        "uiAssetId": "8b376442-b686-4073-a2ef-593b82d5e121",
+        "nineSlice": null,
+        "elements": [
+          {
+            "id": "2d917f7a-8c42-4146-951d-448c63a86af3",
+            "name": "parchment panel",
+            "nineSlice": null,
+            "file": "tools/artgen/candidates/t06/ui-pieces/elements/01-parchment-panel.png"
+          },
+          {
+            "id": "07f86922-d001-445d-99c2-995728bb6084",
+            "name": "wood panel",
+            "nineSlice": null,
+            "file": "tools/artgen/candidates/t06/ui-pieces/elements/02-wood-panel.png"
+          },
+          {
+            "id": "53713692-e53c-4b5a-818f-31ca11cdb8d7",
+            "name": "button",
+            "nineSlice": null,
+            "file": "tools/artgen/candidates/t06/ui-pieces/elements/03-button.png"
+          }
+        ]
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/ui-pieces/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        }
+      ]
+    },
+    {
       "id": "cards/sta-004-lamplight-moth",
       "spec": "cards",
       "job": "sta-004-lamplight-moth",
@@ -2470,6 +3398,111 @@
           "index": 16,
           "file": "tools/artgen/candidates/cards/sta-005-drowsy-bat/16.png",
           "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t06/button-states",
+      "spec": "t06",
+      "job": "button-states",
+      "endpoint": "ui-assets/states",
+      "params": {
+        "element_ids": [
+          "53713692-e53c-4b5a-818f-31ca11cdb8d7"
+        ],
+        "states": [
+          {
+            "name": "hover",
+            "description": "the same button, slightly lighter warm wood and a brighter brass trim highlight; same size and shape, no glow"
+          },
+          {
+            "name": "pressed",
+            "description": "pushed in: the face sits 2 px lower and the dark bottom edge is only 1 px thick, wood a little darker; same outline and size"
+          },
+          {
+            "name": "disabled",
+            "description": "greyed, faded wood with dull grey-brown trim, lower contrast; same size and shape"
+          }
+        ],
+        "target_palette": {
+          "name": "Pixel Packs master",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#e8e0d5",
+            "#fff8ec",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#6e2236",
+            "#a8344a",
+            "#d95f5f",
+            "#f2a0a0",
+            "#e8a33d",
+            "#f6d36b",
+            "#2c5e6b",
+            "#4f9a9a",
+            "#8fd0c2",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        }
+      },
+      "seed": 6023,
+      "status": "completed",
+      "backgroundJobId": "3bf100c0-46cc-4da1-974e-d8a2f560280d",
+      "cost": {
+        "generations": 10
+      },
+      "createdAt": "2026-11-23T16:21:38.882Z",
+      "extra": {
+        "states": [
+          {
+            "id": "2f611580-87ad-47ac-a1ef-7440b49a492e",
+            "name": "hover"
+          },
+          {
+            "id": "5e5f65cf-5142-4f1f-a136-cc5d6ba622f7",
+            "name": "pressed"
+          },
+          {
+            "id": "0c3565e0-8605-4deb-be36-24b8c11e1efa",
+            "name": "disabled"
+          }
+        ]
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t06/button-states/01.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t06/button-states/02.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t06/button-states/03.png",
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },

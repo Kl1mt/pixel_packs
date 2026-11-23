@@ -1,0 +1,275 @@
+{
+  "id": "t06",
+  "description": "T06 frames, card back, packs, UI template, icons, heading font (GDD §4, §16, §19).",
+  "jobs": [
+    {
+      "id": "frame-base",
+      "endpoint": "create-image-pro-flash",
+      "palette": "master",
+      "seed": 6001,
+      "size": {
+        "width": 96,
+        "height": 128
+      },
+      "styleImage": "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+      "styleUsage": "style reference only: copy its outline weight, shading and pixel clusters; do not draw this creature",
+      "description": "front view of an empty fantasy trading card frame made of warm carved oak wood, filling the whole 96x128 canvas, flat and symmetric. A large empty square window in the upper half for artwork, a small round crest socket centered on the top edge, a plain name banner strip below the window, an empty text area below the banner, two small round badge sockets in the bottom-left and bottom-right corners, a row of six tiny empty round gem sockets centered along the bottom edge. cozy whimsical storybook pixel art, clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. No text, no letters, no creature, no picture inside the window, transparent window and background.",
+      "outDir": "tools/artgen/candidates/t06/frame-base"
+    },
+    {
+      "id": "card-back",
+      "endpoint": "create-image-pro-flash",
+      "palette": "master",
+      "seed": 6002,
+      "size": {
+        "width": 96,
+        "height": 128
+      },
+      "styleImage": "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+      "styleUsage": "style reference only: copy its outline weight, shading and pixel clusters; do not draw this creature",
+      "description": "back side of a fantasy trading card filling the whole 96x128 canvas, flat front view, symmetric. Deep plum and night-blue cloth with a stitched warm gold border, small brass corner caps, and one round central emblem showing a little moth courier carrying a tiny satchel, surrounded by a ring of tiny stars and leaves. cozy whimsical storybook pixel art, clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. No text, no letters.",
+      "noBackground": false,
+      "outDir": "tools/artgen/candidates/t06/card-back"
+    },
+    {
+      "id": "pack-mossgrove",
+      "endpoint": "generate-with-style-v2",
+      "palette": "mossgrove",
+      "seed": 6011,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single sealed card pack as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text.",
+      "description": "a sealed card pack shaped like a plump little cloth satchel of mossy green fabric, crimped and stitched top seam, a round stitched emblem of a leaf and a tiny mushroom on the front, a brass clasp, slightly bulging with cards inside, upright, centered, front view, cozy whimsical fantasy, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+      "outDir": "tools/artgen/candidates/t06/pack-mossgrove"
+    },
+    {
+      "id": "pack-starhollow",
+      "endpoint": "generate-with-style-v2",
+      "palette": "starhollow",
+      "seed": 6012,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single sealed card pack as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text.",
+      "description": "a sealed card pack shaped like a plump little cloth satchel of deep night-blue velvet, crimped and stitched top seam, a round stitched emblem of a crescent moon with three tiny stars on the front, a silver clasp, slightly bulging with cards inside, upright, centered, front view, cozy whimsical fantasy, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+      "outDir": "tools/artgen/candidates/t06/pack-starhollow"
+    },
+    {
+      "id": "ui-template",
+      "endpoint": "create-ui-asset",
+      "palette": "master",
+      "seed": 6021,
+      "size": {
+        "width": 256,
+        "height": 256
+      },
+      "elements": ["panel", "window", "button"],
+      "description": "cozy storybook fantasy game UI in chunky pixel art: a cream parchment paper panel with a thin brown ink border and slightly worn edges; a carved warm wood panel with a darker wood frame and small brass corner rivets; a chunky wooden button with a brass trim and a hard 2 px dark bottom edge. Muted earthy colours, 1 px dark plum outline, no text, no icons, no gradients, no glow",
+      "outDir": "tools/artgen/candidates/t06/ui-template"
+    },
+    {
+      "id": "ui-pieces",
+      "endpoint": "create-ui-asset",
+      "palette": "master",
+      "seed": 6022,
+      "size": {
+        "width": 256,
+        "height": 256
+      },
+      "pieces": [
+        {
+          "id": "parchment",
+          "kind": "rounded_rect",
+          "label": "parchment panel",
+          "x": 16,
+          "y": 16,
+          "w": 232,
+          "h": 232,
+          "radius": 8
+        },
+        {
+          "id": "wood",
+          "kind": "rounded_rect",
+          "label": "wood panel",
+          "x": 264,
+          "y": 16,
+          "w": 232,
+          "h": 232,
+          "radius": 8
+        },
+        {
+          "id": "button",
+          "kind": "rounded_rect",
+          "label": "button",
+          "x": 16,
+          "y": 296,
+          "w": 160,
+          "h": 48,
+          "radius": 6
+        }
+      ],
+      "description": "cozy storybook fantasy game UI pieces in chunky pixel art, three separate pieces with empty centres: (1) parchment panel: cream parchment paper with a thin dark brown ink border and slightly worn edges; (2) wood panel: warm carved wood planks inside a darker wood frame with small brass corner rivets; (3) button: a chunky wooden button with a brass trim and a hard 2 px dark bottom edge. Muted earthy colours, 1 px dark plum outline, no text, no letters, no icons, no gradients, no glow",
+      "outDir": "tools/artgen/candidates/t06/ui-pieces"
+    },
+    {
+      "id": "font-heading",
+      "endpoint": "generate-font-pro",
+      "seed": 6031,
+      "weight": "Bold",
+      "glyphPx": 16,
+      "fontName": "Pixel Packs Hollow",
+      "description": "cozy storybook fantasy pixel font for game headings and numbers, chunky hand-lettered strokes with small soft serifs, friendly rounded shapes, very readable",
+      "outDir": "tools/artgen/candidates/t06/font-heading"
+    },
+    {
+      "id": "icon-gold",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 6041,
+      "size": {
+        "width": 32,
+        "height": 32
+      },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "low detail",
+      "description": "game UI icon, a single round gold coin with a small embossed acorn, slight 3/4 tilt, centered, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t06/icon-gold"
+    },
+    {
+      "id": "icon-gem",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 6042,
+      "size": {
+        "width": 32,
+        "height": 32
+      },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "low detail",
+      "description": "game UI icon, a single faceted rose-pink gem crystal, centered, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t06/icon-gem"
+    },
+    {
+      "id": "icon-stardust",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 6043,
+      "size": {
+        "width": 32,
+        "height": 32
+      },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "low detail",
+      "description": "game UI icon, a small pile of glittering pale lilac stardust with two tiny four-point sparkles, centered, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t06/icon-stardust"
+    },
+    {
+      "id": "icon-timer",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 6044,
+      "size": {
+        "width": 32,
+        "height": 32
+      },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "low detail",
+      "description": "game UI icon, a small brass hourglass with sand, centered, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t06/icon-timer"
+    },
+    {
+      "id": "icon-nav-home",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 6045,
+      "size": {
+        "width": 32,
+        "height": 32
+      },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "low detail",
+      "description": "game UI icon, a tiny cozy cottage with a round door and a chimney, centered, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t06/icon-nav-home"
+    },
+    {
+      "id": "icon-nav-packs",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 6046,
+      "size": {
+        "width": 32,
+        "height": 32
+      },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "low detail",
+      "description": "game UI icon, a small sealed card pack shaped like a cloth satchel, centered, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t06/icon-nav-packs"
+    },
+    {
+      "id": "icon-nav-binder",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 6047,
+      "size": {
+        "width": 32,
+        "height": 32
+      },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "low detail",
+      "description": "game UI icon, a closed leather-bound book binder with a brass clasp, centered, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t06/icon-nav-binder"
+    },
+    {
+      "id": "icon-cursor",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 6048,
+      "size": {
+        "width": 32,
+        "height": 32
+      },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "low detail",
+      "description": "game UI icon, a pointing hand cursor arrow, a small white glove with the index finger pointing up-left, as a mouse pointer, centered, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t06/icon-cursor"
+    },
+    {
+      "id": "button-states",
+      "endpoint": "ui-assets/states",
+      "palette": "master",
+      "seed": 6023,
+      "description": "rest/hover/pressed/disabled states of the ui-pieces button",
+      "elementIds": ["53713692-e53c-4b5a-818f-31ca11cdb8d7"],
+      "states": [
+        {
+          "name": "hover",
+          "description": "the same button, slightly lighter warm wood and a brighter brass trim highlight; same size and shape, no glow"
+        },
+        {
+          "name": "pressed",
+          "description": "pushed in: the face sits 2 px lower and the dark bottom edge is only 1 px thick, wood a little darker; same outline and size"
+        },
+        {
+          "name": "disabled",
+          "description": "greyed, faded wood with dull grey-brown trim, lower contrast; same size and shape"
+        }
+      ],
+      "gridSide": 256,
+      "outDir": "tools/artgen/candidates/t06/button-states"
+    }
+  ]
+}
