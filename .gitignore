@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+# PGlite local database
+.data/
+*.log
+.DS_Store
+.vite/

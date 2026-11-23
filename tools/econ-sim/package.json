@@ -1,0 +1,14 @@
+{
+  "name": "@pixel-packs/econ-sim",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Economy simulator (GDD §8).",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
+  }
+}
