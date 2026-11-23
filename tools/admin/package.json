@@ -1,0 +1,14 @@
+{
+  "name": "@pixel-packs/admin",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Admin command-line tools (GDD §23).",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
+  }
+}

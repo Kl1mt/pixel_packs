@@ -9,7 +9,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | ID | Task | Depends on | Status |
 |---|---|---|---|
 | T00 | Design docs & working agreement | — | done |
-| T01 | Monorepo scaffold & tooling | T00 | todo |
+| T01 | Monorepo scaffold & tooling | T00 | done |
 | T02 | Game rules core (odds, pack roll, pity, scores) | T01 | todo |
 | T03 | Card set design: Mossgrove & Starhollow (26 cards) | T02 | todo |
 | T04 | PixelLab pipeline + style anchors | T01, T03 | todo |
@@ -34,7 +34,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 - Wrote GDD v0.3, this task board, `CLAUDE.md` and `README.md`.
 - **Handoff notes (2026-11-23)**: the repo had no commits; this is the first commit, pushed as `main` and as the session branch. The PixelLab balance was 1 163 / 2 000 generations, and the v2 API is at `https://api.pixellab.ai/v2` (spec at `/v2/openapi.json`, LLM docs at `/v2/llms.txt`). Next: T01.
 
-### T01 — Monorepo scaffold & tooling · M
+### T01 — Monorepo scaffold & tooling · M · done
 Docs: §21, §26
 - **Workspaces** (pnpm):
   - `apps/client`: Vite + React + TS placeholder page.
@@ -50,6 +50,14 @@ Docs: §21, §26
 - Fill the **Commands** section of `CLAUDE.md`.
 - Offer the user a cloud-environment setup script (`pnpm install`) so later sessions start ready.
 - **Done when**: on a fresh clone, `pnpm install && pnpm typecheck && pnpm lint && pnpm test` passes; `pnpm dev` shows the client and `/api/health` answers through the proxy; CI is green.
+- **Handoff notes (2026-11-23)**:
+  - Versions: Node 22, pnpm 10.28 (pinned via `packageManager`), TypeScript 6.0 (typescript-eslint 8 doesn't support TS 7 yet), ESLint 10 flat config with `strictTypeChecked`, Vite 8, React 19, Vitest 5 (root `vitest.config.ts` lists the package projects), Fastify 5, Zod 4, Drizzle 0.45 + drizzle-kit, PGlite 0.5.
+  - `packages/shared` is consumed from source (`exports` → `src/index.ts`); it holds `clampInt` (example) and `HealthResponseSchema`. T02 can replace the example.
+  - Server: `buildApp()` in `apps/server/src/app.ts` (testable with `app.inject`), env parsed by Zod in `config.ts`, `createDb()` in `db/client.ts` returns `{ kind, db, close }`. Migrations run on server start and via `pnpm db:migrate`; `apps/server/drizzle/` holds an empty journal. T08 adds tables to `db/schema.ts` and runs `db:generate`.
+  - PGlite data goes to `apps/server/.data/pglite` (git-ignored). The node-postgres path was verified locally against Postgres 16.
+  - CI (`.github/workflows/ci.yml`) has a Postgres 17 service, exports `TEST_DATABASE_URL` for future integration tests, and runs `db:migrate` against it.
+  - Markdown is excluded from Prettier so the hand-written docs keep their table/list layout.
+  - Verified: fresh clone → install, typecheck, lint, test, build pass; `pnpm dev` served the page ("Server ok (pglite)") and `/api/health` through the Vite proxy. CI status: see the PR.
 
 ### T02 — Game rules core · M
 Docs: §4, §5, §6, §7, §9 (dust values), §15, §17 (scripted packs)

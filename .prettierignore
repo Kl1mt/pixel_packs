@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+dist/
+coverage/
+.data/
+apps/server/drizzle/meta/
+# Hand-written docs keep their own layout (small diffs for tables and lists).
+*.md
