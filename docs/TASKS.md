@@ -13,7 +13,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T02 | Game rules core (odds, pack roll, pity, scores) | T01 | done |
 | T03 | Card set design: Mossgrove & Starhollow (26 cards) | T02 | done |
 | T04 | PixelLab pipeline + style anchors | T01, T03 | done |
-| T05 | Card art batch | T04 | todo |
+| T05 | Card art batch | T04 | done |
 | T06 | Frames, packs, UI art + style tile | T04 | todo |
 | T07 | Client design system & app shell | T06 | todo |
 | T08 | Database & email auth (API) | T02 | done |
@@ -159,12 +159,22 @@ Docs: §19
   - **Repo contents**: all 64 candidates and their contact sheets stay in `tools/artgen/candidates/anchors/` (≈560 KB) so the manifest's review history resolves.
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` pass.
 
-### T05 — Card art batch · M · budget ≤ 70
+### T05 — Card art batch · M · budget ≤ 260 · done
 Docs: §19
 - Generate the remaining card art with the anchors and realm palettes.
 - Show the review gallery and get **user approval**.
 - Regenerate rejects (at most 2 retries, then revise the prompt).
 - **Done when**: all 26 approved arts are committed as `apps/client/public/assets/cards/<id>.png` and the catalog art test passes.
+- **Handoff notes (2026-11-23)**:
+  - **Spend**: 250 of 260 generations (25 × `/generate-with-style-v2` at 10 each, confirmed by the receipts). All of it is logged in `tools/artgen/manifest.json` under `cards/*`. The user raised the cap from ≤ 70 to ≤ 230, then to ≤ 260 for three retries (GDD §29).
+  - **Spec**: `tools/artgen/specs/cards.json`, one job per card, built from `anchors.json`: realm anchors as `style_images`, the realm palette, the fixed `style_description`, the §19 template and `no_background`. Seeds are 5100 + n for Mossgrove and 5200 + n for Starhollow; the `-r1` retries add 200.
+  - **Art**: all 26 cards are in `apps/client/public/assets/cards/<id>.png` (64×64, none touching the edge). The user approved every pick; it is marked `approved` in the manifest. Overview sheets with tile number = card number: `tools/artgen/candidates/cards/picks-{mossgrove,starhollow}.png`. All candidates and contact sheets stay in `tools/artgen/candidates/cards/` (≈3.6 MB).
+  - **Retries**: MOS-005 Lantern Shroom now holds a lantern in its hand (prompt revised); MOS-006 Thistle Hedgehog and STA-004 Lamplight Moth were regenerated with revised prompts. The new prompts are in the catalog.
+  - **Rename**: STA-008 is now "Mail Moth" (name only; GDD §29). Its candidate folder keeps the old job id `sta-008-post-moth`.
+  - **Recentring**: STA-001 Dusk Moth #12 touched the right edge, so it was promoted with `promote --recentre`. That shifts the sprite 3 px left in whole pixels, with no resampling (user decision, GDD §29).
+  - **Catalog art test**: `tools/artgen/src/cardArt.test.ts`. Every enabled-realm card has a 64×64, uncropped sprite that equals an approved manifest candidate, either unchanged or moved by whole pixels (`sameUpToTranslation` in `src/shift.ts`). It replaces the 4-card check in `anchors.test.ts`.
+  - **Still open for T07/T11**: the art has no common feet baseline. Bottom opaque rows run from y = 54 to y = 62. Align it in the frame (bottom-align the bbox) rather than editing the files.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (198 tests) pass.
 
 ### T06 — Frames, packs, UI art + style tile · L · budget ≤ 100 (was 60; raised by the user) · in review (style tile awaiting approval)
 Docs: §4 (card face), §16, §19

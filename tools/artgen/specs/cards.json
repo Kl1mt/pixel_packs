@@ -1,0 +1,368 @@
+{
+  "id": "cards",
+  "description": "T05 card art: one /generate-with-style-v2 call per remaining card (realm anchors, realm palette, §19 template). Jobs ending in -r1 are user-requested retries with revised prompts.",
+  "jobs": [
+    {
+      "id": "mos-001-pebble-snail",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-001",
+      "palette": "mossgrove",
+      "seed": 5101,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-001-pebble-snail"
+    },
+    {
+      "id": "mos-002-button-cap",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-002",
+      "palette": "mossgrove",
+      "seed": 5102,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-002-button-cap"
+    },
+    {
+      "id": "mos-004-acorn-beetle",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-004",
+      "palette": "mossgrove",
+      "seed": 5104,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-004-acorn-beetle"
+    },
+    {
+      "id": "mos-005-lantern-shroom",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-005",
+      "palette": "mossgrove",
+      "seed": 5105,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-005-lantern-shroom"
+    },
+    {
+      "id": "mos-006-thistle-hedgehog",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-006",
+      "palette": "mossgrove",
+      "seed": 5106,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog"
+    },
+    {
+      "id": "mos-007-snug-rolypoly",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-007",
+      "palette": "mossgrove",
+      "seed": 5107,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-007-snug-rolypoly"
+    },
+    {
+      "id": "mos-008-toadstool-elder",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-008",
+      "palette": "mossgrove",
+      "seed": 5108,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-008-toadstool-elder"
+    },
+    {
+      "id": "mos-009-briar-stag-beetle",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-009",
+      "palette": "mossgrove",
+      "seed": 5109,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-009-briar-stag-beetle"
+    },
+    {
+      "id": "mos-010-moss-coat-snail",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-010",
+      "palette": "mossgrove",
+      "seed": 5110,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-010-moss-coat-snail"
+    },
+    {
+      "id": "mos-011-bramblemum",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-011",
+      "palette": "mossgrove",
+      "seed": 5111,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-011-bramblemum"
+    },
+    {
+      "id": "mos-013-old-thornback",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-013",
+      "palette": "mossgrove",
+      "seed": 5113,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-013-old-thornback"
+    },
+    {
+      "id": "sta-001-dusk-moth",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-001",
+      "palette": "starhollow",
+      "seed": 5201,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-001-dusk-moth"
+    },
+    {
+      "id": "sta-002-pillow-wisp",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-002",
+      "palette": "starhollow",
+      "seed": 5202,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-002-pillow-wisp"
+    },
+    {
+      "id": "sta-004-lamplight-moth",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-004",
+      "palette": "starhollow",
+      "seed": 5204,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-004-lamplight-moth"
+    },
+    {
+      "id": "sta-005-drowsy-bat",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-005",
+      "palette": "starhollow",
+      "seed": 5205,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-005-drowsy-bat"
+    },
+    {
+      "id": "sta-006-stargazer-mole",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-006",
+      "palette": "starhollow",
+      "seed": 5206,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-006-stargazer-mole"
+    },
+    {
+      "id": "sta-007-driftwisp",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-007",
+      "palette": "starhollow",
+      "seed": 5207,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-007-driftwisp"
+    },
+    {
+      "id": "sta-008-post-moth",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-008",
+      "palette": "starhollow",
+      "seed": 5208,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-008-post-moth"
+    },
+    {
+      "id": "sta-009-nightcap-badger",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-009",
+      "palette": "starhollow",
+      "seed": 5209,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-009-nightcap-badger"
+    },
+    {
+      "id": "sta-010-lullaby-moth",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-010",
+      "palette": "starhollow",
+      "seed": 5210,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-010-lullaby-moth"
+    },
+    {
+      "id": "sta-011-wisp-shepherd",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-011",
+      "palette": "starhollow",
+      "seed": 5211,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-011-wisp-shepherd"
+    },
+    {
+      "id": "sta-013-umbra-the-dreaming-bear",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-013",
+      "palette": "starhollow",
+      "seed": 5213,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-013-umbra-the-dreaming-bear"
+    },
+    {
+      "id": "mos-005-lantern-shroom-r1",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-005",
+      "palette": "mossgrove",
+      "seed": 5305,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1"
+    },
+    {
+      "id": "mos-006-thistle-hedgehog-r1",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "MOS-006",
+      "palette": "mossgrove",
+      "seed": 5306,
+      "styleImages": [
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+        "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+        "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1"
+    },
+    {
+      "id": "sta-004-lamplight-moth-r1",
+      "endpoint": "generate-with-style-v2",
+      "cardId": "STA-004",
+      "palette": "starhollow",
+      "seed": 5404,
+      "styleImages": [
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+        "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+        "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame.",
+      "outDir": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1"
+    }
+  ]
+}
