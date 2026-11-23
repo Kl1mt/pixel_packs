@@ -23,6 +23,7 @@ export async function createTestApp(
     rng?: Rng;
     databaseUrl?: string;
     discord?: DiscordClient;
+    allowDevOverrides?: boolean;
   } = {},
 ): Promise<TestApp> {
   const db = createDb({ pgliteDir: 'memory://', databaseUrl: opts.databaseUrl });
@@ -36,7 +37,7 @@ export async function createTestApp(
     appOrigin: 'http://app.test',
     cookieSecure: false,
     rateLimit: opts.rateLimit ?? false,
-    allowDevOverrides: true,
+    allowDevOverrides: opts.allowDevOverrides ?? true,
     ...(opts.now ? { now: opts.now } : {}),
     ...(opts.rng ? { rng: opts.rng } : {}),
     discord: opts.discord ?? null,

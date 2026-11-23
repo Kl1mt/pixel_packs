@@ -1,0 +1,447 @@
+/* Opening scene (T12, GDD §5, §7). Cards at --card (CARD_SCALE); UI bits at --art-px. */
+.opening {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  color: var(--glow);
+  background: var(--night);
+  /* A stepped dark frame instead of a blurred vignette. */
+  box-shadow:
+    inset 0 0 0 calc(4 * var(--art-px)) var(--ink),
+    inset 0 0 0 calc(8 * var(--art-px)) rgb(30 26 38 / 60%);
+}
+
+.opening[data-theme='mossgrove'] {
+  background: var(--mossDeep);
+}
+
+.opening:focus {
+  outline: none;
+}
+
+/* ---- Tear ---- */
+.tear {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.tear__scene {
+  position: relative;
+  flex: 1;
+  min-height: 320px;
+  overflow: hidden;
+}
+
+.tear__canvas {
+  position: absolute;
+  inset: 0;
+  image-rendering: pixelated;
+  touch-action: none;
+}
+
+.tear__controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--sp-4) var(--sp-8);
+  padding: var(--sp-8);
+}
+
+.tear__hint {
+  margin: 0;
+}
+
+/* ---- Reveal ---- */
+.reveal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-8);
+  padding: var(--sp-12) var(--sp-8);
+}
+
+.reveal__table {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-12);
+}
+
+.reveal__stack-slot {
+  justify-self: end;
+  /* Room for the whole stack, so the layout does not jump as it shrinks. */
+  min-width: calc(104px * var(--card));
+  min-height: calc(136px * var(--card));
+}
+
+.reveal__stack {
+  position: relative;
+  display: block;
+  width: calc(104px * var(--card));
+  height: calc(136px * var(--card));
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.reveal__stack .card {
+  position: absolute;
+}
+
+.reveal__under:nth-last-child(2) {
+  left: calc(2px * var(--card));
+  top: calc(2px * var(--card));
+}
+
+.reveal__under:nth-last-child(3) {
+  left: calc(4px * var(--card));
+  top: calc(4px * var(--card));
+}
+
+.reveal__under:nth-last-child(4) {
+  left: calc(6px * var(--card));
+  top: calc(6px * var(--card));
+}
+
+.reveal__under:nth-last-child(5) {
+  left: calc(8px * var(--card));
+  top: calc(8px * var(--card));
+}
+
+.reveal__top {
+  left: 0;
+  top: 0;
+  transition: transform var(--motion-fast) var(--motion-overshoot);
+}
+
+.reveal__stack:hover:not(:disabled) .reveal__top {
+  transform: translateY(calc(-2px * var(--card)));
+}
+
+/* Rarity glow on the next back (GDD §5): hard stepped rings that pulse, never blurred. */
+.reveal__stack[data-glow] .reveal__top {
+  --ring-a: transparent;
+  --ring-b: transparent;
+  box-shadow:
+    0 0 0 calc(2px * var(--card)) var(--ring-a),
+    0 0 0 calc(4px * var(--card)) var(--ring-b);
+  animation: ring-pulse 900ms steps(2, jump-none) infinite alternate;
+}
+
+.reveal__stack[data-glow='none'] .reveal__top {
+  animation: none;
+}
+
+.reveal__stack[data-glow='uncommon'] .reveal__top {
+  --ring-a: var(--sprout);
+  --ring-b: var(--leaf);
+}
+
+.reveal__stack[data-glow='rare'] .reveal__top {
+  --ring-a: var(--moonlight);
+  --ring-b: var(--periwinkle);
+}
+
+.reveal__stack[data-glow='epic'] .reveal__top {
+  --ring-a: var(--lavender);
+  --ring-b: var(--lilac);
+  animation:
+    ring-pulse 900ms steps(2, jump-none) infinite alternate,
+    back-shake 1400ms steps(1) infinite;
+}
+
+.reveal__stack[data-glow='legendary'] .reveal__top,
+.reveal__stack[data-glow='mythic'] .reveal__top {
+  --ring-a: var(--sunflower);
+  --ring-b: var(--amber);
+  animation:
+    ring-pulse 600ms steps(2, jump-none) infinite alternate,
+    back-shake 1000ms steps(1) infinite;
+}
+
+.reveal__stack[data-glow='mythic'] .reveal__top {
+  --ring-b: var(--rose);
+}
+
+@keyframes ring-pulse {
+  to {
+    box-shadow:
+      0 0 0 calc(3px * var(--card)) var(--ring-a),
+      0 0 0 calc(5px * var(--card)) var(--ring-b);
+  }
+}
+
+@keyframes back-shake {
+  0%,
+  70% {
+    translate: 0 0;
+  }
+  75% {
+    translate: calc(-1px * var(--card)) 0;
+  }
+  80% {
+    translate: calc(1px * var(--card)) 0;
+  }
+  85% {
+    translate: calc(-1px * var(--card)) 0;
+  }
+  90% {
+    translate: calc(1px * var(--card)) 0;
+  }
+}
+
+.reveal__featured {
+  position: absolute;
+  left: 50%;
+  bottom: calc(-6px * var(--card));
+  translate: -50% 0;
+  padding: var(--sp-1) var(--sp-3);
+  background: var(--sunflower);
+  color: var(--ink);
+  font: 16px / 1 var(--font-heading);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
+.reveal__spotlight {
+  display: grid;
+  place-items: center;
+  width: calc(96px * var(--card));
+  min-height: calc(128px * var(--card));
+}
+
+.reveal__prompt {
+  margin: 0;
+  text-align: center;
+}
+
+.reveal__card {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-4);
+}
+
+.reveal__flip {
+  animation: flip-in var(--motion-slow) steps(5) both;
+}
+
+@keyframes flip-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.reveal__caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--small);
+}
+
+.reveal__name {
+  font: 16px / 1 var(--font-heading);
+}
+
+.reveal__tray {
+  justify-self: start;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.reveal__chip {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-1) var(--sp-3);
+  background: var(--cream);
+  color: var(--ink);
+  font-size: var(--small);
+  box-shadow: var(--shadow-sm);
+}
+
+.reveal__pip,
+.rarity-tag::before {
+  display: inline-block;
+  width: calc(4 * var(--art-px));
+  height: calc(4 * var(--art-px));
+  background: var(--pip, var(--stone));
+  box-shadow: 0 0 0 var(--art-px) var(--ink);
+}
+
+.rarity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.rarity-tag::before {
+  content: '';
+}
+
+[data-rarity='uncommon'] > .reveal__pip,
+.rarity-tag--uncommon {
+  --pip: var(--leaf);
+}
+
+[data-rarity='rare'] > .reveal__pip,
+.rarity-tag--rare {
+  --pip: var(--periwinkle);
+}
+
+[data-rarity='epic'] > .reveal__pip,
+.rarity-tag--epic {
+  --pip: var(--lilac);
+}
+
+[data-rarity='legendary'] > .reveal__pip,
+.rarity-tag--legendary {
+  --pip: var(--amber);
+}
+
+[data-rarity='mythic'] > .reveal__pip,
+.rarity-tag--mythic {
+  --pip: var(--rose);
+}
+
+.reveal__actions,
+.summary__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-4);
+}
+
+/* NEW stamp and extra tag. */
+.stamp {
+  display: inline-block;
+  padding: var(--sp-1) var(--sp-2);
+  font: 16px / 1 var(--font-heading);
+  box-shadow: var(--shadow-sm);
+}
+
+.stamp--new {
+  background: var(--berry);
+  color: var(--glow);
+  rotate: -6deg;
+}
+
+.stamp--extra {
+  background: var(--stone);
+  color: var(--ink);
+}
+
+/* ---- Summary ---- */
+.summary {
+  flex: 1;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-12) var(--sp-8);
+}
+
+.summary__head {
+  text-align: center;
+}
+
+/* Actions above the cards, so they stay in view when the cards wrap. */
+.summary__dust {
+  order: 1;
+}
+
+.summary__actions {
+  order: 2;
+}
+
+.summary__cards {
+  order: 3;
+}
+
+.summary__title {
+  margin-bottom: var(--sp-4);
+}
+
+.summary__counts {
+  margin: 0;
+}
+
+.summary__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: calc(6px * var(--card));
+}
+
+.summary__card {
+  position: relative;
+}
+
+.summary__card .stamp {
+  position: absolute;
+  top: calc(-3px * var(--card));
+  right: calc(-3px * var(--card));
+}
+
+.summary__card[data-featured='true'] {
+  box-shadow:
+    0 0 0 calc(1px * var(--card)) var(--sunflower),
+    0 0 0 calc(2px * var(--card)) var(--amber);
+}
+
+.summary__dust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--sp-4);
+  min-height: calc(var(--sp-12) * 2);
+}
+
+.summary__cards {
+  margin-top: var(--sp-6);
+}
+
+.summary__confirm {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--sp-4);
+  max-width: 44rem;
+}
+
+.summary__note {
+  margin: 0;
+  text-align: center;
+}
+
+@media (max-width: 960px) {
+  .reveal__table {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .reveal__stack-slot,
+  .reveal__tray {
+    justify-self: center;
+  }
+}

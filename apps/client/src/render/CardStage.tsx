@@ -5,6 +5,7 @@ import { cardFaceModel } from '../components/cardFace.js';
 import { useReducedMotion, useSettings } from '../settings/useSettings.js';
 import type { CardSpec } from './cardView.js';
 import { createStage, type Stage } from './stage.js';
+import './cardStage.css';
 
 export interface CardStageProps {
   specs: readonly CardSpec[];
