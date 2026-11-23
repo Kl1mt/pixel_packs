@@ -364,9 +364,9 @@ Every step can be skipped. In scripted packs only the forced slot is scripted; e
 - **Binder idle loops** for Legendary/Mythic: south direction, 4–8 frames, staying inside the 64×64 window. Trialled in T17 and dropped if the consistency is poor.
 
 **Other assets**
-- Pack art and icons: `/generate-with-style-v2`.
+- Pack art: `/generate-with-style-v2` with the realm anchors (64×64). Icons: `/create-image-pixflux` at 32×32 (1 generation each), reduced to 16×16 in code (T06).
 - UI panels and buttons: `/create-ui-asset`, as 9-slice.
-- Rarity frames and card back: a generated base, hand-tuned if needed.
+- Rarity frames and card back: one generated base (`/create-image-pro-flash`), hand-tuned in code into all six materials (`artgen compose-t06`, T06).
 - Realm battle backdrops (M4) and VFX: `/vfx`.
 - Heading font: `/generate-font-pro`; fallback is an OFL-licensed pixel font, with its licence file in the repo.
 - Music and SFX: see §20.
@@ -514,3 +514,9 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T10: dev odds overrides (`tools/admin`) force the featured slot like a scripted pack (no pity) and are ignored in production |
 | 2026-11-23 | T04: style anchors are per realm — Mossgrove: Burr Hoglet ×2 + Grandmother Morel; Starhollow: Yawning Dormouse ×2 + Lady Lunamoth ×2 (user picks). Card art uses only its own realm's anchors as `style_images` (≤ 4), plus the shared `style_description` in `tools/artgen/anchors.json`. The first pick per anchor card is that card's final art |
 | 2026-11-23 | T04: master palette of 32 named colours, with 16-colour Mossgrove and Starhollow sub-palettes, in `packages/shared/src/config/palettes.ts`; sent as `target_palette` with the palette name |
+| 2026-11-23 | T06: budget raised from ≤ 60 to a hard cap of ≤ 100 generations (user); 85 used (75 planned + 10 for one UI retry with explicit `pieces`) |
+| 2026-11-23 | T06: the six rarity frames share one shape — one generated 96×128 base, hand-tuned in code (exact 64×64 window, 6 pip sockets) and recoloured per material: wood, copper (rose), silver, amethyst, gold, starmetal (teal). Layout in shared `CARD_FACE`, ramps in `FRAME_MATERIALS` (user-approved plan) |
+| 2026-11-23 | T06: icons are 16×16 art px, generated with pixflux at 32×32 and reduced in code with a fresh 1 px ink outline (user-approved plan) |
+| 2026-11-23 | T06: pack art is 64×64 (the style endpoint returns squares), shown at 3× (user-approved plan) |
+| 2026-11-23 | T06: pixel scales — menus/panels 1 art px = 2 screen px (`UI_SCALE`), cards and packs 3 (`CARD_SCALE`). Type scale of 4 sizes: Display 48 px and Heading/Numbers 32 px in the generated "Pixel Packs Hollow" font (16 px glyphs, integer multiples only); Body 18 px and Small 16 px in a storybook serif stack (Iowan Old Style / Palatino / Georgia) |
+| 2026-11-23 | T06: card-face rules text is compact (13 px) to fit two abilities in the 78×13 box at 3×; the full text at ≥ 16 px lives in card inspect (T11/T15) |
