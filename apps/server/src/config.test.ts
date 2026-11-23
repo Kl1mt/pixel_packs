@@ -23,4 +23,22 @@ describe('loadConfig', () => {
       false,
     );
   });
+
+  it('enables Discord only when both credentials are set', () => {
+    expect(loadConfig({}).discord).toBeNull();
+    expect(loadConfig({ DISCORD_CLIENT_ID: '123', DISCORD_CLIENT_SECRET: ' ' }).discord).toBeNull();
+    expect(
+      loadConfig({ DISCORD_CLIENT_ID: '123', DISCORD_CLIENT_SECRET: 's3cret' }).discord,
+    ).toEqual({
+      clientId: '123',
+      clientSecret: 's3cret',
+      redirectUri: 'http://localhost:5173/api/auth/discord/callback',
+    });
+  });
+
+  it('only lets rate limits be switched off outside production', () => {
+    expect(loadConfig({}).RATE_LIMIT).toBe(true);
+    expect(loadConfig({ RATE_LIMIT: 'false' }).RATE_LIMIT).toBe(false);
+    expect(loadConfig({ NODE_ENV: 'production', RATE_LIMIT: 'false' }).RATE_LIMIT).toBe(true);
+  });
 });

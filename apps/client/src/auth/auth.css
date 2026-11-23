@@ -1,0 +1,189 @@
+/* Auth screens (T09, GDD §16): a pinned parchment letter beside a still life on the moss table. */
+.auth__main {
+  display: grid;
+  grid-template-columns: minmax(0, 560px) minmax(0, 1fr);
+  gap: var(--sp-16);
+  align-items: start;
+  padding-top: var(--sp-16);
+}
+
+.auth__panel {
+  padding: var(--sp-6) var(--sp-8) var(--sp-8);
+}
+
+.auth__title {
+  font-size: var(--heading);
+  margin: var(--sp-2) 0 var(--sp-4);
+}
+
+.auth__switch {
+  margin: var(--sp-6) 0 0;
+}
+
+/* A pack and two cards dropped on the table, overlapping (no rotation: pixels stay square). */
+.auth__table {
+  position: relative;
+  min-height: 480px;
+}
+
+.auth__table > * {
+  position: absolute;
+}
+
+.auth__back {
+  left: 0;
+  top: 0;
+}
+
+.auth__card {
+  left: 168px;
+  top: 48px;
+}
+
+.auth__pack {
+  left: 360px;
+  top: 264px;
+}
+
+/* Forms */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.form__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+  margin-top: var(--sp-2);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.field__label {
+  font-size: var(--small);
+  color: var(--role-text);
+}
+
+.field__input {
+  font: var(--body) / 1.2 var(--font-body);
+  color: var(--ink);
+  background: var(--glow);
+  border: var(--art-px) solid var(--ink);
+  border-radius: 0;
+  box-shadow: inset var(--art-px) var(--art-px) 0 var(--mist);
+  padding: var(--sp-2) var(--sp-3);
+  width: 100%;
+  min-height: calc(var(--sp-16) + var(--sp-2));
+}
+
+.field__input:focus-visible {
+  outline-offset: var(--art-px);
+}
+
+.field__hint,
+.field__error {
+  font-size: var(--small);
+  color: var(--role-textMuted);
+}
+
+.field--error .field__input {
+  border-color: var(--role-danger);
+  box-shadow: inset var(--art-px) var(--art-px) 0 var(--blush);
+}
+
+.field--error .field__error {
+  color: var(--berryDeep);
+}
+
+/* A note stamped onto the parchment: info in moss, errors in berry. */
+.notice {
+  margin: 0;
+  padding: var(--sp-2) var(--sp-4);
+  border: var(--art-px) solid var(--ink);
+  border-left-width: calc(3 * var(--art-px));
+  background: var(--cream);
+  font-size: var(--small);
+}
+
+.notice--info {
+  border-left-color: var(--moss);
+}
+
+.notice--error {
+  border-left-color: var(--berry);
+  color: var(--berryDeep);
+}
+
+.notice + .btn,
+.notice + .form,
+.notice + .button {
+  margin-top: var(--sp-4);
+}
+
+/* "or" + the Discord button; only rendered when the server has credentials. */
+.oauth {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin-top: var(--sp-6);
+}
+
+.oauth__or {
+  font-size: var(--small);
+  color: var(--role-textMuted);
+}
+
+.session-wait {
+  color: var(--glow);
+  margin: var(--sp-16) auto;
+  text-align: center;
+}
+
+.panel.session-wait {
+  color: var(--ink);
+  text-align: left;
+}
+
+.account {
+  margin-bottom: var(--sp-8);
+}
+
+.account__row {
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-4);
+}
+
+.account__row p {
+  margin: 0;
+}
+
+.account > .notice {
+  margin-bottom: var(--sp-4);
+}
+
+/* The still life needs ~560 px beside the form; below that the letter stands alone. */
+@media (max-width: 1180px) {
+  .auth__main {
+    grid-template-columns: minmax(0, 560px);
+    justify-content: center;
+  }
+
+  .auth__table {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .auth__main {
+    padding-top: var(--sp-8);
+  }
+}

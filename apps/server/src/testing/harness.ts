@@ -1,6 +1,7 @@
 import type { FastifyInstance, InjectOptions, LightMyRequestResponse } from 'fastify';
 import { CSRF_HEADER, type Rng } from '@pixel-packs/shared';
 import { buildApp } from '../app.js';
+import type { DiscordClient } from '../auth/discord.js';
 import { createDb, type DbHandle } from '../db/client.js';
 import { runMigrations } from '../db/migrate.js';
 import { syncCatalog, syncPackTypes } from '../db/sync.js';
@@ -16,7 +17,13 @@ export interface TestApp {
 
 /** A fresh in-memory PGlite database with migrations, plus the app on top. */
 export async function createTestApp(
-  opts: { rateLimit?: boolean; now?: () => Date; rng?: Rng; databaseUrl?: string } = {},
+  opts: {
+    rateLimit?: boolean;
+    now?: () => Date;
+    rng?: Rng;
+    databaseUrl?: string;
+    discord?: DiscordClient;
+  } = {},
 ): Promise<TestApp> {
   const db = createDb({ pgliteDir: 'memory://', databaseUrl: opts.databaseUrl });
   await runMigrations(db);
@@ -32,6 +39,7 @@ export async function createTestApp(
     allowDevOverrides: true,
     ...(opts.now ? { now: opts.now } : {}),
     ...(opts.rng ? { rng: opts.rng } : {}),
+    discord: opts.discord ?? null,
   });
   return {
     app,

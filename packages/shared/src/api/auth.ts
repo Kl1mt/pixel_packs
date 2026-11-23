@@ -61,6 +61,36 @@ export type UserResponse = z.infer<typeof UserResponseSchema>;
 export const CsrfResponseSchema = z.object({ csrfToken: z.string().min(1) });
 export type CsrfResponse = z.infer<typeof CsrfResponseSchema>;
 
+/** Which optional login providers this server has credentials for (T09). */
+export const AuthProvidersResponseSchema = z.object({ discord: z.boolean() });
+export type AuthProvidersResponse = z.infer<typeof AuthProvidersResponseSchema>;
+
+/** Login methods on the current account, for the Settings page. */
+export const LinkedAccountsResponseSchema = z.object({
+  hasPassword: z.boolean(),
+  discord: z.object({ username: z.string() }).nullable(),
+});
+export type LinkedAccountsResponse = z.infer<typeof LinkedAccountsResponseSchema>;
+
+/** `mode` of `GET /api/auth/discord/start`: log in / sign up, or link to the current account. */
+export const OAuthModeSchema = z.enum(['login', 'link']);
+export type OAuthMode = z.infer<typeof OAuthModeSchema>;
+
+/**
+ * Outcome the Discord callback sends back in the redirect: `/login?oauth=…` after a
+ * failed login, `/settings?discord=…` after linking.
+ */
+export const OAuthOutcomeSchema = z.enum([
+  'denied',
+  'failed',
+  'noEmail',
+  'emailExists',
+  'linked',
+  'taken',
+  'loginRequired',
+]);
+export type OAuthOutcome = z.infer<typeof OAuthOutcomeSchema>;
+
 export const ApiErrorCodeSchema = z.enum([
   'badRequest',
   'unauthorized',
@@ -72,6 +102,7 @@ export const ApiErrorCodeSchema = z.enum([
   'rateLimited',
   'notFound',
   'internal',
+  'lastLoginMethod',
   // Economy (T10)
   'insufficientFunds',
   'noPacks',

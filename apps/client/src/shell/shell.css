@@ -133,3 +133,27 @@ body {
     padding: var(--sp-6) var(--sp-4) calc(var(--sp-16) * 3);
   }
 }
+
+/* Reminder to verify the email (T09); dismissible for this visit. */
+.shell__note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-4);
+  margin: 0 0 var(--sp-6);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--cream);
+  color: var(--ink);
+  border: var(--art-px) solid var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.shell__note-close {
+  margin-left: auto;
+  font: inherit;
+  color: var(--role-textMuted);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  padding: 0;
+}

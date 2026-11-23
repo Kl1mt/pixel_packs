@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
+import { useSession } from '../auth/useSession.js';
 import { CurrencyBadge } from '../components/CurrencyBadge.js';
 import { Icon } from '../components/Icon.js';
 import { Panel } from '../components/Panel.js';
 import { useApplySettingsToDocument } from '../settings/useSettings.js';
 import { NAV_ITEMS } from './nav.js';
+import { useWallet } from './useWallet.js';
 
 export interface Wallet {
   gold: number | null;
@@ -11,12 +14,17 @@ export interface Wallet {
   dust: number | null;
 }
 
-/** Until auth (T09) and the wallet fetch land, balances are unknown. */
+/** Balances are unknown ("–") until `/api/economy` answers, and for guests. */
 const UNKNOWN_WALLET: Wallet = { gold: null, gems: null, dust: null };
 
 /** Top bar (navigation, balances, settings) around every in-game screen. */
-export function AppShell({ wallet = UNKNOWN_WALLET }: { wallet?: Wallet }) {
+export function AppShell({ wallet: given }: { wallet?: Wallet }) {
   useApplySettingsToDocument();
+  const session = useSession();
+  const user = session.status === 'user' ? session.user : null;
+  const fetched = useWallet(given === undefined && user !== null);
+  const wallet = given ?? fetched ?? UNKNOWN_WALLET;
+  const [hideVerify, setHideVerify] = useState(false);
   return (
     <div className="shell">
       <a className="skip-link" href="#main">
@@ -44,6 +52,21 @@ export function AppShell({ wallet = UNKNOWN_WALLET }: { wallet?: Wallet }) {
         </NavLink>
       </Panel>
       <main id="main" className="shell__main" tabIndex={-1}>
+        {user && !user.emailVerified && !hideVerify && (
+          <p className="shell__note small" role="status">
+            We sent a letter to {user.email}. Open its link to verify your email.{' '}
+            <Link to="/settings">Send again</Link>{' '}
+            <button
+              type="button"
+              className="shell__note-close"
+              onClick={() => {
+                setHideVerify(true);
+              }}
+            >
+              Hide
+            </button>
+          </p>
+        )}
         <Outlet />
       </main>
     </div>

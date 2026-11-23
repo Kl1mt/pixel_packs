@@ -36,6 +36,19 @@ curl -s -b $J $B/me
 curl -s -c $J -b $J -H "x-csrf-token: $T" -X POST $B/logout
 ```
 
+## Discord login (T09)
+Off unless `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` are set (README → "Discord login"). When off, the `discord/*` routes answer `404 notFound` and the client hides every Discord button.
+
+| Method & path | Body / query | Success | Errors | Limit |
+|---|---|---|---|---|
+| `GET /api/auth/providers` | — | `200 { discord: boolean }` | — | — |
+| `GET /api/auth/discord/start` | `?mode=login\|link` (full-page navigation) | `302` to Discord, sets the `pp_oauth` state cookie (httpOnly, 10 min, path `/api/auth/discord`) | `404`; `mode=link` while logged out → `302 /login?oauth=loginRequired` | 20 / 15 min |
+| `GET /api/auth/discord/callback` | `?code&state` (from Discord) | `302 /` with a session (login/sign-up), or `302 /settings?discord=linked\|taken` (link) | `302 /login?oauth=denied\|failed\|noEmail\|emailExists` | 20 / 15 min |
+| `GET /api/auth/linked` | — (logged in) | `200 { hasPassword, discord: { username } \| null }` | `401` | — |
+| `POST /api/auth/discord/unlink` | — (logged in) | `204` | `409 lastLoginMethod` (no password set) | 20 / 15 min |
+
+Login rules (GDD §29): a Discord id already linked logs into its account. Otherwise, if Discord's email matches an account, they are linked only when **both** emails are verified; else `emailExists` (log in with the password, then link in Settings). Otherwise a new account is created: username from the Discord handle (`A–Z a–z 0–9 _`, a `_1234` tag on collisions), no password (set one with "Forgot password"), email verified if Discord says so — else a verification mail is sent. Outcome codes are `OAuthOutcome` in `packages/shared/src/api/auth.ts`.
+
 ## Economy & packs (T10)
 All routes except the odds need a session (`401 unauthorized`). Schemas: `packages/shared/src/api/economy.ts`. Mutations are limited to 60 / min per IP.
 

@@ -58,3 +58,27 @@ export const emailTokens = pgTable(
   },
   (t) => [index('email_tokens_user_purpose_idx').on(t.userId, t.purpose)],
 );
+
+export const OAUTH_PROVIDERS = ['discord'] as const;
+export type OAuthProvider = (typeof OAUTH_PROVIDERS)[number];
+
+/** External logins linked to a user (T09: Discord). One per provider and user. */
+export const oauthAccounts = pgTable(
+  'oauth_accounts',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    provider: text('provider', { enum: OAUTH_PROVIDERS }).notNull(),
+    /** The provider's stable user id (Discord snowflake). */
+    providerUserId: text('provider_user_id').notNull(),
+    /** Display name at the provider, refreshed on every login. */
+    providerUsername: text('provider_username').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    uniqueIndex('oauth_accounts_provider_uid_uq').on(t.provider, t.providerUserId),
+    uniqueIndex('oauth_accounts_user_provider_uq').on(t.userId, t.provider),
+  ],
+);

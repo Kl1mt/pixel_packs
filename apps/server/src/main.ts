@@ -1,4 +1,5 @@
 import { buildApp } from './app.js';
+import { createDiscordClient } from './auth/discord.js';
 import { SERVER_CATALOG } from './catalog.js';
 import { loadConfig } from './config.js';
 import { createDb } from './db/client.js';
@@ -18,6 +19,8 @@ const app = await buildApp(
     mailer: createConsoleMailer(),
     appOrigin: config.APP_ORIGIN,
     cookieSecure: config.COOKIE_SECURE,
+    rateLimit: config.RATE_LIMIT,
+    discord: config.discord ? createDiscordClient(config.discord) : null,
     allowDevOverrides: config.NODE_ENV !== 'production',
   },
   { logger: { level: config.LOG_LEVEL } },
@@ -33,3 +36,6 @@ for (const signal of ['SIGINT', 'SIGTERM'] as const) {
 }
 
 await app.listen({ port: config.PORT, host: config.HOST });
+app.log.info(
+  config.discord ? 'Discord login enabled' : 'Discord login hidden (no DISCORD_CLIENT_ID/SECRET)',
+);
