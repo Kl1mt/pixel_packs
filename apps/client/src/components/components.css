@@ -1,0 +1,116 @@
+/* Component styles (GDD §16). 9-slice art and button states are in design/tokens.ts. */
+
+.panel {
+  border-style: solid;
+  border-color: transparent;
+  padding: var(--sp-2) var(--sp-4);
+}
+
+.panel--wood {
+  padding: var(--sp-1) var(--sp-2);
+  color: var(--role-textOnWood);
+}
+
+.panel--wood .muted {
+  color: var(--role-textOnWoodMuted);
+}
+
+.panel > h2 {
+  margin-bottom: var(--sp-6);
+}
+
+/* Button: wood art, pixel-font label, pressed sinks 1 art px. */
+.btn {
+  border-style: solid;
+  border-color: transparent;
+  background: none;
+  padding: 0 var(--sp-4);
+  font: var(--heading) / 1 var(--font-heading);
+  color: var(--glow);
+  text-shadow: var(--art-px) var(--art-px) 0 var(--barkDeep);
+  position: relative;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--motion-fast) var(--motion-overshoot);
+}
+
+.btn:active:not(:disabled),
+.btn.is-pressed {
+  transform: translateY(var(--art-px));
+}
+
+.btn:disabled {
+  color: var(--mist);
+  text-shadow: none;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex: none;
+}
+
+.currency {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--role-textOnWood);
+}
+
+/* DOM card: 96×128 art px at --card scale, parts placed by CARD_FACE. */
+.card {
+  position: relative;
+  margin: 0;
+  flex: none;
+  width: calc(96px * var(--card));
+  height: calc(128px * var(--card));
+  color: var(--ink);
+}
+
+.card > * {
+  position: absolute;
+}
+
+.card__backdrop {
+  background: linear-gradient(var(--bd-sky) 78%, var(--bd-ground) 0);
+}
+
+.card__art {
+  overflow: hidden;
+}
+
+.card__art img {
+  width: 100%;
+  height: 100%;
+}
+
+.card__frame,
+.card__overlay {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.card__overlay {
+  fill: var(--ink);
+}
+
+.card__name {
+  padding: 0 calc(3px * var(--card));
+  font-family: var(--font-body);
+  font-weight: bold;
+  line-height: calc(9px * var(--card));
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Compact rules text: the 13 px exception to the 16 px minimum (GDD §29, T06). */
+.card__rules {
+  font: 13px / 1.25 var(--font-body);
+  text-align: center;
+  display: grid;
+  place-content: center;
+}

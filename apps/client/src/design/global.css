@@ -1,0 +1,91 @@
+/* Base styles (GDD §16, §18). Tokens come from design/tokens.ts (injected at startup). */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--role-page);
+  color: var(--role-text);
+  font: var(--body) / 1.45 var(--font-body);
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  cursor:
+    url('/assets/icons/cursor.png') 2 2,
+    auto;
+}
+
+/* Pixel art only at integer scale, never smoothed. */
+img,
+.px {
+  image-rendering: pixelated;
+}
+
+h1,
+h2,
+h3,
+.num {
+  font-family: var(--font-heading);
+  font-weight: normal;
+  line-height: 1;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--display);
+}
+
+h2,
+h3,
+.num {
+  font-size: var(--heading);
+}
+
+p {
+  margin: 0 0 var(--sp-4);
+}
+
+.small {
+  font-size: var(--small);
+}
+
+.muted {
+  color: var(--role-textMuted);
+}
+
+a,
+button,
+input,
+select {
+  cursor: inherit;
+}
+
+/* Pixel-style focus ring for every interactive element (§18). */
+:focus-visible {
+  outline: var(--art-px) dashed var(--role-focus);
+  outline-offset: var(--sp-2);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Reduced motion: from the OS setting or the in-game choice (settings store sets data-motion). */
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  transition-duration: 0ms !important;
+  animation-duration: 0ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+}

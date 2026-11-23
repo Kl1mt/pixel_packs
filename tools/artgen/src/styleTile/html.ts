@@ -6,6 +6,7 @@ import {
   MASTER_PALETTE,
   RARITIES,
   REALM_PALETTES,
+  cardNameSize,
   cardRulesText,
   iconFile,
   realmPaletteHex,
@@ -40,15 +41,6 @@ const BACKDROP: Partial<Record<Realm, [string, string]>> = {
 const icon = (name: (typeof ICONS)[number], cls = 'icon') =>
   `<img class="${cls}" src="${iconFile(name)}" alt="" width="16" height="16">`;
 
-/**
- * Card-name size in screen px at 3×: 20 px for most names, smaller for long ones
- * so even "Umbra, the Dreaming Bear" keeps a margin inside the banner (checked
- * for the whole catalog in styleTile.test.ts).
- */
-export function nameSize(name: string): number {
-  return name.length <= 15 ? 20 : name.length <= 19 ? 18 : 16;
-}
-
 function card(id: string, opts: CardOptions, input: StyleTileInput): string {
   const c = CARD_CATALOG.find((x) => x.id === id);
   if (!c) throw new Error(`unknown card ${id}`);
@@ -65,7 +57,7 @@ function card(id: string, opts: CardOptions, input: StyleTileInput): string {
   <div class="backdrop"></div>
   <div class="art"><img src="/assets/cards/${id}.png" alt="" style="transform:translateY(${s(drop)})"></div>
   <img class="frame" src="/assets/frames/${r}.png" alt="">
-  <div class="name" style="--name-size:${String(nameSize(c.name))}px">${esc(c.name)}</div>
+  <div class="name" style="--name-size:${String(cardNameSize(c.name))}px">${esc(c.name)}</div>
   <div class="rules">${rules.map((l) => `<span>${esc(l)}</span>`).join('')}</div>
   ${pixelsSvg(stats, MASTER_PALETTE.ink)}
 </figure>`;
