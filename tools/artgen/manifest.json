@@ -6219,6 +6219,104 @@
           "review": "pending"
         }
       ]
+    },
+    {
+      "id": "t17/sta-013-low-attack-east",
+      "spec": "t17",
+      "job": "sta-013-low-attack-east",
+      "endpoint": "characters/animations",
+      "params": {
+        "character_id": "57d7ed0a-28e4-4462-95ef-83a87c87f6bb",
+        "mode": "v3",
+        "animation_name": "attack-east",
+        "action_description": "Always faces east (right) and never turns. A quick playful lunge east, then returns to the base pose. No camera movement and nothing leaves the canvas. No background and no ground shadow. Feet stay on the same fixed baseline. The first and last frame are the base pose.",
+        "frame_count": 6,
+        "directions": [
+          "east"
+        ],
+        "keep_first_frame": false,
+        "seed": 17033,
+        "target_palette": {
+          "name": "Starhollow: indigo, silver, lilac",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#fff8ec",
+            "#8a5a3c",
+            "#d95f5f",
+            "#e8a33d",
+            "#f6d36b",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        }
+      },
+      "seed": 17033,
+      "status": "completed",
+      "backgroundJobId": "c0b41517-e72a-4b59-8307-412b78bd7d95",
+      "cost": {
+        "generations": 1,
+        "usd": 0
+      },
+      "createdAt": "2026-11-23T20:24:49.352Z",
+      "extra": {
+        "characterId": "57d7ed0a-28e4-4462-95ef-83a87c87f6bb",
+        "animationGroupId": "e9413b2c-bfda-416a-9166-07e353025848",
+        "frames": 6,
+        "frameSize": {
+          "width": 88,
+          "height": 88
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/sta-013-low/attack-east/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/sta-013-low/attack-east/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/sta-013-low/attack-east/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/sta-013-low/attack-east/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/t17/sta-013-low/attack-east/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/t17/sta-013-low/attack-east/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/t17/sta-013-low/attack-east/sheet.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/t17/sta-013-low/attack-east/preview.png",
+          "review": "pending"
+        }
+      ]
     }
   ]
 }
