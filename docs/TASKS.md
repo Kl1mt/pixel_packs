@@ -159,7 +159,7 @@ Docs: §19
   - **Repo contents**: all 64 candidates and their contact sheets stay in `tools/artgen/candidates/anchors/` (≈560 KB) so the manifest's review history resolves.
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` pass.
 
-### T05 — Card art batch · M · budget ≤ 70
+### T05 — Card art batch · M · budget ≤ 230
 Docs: §19
 - Generate the remaining card art with the anchors and realm palettes.
 - Show the review gallery and get **user approval**.
