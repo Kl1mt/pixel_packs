@@ -1,0 +1,519 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "anchors/mos-003-burr-hoglet",
+      "spec": "anchors",
+      "job": "mos-003-burr-hoglet",
+      "cardId": "MOS-003",
+      "endpoint": "generate-image-v2",
+      "params": {
+        "description": "a baby hedgehog curled halfway into a ball, soft brown spines with a few burrs stuck in them, tiny pink nose, cozy whimsical fantasy critter, full body, facing the viewer in 3/4 front view, centered, feet on one ground line, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "image_size": {
+          "width": 64,
+          "height": 64
+        },
+        "seed": 1101,
+        "no_background": true,
+        "target_palette": {
+          "name": "Mossgrove",
+          "colors": [
+            "#1e1a26",
+            "#8c8191",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#a8344a",
+            "#d95f5f",
+            "#8f87d1",
+            "#e8e0d5"
+          ]
+        },
+        "style_options": {
+          "color_palette": false,
+          "outline": true,
+          "detail": true,
+          "shading": true
+        }
+      },
+      "seed": 1101,
+      "status": "completed",
+      "backgroundJobId": "49b9152b-d9d4-45b6-a5cf-bd19dfd2a3a0",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08268334900008308
+      },
+      "createdAt": "2026-11-23T07:20:15.501214+00:00",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/anchors/mos-003-burr-hoglet/16.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "anchors/mos-012-grandmother-morel",
+      "spec": "anchors",
+      "job": "mos-012-grandmother-morel",
+      "cardId": "MOS-012",
+      "endpoint": "generate-image-v2",
+      "params": {
+        "description": "an ancient morel mushroom with a tall honeycombed tan cap, round spectacles, a shawl of moss, glowing spores around her, cozy whimsical fantasy critter, full body, facing the viewer in 3/4 front view, centered, feet on one ground line, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 1112,
+        "no_background": true,
+        "target_palette": {
+          "name": "Mossgrove: moss, bark, berry",
+          "colors": [
+            "#1e1a26",
+            "#8c8191",
+            "#e8e0d5",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#a8344a",
+            "#d95f5f",
+            "#8f87d1"
+          ]
+        },
+        "image_size": {
+          "width": 64,
+          "height": 64
+        }
+      },
+      "seed": 1112,
+      "status": "completed",
+      "backgroundJobId": "c4ca7c95-68a9-463b-8b1f-42f720d8290c",
+      "cost": {
+        "generations": 10,
+        "usd": 0.0815294643772973
+      },
+      "createdAt": "2026-11-23T07:27:48.323Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/anchors/mos-012-grandmother-morel/16.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "anchors/sta-003-yawning-dormouse",
+      "spec": "anchors",
+      "job": "sta-003-yawning-dormouse",
+      "cardId": "STA-003",
+      "endpoint": "generate-image-v2",
+      "params": {
+        "description": "a plump grey dormouse in an indigo nightcap, mid-yawn, rubbing one eye, long fluffy tail, cozy whimsical fantasy critter, full body, facing the viewer in 3/4 front view, centered, feet on one ground line, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 1203,
+        "no_background": true,
+        "target_palette": {
+          "name": "Starhollow: indigo, silver, lilac",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#fff8ec",
+            "#8a5a3c",
+            "#d95f5f",
+            "#e8a33d",
+            "#f6d36b",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "image_size": {
+          "width": 64,
+          "height": 64
+        }
+      },
+      "seed": 1203,
+      "status": "completed",
+      "backgroundJobId": "a2205453-eb4b-44ce-83b7-18bc7e01c2f7",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08166757652494643
+      },
+      "createdAt": "2026-11-23T07:29:10.571Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/anchors/sta-003-yawning-dormouse/16.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "anchors/sta-012-lady-lunamoth",
+      "spec": "anchors",
+      "job": "sta-012-lady-lunamoth",
+      "cardId": "STA-012",
+      "endpoint": "generate-image-v2",
+      "params": {
+        "description": "an elegant luna moth with long trailing pale-lilac wings edged in silver, crescent moon markings, a delicate crown of antennae, cozy whimsical fantasy critter, full body, facing the viewer in 3/4 front view, centered, feet on one ground line, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 1212,
+        "no_background": true,
+        "target_palette": {
+          "name": "Starhollow: indigo, silver, lilac",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#fff8ec",
+            "#8a5a3c",
+            "#d95f5f",
+            "#e8a33d",
+            "#f6d36b",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "image_size": {
+          "width": 64,
+          "height": 64
+        }
+      },
+      "seed": 1212,
+      "status": "completed",
+      "backgroundJobId": "2eb8b152-93b7-472b-9159-90e78256e1ba",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08200991278224522
+      },
+      "createdAt": "2026-11-23T07:30:41.006Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/anchors/sta-012-lady-lunamoth/16.png",
+          "review": "pending"
+        }
+      ]
+    }
+  ]
+}

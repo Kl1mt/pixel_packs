@@ -8,6 +8,7 @@ export * from './model/card.js';
 export * from './model/pack.js';
 export * from './config/odds.js';
 export * from './config/power.js';
+export * from './config/palettes.js';
 export * from './data/cards/index.js';
 export * from './rng/rng.js';
 export { pickWeighted, pickOne, totalWeight } from './rules/weighted.js';
