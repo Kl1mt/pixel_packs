@@ -59,9 +59,11 @@ export type BackGlow = Exclude<Rarity, 'common'> | null;
 export const backGlow = (c: Pick<OpenedCard, 'rarity'>): BackGlow =>
   c.rarity === 'common' ? null : c.rarity;
 
-/** Best rarity in the pack: Epic or better makes the pack shake and leak light at the tear. */
-export function packMood(o: PackOpening): 'calm' | 'epic' | 'golden' {
+/** Best rarity in the pack: Epic or better makes the pack shake and leak light at the tear (gold for Legendary, rose-gold and harder for Mythic). */
+export type PackMood = 'calm' | 'epic' | 'golden' | 'mythic';
+export function packMood(o: PackOpening): PackMood {
   const best = Math.max(...o.cards.map((c) => rarityRank(c.rarity)));
+  if (best >= rarityRank('mythic')) return 'mythic';
   if (best >= rarityRank('legendary')) return 'golden';
   if (best >= rarityRank('epic')) return 'epic';
   return 'calm';

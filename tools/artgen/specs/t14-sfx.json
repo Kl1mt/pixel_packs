@@ -101,6 +101,41 @@
       "id": "ui.error",
       "prompt": "A soft gentle low wooden double-bonk, a friendly 'not quite' sound, not harsh",
       "seconds": 0.8
+    },
+    {
+      "id": "open.clasp",
+      "prompt": "A small brass clasp turning one notch, a tiny soft metallic click",
+      "seconds": 0.5
+    },
+    {
+      "id": "open.rustle",
+      "prompt": "Leafy vines rustling and unwinding briefly, soft dry leaves",
+      "seconds": 0.6
+    },
+    {
+      "id": "moment.swell",
+      "prompt": "A soft deep magical swell rising, the room going quiet before something big",
+      "seconds": 0.8
+    },
+    {
+      "id": "moment.rays",
+      "prompt": "Warm golden light shining down, a bright airy shimmer opening up",
+      "seconds": 1.2
+    },
+    {
+      "id": "moment.whoosh",
+      "prompt": "A slow soft magical whoosh of something gently descending from above",
+      "seconds": 1.2
+    },
+    {
+      "id": "moment.tick",
+      "prompt": "A single clock tick as time freezes, crisp and hollow",
+      "seconds": 0.5
+    },
+    {
+      "id": "moment.boom",
+      "prompt": "A soft deep magical boom with a rush of air, a warm shockwave, not harsh",
+      "seconds": 1.2
     }
   ]
 }

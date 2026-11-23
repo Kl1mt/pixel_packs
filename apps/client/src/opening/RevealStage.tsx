@@ -1,8 +1,13 @@
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { audio } from '../audio/audio.js';
+import { beatSounds } from '../audio/events.js';
 import type { OpenedCard } from '@pixel-packs/shared';
 import { Button } from '../components/Button.js';
 import { Card, CardBack } from '../components/Card.js';
 import { cardFaceModel } from '../components/cardFace.js';
 import { CardStage } from '../render/CardStage.js';
+import { cardShown, momentPlan, type BeatAt } from './moment.js';
+import { RevealMoment } from './RevealMoment.js';
 import { backGlow, openedSpec } from './reveal.js';
 
 export interface RevealStageProps {
@@ -13,6 +18,12 @@ export interface RevealStageProps {
   onRevealAll: () => void;
   onSkip: () => void;
   onResults: () => void;
+  /** Reduced effects: moments become short still frames. */
+  reduced: boolean;
+  /** A Legendary / Mythic moment or a variant stinger is playing (hold "Reveal all"). */
+  onBusy?: (busy: boolean) => void;
+  /** Hold moments at this many ms (screenshots). */
+  momentFrozenAt?: number | undefined;
 }
 
 const RARITY_NAME: Record<OpenedCard['rarity'], string> = {
@@ -62,9 +73,35 @@ export function RevealStage(p: RevealStageProps) {
   const next = rest[0];
   const done = flipped >= sequence.length;
   const glow = next ? backGlow(next) : null;
+  // Memoised: the moment restarts whenever its plan object changes.
+  const plan = useMemo(
+    () => (current ? momentPlan(current, p.reduced) : null),
+    [current, p.reduced],
+  );
+  const [finished, setFinished] = useState<ReadonlySet<number>>(new Set());
+  const [beat, setBeat] = useState<BeatAt | null>(null);
+  const playing = plan !== null && current !== undefined && !finished.has(current.slot);
+  const flip = useRef<HTMLDivElement>(null);
+  const { onBusy } = p;
+  useEffect(() => {
+    onBusy?.(playing);
+  }, [playing, onBusy]);
+  // The card is hidden until its moment brings it in (Legendary / Mythic descend).
+  const arrival = !playing
+    ? 'landed'
+    : !cardShown(plan, beat)
+      ? 'waiting'
+      : beat?.beat === 'descend'
+        ? 'arriving'
+        : 'landed';
 
   return (
-    <div className="reveal" data-flipped={flipped}>
+    <div
+      className="reveal"
+      data-flipped={flipped}
+      data-beat={playing ? (beat?.beat ?? 'none') : 'none'}
+      data-reduced={p.reduced}
+    >
       <div className="reveal__table">
         <div className="reveal__stack-slot">
           {next && (
@@ -92,8 +129,22 @@ export function RevealStage(p: RevealStageProps) {
 
         <div className="reveal__spotlight" aria-live="polite">
           {current ? (
-            <figure key={current.slot} className="reveal__card" data-rarity={current.rarity}>
-              <div className="reveal__flip">
+            <figure
+              key={current.slot}
+              className="reveal__card"
+              data-rarity={current.rarity}
+              data-variant={current.variant}
+              data-arrival={arrival}
+              data-moment={plan ? 'yes' : 'no'}
+              style={
+                plan
+                  ? ({
+                      '--descend-ms': `${String(plan.beats.find((b) => b.beat === 'descend')?.ms ?? 0)}ms`,
+                    } as CSSProperties)
+                  : undefined
+              }
+            >
+              <div ref={flip} className="reveal__flip">
                 <OpenedFace card={current} />
               </div>
               <figcaption className="reveal__caption">
@@ -123,15 +174,36 @@ export function RevealStage(p: RevealStageProps) {
         </ol>
       </div>
 
+      {playing && (
+        <RevealMoment
+          key={current.slot}
+          card={current}
+          plan={plan}
+          reduced={p.reduced}
+          frozenAt={p.momentFrozenAt}
+          target={() => flip.current}
+          onBeat={(at) => {
+            setBeat(at);
+            if (at) for (const id of beatSounds(at.beat, current)) audio.play(id);
+          }}
+          onDone={() => {
+            setBeat(null);
+            setFinished((f) => new Set(f).add(current.slot));
+          }}
+        />
+      )}
+
       <div className="reveal__actions">
         {done ? (
-          <Button onClick={p.onResults}>See results</Button>
+          <Button onClick={p.onResults} disabled={playing}>
+            See results
+          </Button>
         ) : (
           <>
-            <Button onClick={p.onFlip} disabled={p.auto}>
+            <Button onClick={p.onFlip} disabled={p.auto || playing}>
               Flip
             </Button>
-            <Button onClick={p.onRevealAll} disabled={p.auto}>
+            <Button onClick={p.onRevealAll} disabled={p.auto || playing}>
               Reveal all
             </Button>
             <Button onClick={p.onSkip}>Skip</Button>

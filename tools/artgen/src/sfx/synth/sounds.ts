@@ -138,6 +138,70 @@ export const SOUNDS: Record<string, SoundDef> = {
       ...twinkles(0.7, 16, 1.6),
     ],
   },
+  'open.clasp': {
+    peak: 0.35,
+    seed: 31,
+    voices: [
+      { wave: 'square', duty: 0.25, from: n(91), to: n(86), decay: 0.03, lowpass: 5000, gain: 0.6 },
+      { wave: 'noise', from: 7000, decay: 0.015, highpass: 3000, gain: 0.6 },
+      { wave: 'triangle', from: n(98), at: 0.02, decay: 0.05, curve: 3, gain: 0.4 },
+    ],
+  },
+  'open.rustle': {
+    peak: 0.3,
+    seed: 37,
+    voices: [
+      {
+        wave: 'noise',
+        from: 4500,
+        to: 2500,
+        attack: 0.03,
+        hold: 0.08,
+        decay: 0.2,
+        crackle: 0.9,
+        highpass: 800,
+      },
+    ],
+  },
+  'moment.swell': {
+    peak: 0.45,
+    seed: 41,
+    voices: [
+      { wave: 'triangle', from: n(38), to: n(45), attack: 0.5, decay: 0.3, gain: 0.8 },
+      { wave: 'noise', from: 400, to: 2500, attack: 0.55, decay: 0.2, gain: 0.25 },
+    ],
+  },
+  'moment.rays': {
+    peak: 0.45,
+    seed: 43,
+    voices: [
+      { wave: 'noise', from: 3000, to: 8000, attack: 0.3, decay: 0.8, highpass: 2000, gain: 0.35 },
+      ...bell(88, 0.05, 1.0, 0.6),
+      ...bell(95, 0.15, 0.9, 0.4),
+      ...twinkles(0.1, 6, 0.8, 0.3),
+    ],
+  },
+  'moment.whoosh': {
+    peak: 0.4,
+    seed: 47,
+    voices: [{ wave: 'noise', from: 5000, to: 500, attack: 0.4, decay: 0.7, gain: 0.8 }],
+  },
+  'moment.tick': {
+    peak: 0.4,
+    seed: 53,
+    voices: [
+      { wave: 'noise', from: 6000, decay: 0.012, highpass: 2500 },
+      { wave: 'sine', from: n(84), decay: 0.09, curve: 3, gain: 0.5 },
+    ],
+  },
+  'moment.boom': {
+    peak: 0.6,
+    seed: 59,
+    voices: [
+      { wave: 'sine', from: 110, to: 38, decay: 0.7, curve: 2 },
+      { wave: 'noise', from: 2500, to: 300, attack: 0.005, decay: 0.6, gain: 0.5 },
+    ],
+  },
   'variant.foil': {
     peak: 0.45,
     voices: [

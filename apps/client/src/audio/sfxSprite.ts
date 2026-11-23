@@ -21,6 +21,13 @@ export const SFX_SPRITE = {
   'reward.dust': [16107, 514],
   'reward.fusion': [16871, 1662],
   'ui.error': [18783, 302],
+  'open.clasp': [19335, 72],
+  'open.rustle': [19657, 310],
+  'moment.swell': [20217, 800],
+  'moment.rays': [21267, 1100],
+  'moment.whoosh': [22617, 1100],
+  'moment.tick': [23967, 92],
+  'moment.boom': [24309, 702],
 } as const satisfies Record<string, readonly [number, number]>;
 
 export type SfxId = keyof typeof SFX_SPRITE;

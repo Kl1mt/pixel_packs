@@ -1,13 +1,15 @@
 import { MASTER_PALETTE as P } from '@pixel-packs/shared';
 import { ambientPetal, burstPetal, petalPixels, stepPetals, type Petal } from './petals.js';
+import { claspPixels, Stardust } from './starhollow.js';
 import { SEAM_REACH, SeamTear, TEAR_DONE } from './tear.js';
+import type { PackMood } from './reveal.js';
 import { vineFront, type PackTheme, type WrapPixel } from './themes.js';
 
 export interface TearSceneOptions {
   theme: PackTheme;
   packImage: HTMLImageElement;
   /** Epic or better: the pack shakes and light leaks through the tear (GDD §5). */
-  mood: 'calm' | 'epic' | 'golden';
+  mood: PackMood;
   reduced: boolean;
   /** Called as the seam tears (0–1). */
   onProgress: (p: number) => void;
@@ -25,6 +27,7 @@ const LEAK: Record<TearSceneOptions['mood'], readonly string[]> = {
   calm: [P.glow, P.cream],
   epic: [P.lavender, P.lilac],
   golden: [P.sunflower, P.amber],
+  mythic: [P.sunflower, P.rose],
 };
 
 /**
@@ -49,6 +52,7 @@ export class TearScene {
   private burstAt: number | null = null;
   private torn = false;
   private spawn = 0;
+  private readonly dust: Stardust | null;
 
   constructor(
     private readonly canvas: HTMLCanvasElement,
@@ -59,6 +63,7 @@ export class TearScene {
     this.ctx = ctx;
     this.seam = new SeamTear(o.theme.seam.x0, o.theme.seam.x1);
     this.wrap = o.theme.wrap(packMask(o.packImage));
+    this.dust = o.theme.stardust > 0 ? new Stardust(o.theme.stardust, Math.random) : null;
     canvas.addEventListener('pointerdown', this.onDown);
     canvas.addEventListener('pointermove', this.onMove);
     canvas.addEventListener('pointerup', this.onUp);
@@ -183,6 +188,22 @@ export class TearScene {
       }
     }
     this.petals = stepPetals(this.petals, dt, this.h + 2);
+    if (!this.o.reduced) this.dust?.step(dt, this.seam.progress, this.burstK());
+  }
+
+  /** How far the burst has played (0–1), or null before it. */
+  private burstK(): number | null {
+    if (this.burstAt === null) return null;
+    return Math.min(
+      1,
+      (this.clock - this.burstAt) / (this.o.reduced ? BURST_MS_REDUCED : BURST_MS),
+    );
+  }
+
+  private stardust(o: { x: number; y: number }, back: boolean): void {
+    if (!this.dust) return;
+    for (const d of this.dust.pixels(o.x + 32, o.y + 34, back, this.burstK()))
+      this.px(d.x, d.y, d.colour);
   }
 
   private px(x: number, y: number, colour: string): void {
@@ -197,9 +218,14 @@ export class TearScene {
     const since = this.burstAt === null ? 0 : this.clock - this.burstAt;
     const k =
       this.burstAt === null ? 0 : Math.min(1, since / (opts.reduced ? BURST_MS_REDUCED : BURST_MS));
+    // Epic+ packs shake now and then; a Mythic one harder and more often.
+    const big = opts.mood === 'mythic' ? 2 : 1;
     const shake =
-      opts.mood !== 'calm' && !opts.reduced && this.burstAt === null && this.clock % 1400 < 220
-        ? (Math.floor(this.clock / 50) % 2) * 2 - 1
+      opts.mood !== 'calm' &&
+      !opts.reduced &&
+      this.burstAt === null &&
+      this.clock % (1600 / big) < 220
+        ? ((Math.floor(this.clock / 50) % 2) * 2 - 1) * big
         : 0;
     const o = { x: this.origin.x + shake, y: this.origin.y };
     const img = opts.packImage;
@@ -226,8 +252,12 @@ export class TearScene {
       });
 
     // The pack below the seam, and the top flap flying off once it bursts.
+    this.stardust(o, true);
     const cut = seam.y + 1;
     ctx.drawImage(img, 0, cut, PACK, PACK - cut, o.x, o.y + cut, PACK, PACK - cut);
+    if (opts.theme.clasp)
+      for (const c of claspPixels(this.seam.progress / TEAR_DONE, k > 0))
+        this.px(o.x + c.x, o.y + c.y, c.colour);
     if (k < 1) {
       ctx.globalAlpha = k === 0 ? 1 : ([1, 0.66, 0.33][Math.min(2, Math.floor(k * 3))] ?? 0);
       const lift = Math.round(k * k * 18);
@@ -258,6 +288,7 @@ export class TearScene {
       if (w.t >= vineFront(opts.theme, w.vine, p) && !(p >= 1 && k > 0))
         this.px(o.x + w.x, o.y + w.y, w.colour);
 
+    this.stardust(o, false);
     for (const petal of this.petals)
       for (const [x, y] of petalPixels(petal)) this.px(x, y, petal.colour);
   }

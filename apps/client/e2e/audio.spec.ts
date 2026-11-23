@@ -59,4 +59,25 @@ test.describe('audio', () => {
     await expect.poll(async () => (await probe(page)).music).toBe('home');
     expect(errors).toEqual([]);
   });
+
+  test('a Legendary Foil moment plays its beats: swell, rays, whoosh, crest, glint', async ({
+    page,
+  }) => {
+    await page.goto('/debug/moments?rarity=legendary&variant=foil&fx=full');
+    // The first press unlocks audio; Replay restarts the moment so every beat sounds.
+    await page.getByRole('button', { name: 'Replay' }).click();
+    await expect.poll(async () => (await probe(page)).sfx).toBe('loaded');
+    await page.getByRole('button', { name: 'Replay' }).click();
+    await expect
+      .poll(async () => (await probe(page)).log, { timeout: 8000 })
+      .toEqual(
+        expect.arrayContaining([
+          'moment.swell',
+          'moment.rays',
+          'moment.whoosh',
+          'rarity.legendary',
+          'variant.foil',
+        ]),
+      );
+  });
 });

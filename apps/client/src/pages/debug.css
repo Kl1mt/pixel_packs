@@ -60,3 +60,21 @@
   min-height: 1.45em;
   font-size: var(--small);
 }
+
+/* ---- Moment lab (T13) ---- */
+.lab-moments__bar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--sp-3) var(--sp-4);
+  padding: var(--sp-4) var(--sp-8);
+  background: var(--ink);
+  font-size: var(--small);
+}
+
+.lab-moments__bar label {
+  display: grid;
+  gap: var(--sp-1);
+}
