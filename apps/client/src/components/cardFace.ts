@@ -4,11 +4,19 @@ import {
   MASTER_PALETTE,
   cardNameSize,
   cardRulesText,
+  starredCard,
   statDigitPixels,
   type Card,
+  type EditionStamp,
   type Rarity,
   type Realm,
+  type Stars,
+  type Variant,
 } from '@pixel-packs/shared';
+import { cardBadgePixels, mintText, type FacePixel } from './cardBadges.js';
+
+/** Rows of sky above the ground band in the 64-row art window (78 % of it, on a whole pixel). */
+export const CARD_SKY_ROWS = 50;
 
 /** Flat two-band backdrop behind the art (sky, ground), per realm (T06 style tile). */
 const REALM_BACKDROP: Partial<Record<Realm, readonly [string, string]>> = {
@@ -32,21 +40,57 @@ export interface CardFaceModel {
   backdrop: readonly [string, string];
   /** ATK and HP digits as ink pixels on the 96×128 face. */
   statPixels: { x: number; y: number }[];
+  variant: Variant;
+  stars: Stars;
+  /** Star, edition and mint badges in palette colours, painted in order. */
+  badgePixels: FacePixel[];
   label: string;
 }
 
+/** Per-copy look (GDD §4, §6); catalog values win where nothing is given. */
 export interface CardFaceOverrides {
   rarity?: Rarity;
   atk?: number;
   hp?: number;
+  variant?: Variant;
+  stars?: Stars;
+  edition?: EditionStamp | null;
+  mintNumber?: number | null;
+}
+
+const VARIANT_LABEL: Record<Variant, string> = {
+  normal: '',
+  foil: 'Foil',
+  prismatic: 'Prismatic',
+  void: 'Void',
+  glitch: 'Glitch',
+};
+
+function copyLabel(
+  variant: Variant,
+  stars: Stars,
+  edition: EditionStamp | null,
+  mint: number | null,
+) {
+  const parts = [
+    VARIANT_LABEL[variant] + (mint !== null && VARIANT_LABEL[variant] ? ` ${mintText(mint)}` : ''),
+    stars > 1 ? `${String(stars)} stars` : '',
+    edition ? `First Edition, Season ${String(edition.season)}` : '',
+  ].filter(Boolean);
+  return parts.length ? `, ${parts.join(', ')}` : '';
 }
 
 /** Everything the DOM card needs, derived from the catalog card and shared `CARD_FACE`. */
 export function cardFaceModel(card: Card, o: CardFaceOverrides = {}): CardFaceModel {
   const rarity = o.rarity ?? card.rarity;
-  const atk = o.atk ?? card.atk;
-  const hp = o.hp ?? card.hp;
-  const rules = cardRulesText(card);
+  const variant = o.variant ?? 'normal';
+  const stars = o.stars ?? 1;
+  const edition = o.edition ?? null;
+  const mintNumber = o.mintNumber ?? null;
+  const played = starredCard(card, stars);
+  const atk = o.atk ?? played.atk;
+  const hp = o.hp ?? played.hp;
+  const rules = cardRulesText(played);
   return {
     id: card.id,
     name: card.name,
@@ -60,8 +104,11 @@ export function cardFaceModel(card: Card, o: CardFaceOverrides = {}): CardFaceMo
     rules,
     backdrop: REALM_BACKDROP[card.realm] ?? DEFAULT_BACKDROP,
     statPixels: [...statDigitPixels(atk, CARD_FACE.atk), ...statDigitPixels(hp, CARD_FACE.hp)],
-    label: `${card.name}, ${rarity}, attack ${String(atk)}, health ${String(hp)}${
-      rules.length ? `. ${rules.join(' ')}` : ''
-    }`,
+    variant,
+    stars,
+    badgePixels: cardBadgePixels({ variant, stars, edition, mintNumber }),
+    label: `${card.name}, ${rarity}${copyLabel(variant, stars, edition, mintNumber)}, attack ${String(
+      atk,
+    )}, health ${String(hp)}${rules.length ? `. ${rules.join(' ')}` : ''}`,
   };
 }

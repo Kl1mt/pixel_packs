@@ -74,7 +74,8 @@
 }
 
 .card__backdrop {
-  background: linear-gradient(var(--bd-sky) 78%, var(--bd-ground) 0);
+  /* Sky over ground, split on a whole art pixel (CARD_SKY_ROWS) so the Pixi card matches. */
+  background: linear-gradient(var(--bd-sky) calc(50px * var(--card)), var(--bd-ground) 0);
 }
 
 .card__art {

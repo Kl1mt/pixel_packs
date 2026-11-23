@@ -1,0 +1,84 @@
+/* Card lab (/debug, T11). */
+.lab {
+  display: grid;
+  gap: var(--sp-8);
+}
+
+.lab__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-8);
+}
+
+.lab__head .page-title {
+  margin: 0;
+}
+
+.fps {
+  font: var(--heading) / 1 var(--font-heading);
+  color: var(--sunflower);
+}
+
+.lab__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-8);
+}
+
+.lab__field {
+  display: grid;
+  gap: var(--sp-1);
+  font-size: var(--small);
+}
+
+.lab__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--sp-8);
+}
+
+.lab__cell {
+  margin: 0;
+  display: grid;
+  gap: var(--sp-2);
+  color: var(--glow);
+  font-size: var(--small);
+}
+
+.card-stage canvas {
+  display: block;
+}
+
+.card-stage--static {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(8px * var(--card));
+}
+
+/* Full card text beside a card (inspect): body size, never the compact face size. */
+.card-details {
+  max-width: 26rem;
+  font-size: var(--body);
+}
+
+.card-details__name {
+  margin: 0 0 var(--sp-2);
+  font: var(--heading) / 1 var(--font-heading);
+}
+
+.card-details__meta,
+.card-details__stats {
+  margin: 0 0 var(--sp-2);
+}
+
+.card-details__rules {
+  margin: var(--sp-4) 0;
+  padding-left: var(--sp-8);
+}
+
+.card-details__flavour {
+  margin: 0;
+  font-style: italic;
+  font-size: var(--small);
+}

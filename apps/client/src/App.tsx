@@ -33,6 +33,18 @@ const router = createBrowserRouter([
     children: [{ index: true, element: <StyleguidePage /> }],
   },
   {
+    // Card lab (T11): public like the style guide; lazy so Pixi stays out of the main bundle.
+    path: '/debug',
+    element: <AppShell />,
+    children: [
+      {
+        index: true,
+        hydrateFallbackElement: <p className="on-ground">Loading the card lab…</p>,
+        lazy: () => import('./pages/DebugPage.js').then((m) => ({ Component: m.DebugPage })),
+      },
+    ],
+  },
+  {
     element: <RequireAuth children={<AppShell />} />,
     children: [
       { path: '/', element: <HomePage /> },
