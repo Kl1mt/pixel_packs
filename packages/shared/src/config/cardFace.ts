@@ -19,8 +19,8 @@ export const CARD_FACE = {
   size: { w: 96, h: 128 },
   /** Transparent 64×64 art window; the art is bottom-aligned inside it. */
   art: { x: 16, y: 17, w: 64, h: 64 },
-  /** Round crest socket on the top edge (realm crest). */
-  crest: { x: 43, y: 4, w: 10, h: 10 },
+  /** Round crest socket on the top edge: the bounding box of its cream interior (realm crest, T20). */
+  crest: { x: 42, y: 4, w: 11, h: 11 },
   /** Name banner text box. */
   name: { x: 10, y: 83, w: 76, h: 9 },
   /** Rules text box. */

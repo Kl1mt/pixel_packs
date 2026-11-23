@@ -133,11 +133,12 @@ export class CardView {
     return new CardView(model, await composite(model), opts);
   }
 
-  /** Stat digits and badges, unaffected by the shader so they stay legible. */
+  /** Stat digits, the realm crest and badges, unaffected by the shader so they stay legible. */
   private overlay(): Graphics {
     const g = new Graphics();
     for (const p of this.model.statPixels) g.rect(p.x, p.y, 1, 1);
     g.fill(MASTER_PALETTE.ink);
+    for (const p of this.model.crestPixels) g.rect(p.x, p.y, 1, 1).fill(p.colour);
     for (const p of this.model.badgePixels) g.rect(p.x, p.y, 1, 1).fill(p.colour);
     return g;
   }

@@ -6,7 +6,7 @@ test('style guide renders the approved style-tile parts', async ({ page }) => {
   await page.goto('/styleguide');
   await settle(page);
   await expect(page.getByRole('heading', { name: 'Style guide' })).toBeVisible();
-  await expect(page.locator('figure.card[data-rarity]')).toHaveCount(8);
+  await expect(page.locator('figure.card[data-rarity]')).toHaveCount(14);
   expect(await page.evaluate(() => document.fonts.check('32px "Pixel Packs Hollow"'))).toBe(true);
   // Every pixel image is drawn unsmoothed.
   const smoothed = await page.$$eval(
@@ -15,6 +15,15 @@ test('style guide renders the approved style-tile parts', async ({ page }) => {
   );
   expect(smoothed).toBe(0);
   await page.screenshot({ path: `${OUT}/styleguide.png`, fullPage: true });
+  // Realm crests (T20) on every frame, both realms. Centred in a tall view so the sticky top bar stays clear.
+  await page.setViewportSize({ width: 1440, height: 1400 });
+  for (const realm of ['mossgrove', 'starhollow']) {
+    const row = page.getByTestId(`frames-${realm}`);
+    await row.evaluate((el) => {
+      el.scrollIntoView({ block: 'center' });
+    });
+    await row.screenshot({ path: `../../docs/cards/crests-${realm}.png` });
+  }
 });
 
 test('app shell: navigation, routing and the phone layout', async ({ page }) => {

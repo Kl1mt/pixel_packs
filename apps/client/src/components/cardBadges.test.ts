@@ -72,5 +72,6 @@ describe('card face model with copy traits', () => {
       hp: card.hp,
       badgePixels: [],
     });
+    expect(m.crestPixels.length).toBeGreaterThan(0);
   });
 });
