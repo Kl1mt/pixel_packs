@@ -4813,6 +4813,394 @@
           "review": "pending"
         }
       ]
+    },
+    {
+      "id": "t17/mos-012-low",
+      "spec": "t17",
+      "job": "mos-012-low",
+      "cardId": "MOS-012",
+      "endpoint": "create-character-v3",
+      "params": {
+        "description": "Grandmother Morel: an ancient morel mushroom with a tall honeycombed tan cap, round spectacles, a shawl of moss, glowing spores around her",
+        "reference_image": "apps/client/public/assets/cards/MOS-012.png",
+        "n_directions": 4,
+        "view": "low top-down",
+        "template_id": "mannequin",
+        "seed": 1701,
+        "no_background": true
+      },
+      "seed": 1701,
+      "status": "completed",
+      "backgroundJobId": "673af43f-574f-454d-9463-3c61e30ca0fd",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T20:09:52.364Z",
+      "extra": {
+        "characterId": "e5d4de46-1530-4b51-869a-628bda308c9f",
+        "view": "low top-down",
+        "size": {
+          "width": 64,
+          "height": 64
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/mos-012-low/rotations/south.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/mos-012-low/rotations/west.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/mos-012-low/rotations/east.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/mos-012-low/rotations/north.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t17/mos-012-side",
+      "spec": "t17",
+      "job": "mos-012-side",
+      "cardId": "MOS-012",
+      "endpoint": "create-character-v3",
+      "params": {
+        "description": "Grandmother Morel: an ancient morel mushroom with a tall honeycombed tan cap, round spectacles, a shawl of moss, glowing spores around her",
+        "reference_image": "apps/client/public/assets/cards/MOS-012.png",
+        "n_directions": 4,
+        "view": "side",
+        "template_id": "mannequin",
+        "seed": 1702,
+        "no_background": true
+      },
+      "seed": 1702,
+      "status": "completed",
+      "backgroundJobId": "2cc84ef0-9392-4eca-ba15-97769801aa90",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T20:11:00.096Z",
+      "extra": {
+        "characterId": "581e45c1-78f7-49e1-8bfa-7c4f5fefa771",
+        "view": "side",
+        "size": {
+          "width": 64,
+          "height": 64
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/mos-012-side/rotations/south.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/mos-012-side/rotations/west.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/mos-012-side/rotations/east.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/mos-012-side/rotations/north.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t17/sta-013-low",
+      "spec": "t17",
+      "job": "sta-013-low",
+      "cardId": "STA-013",
+      "endpoint": "create-character-v3",
+      "params": {
+        "description": "Umbra, the Dreaming Bear: a great sleeping bear made of deep indigo night sky with silver stars and a crescent moon in her fur, sitting up with eyes half closed and a sleepy smile",
+        "reference_image": "apps/client/public/assets/cards/STA-013.png",
+        "n_directions": 4,
+        "view": "low top-down",
+        "template_id": "bear",
+        "seed": 1703,
+        "no_background": true
+      },
+      "seed": 1703,
+      "status": "completed",
+      "backgroundJobId": "ea061d69-6500-4203-a7de-270b0a467417",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T20:12:08.730Z",
+      "extra": {
+        "characterId": "57d7ed0a-28e4-4462-95ef-83a87c87f6bb",
+        "view": "low top-down",
+        "size": {
+          "width": 64,
+          "height": 64
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/sta-013-low/rotations/south.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/sta-013-low/rotations/west.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/sta-013-low/rotations/east.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/sta-013-low/rotations/north.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t17/sta-013-side",
+      "spec": "t17",
+      "job": "sta-013-side",
+      "cardId": "STA-013",
+      "endpoint": "create-character-v3",
+      "params": {
+        "description": "Umbra, the Dreaming Bear: a great sleeping bear made of deep indigo night sky with silver stars and a crescent moon in her fur, sitting up with eyes half closed and a sleepy smile",
+        "reference_image": "apps/client/public/assets/cards/STA-013.png",
+        "n_directions": 4,
+        "view": "side",
+        "template_id": "bear",
+        "seed": 1704,
+        "no_background": true
+      },
+      "seed": 1704,
+      "status": "completed",
+      "backgroundJobId": "6f1032ba-ed12-4b72-9c2c-a7833a65e692",
+      "cost": {
+        "generations": 1
+      },
+      "createdAt": "2026-11-23T20:13:49.751Z",
+      "extra": {
+        "characterId": "b2a1d3b9-4535-44cc-b942-2b44dd50596e",
+        "view": "side",
+        "size": {
+          "width": 64,
+          "height": 64
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/sta-013-side/rotations/south.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/sta-013-side/rotations/west.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/sta-013-side/rotations/east.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/sta-013-side/rotations/north.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t17/mos-012-side-idle-east",
+      "spec": "t17",
+      "job": "mos-012-side-idle-east",
+      "endpoint": "characters/animations",
+      "params": {
+        "character_id": "581e45c1-78f7-49e1-8bfa-7c4f5fefa771",
+        "mode": "v3",
+        "animation_name": "idle-east",
+        "action_description": "Always faces east (right) and never turns. Gentle breathing idle in place: the body rises and falls slightly, loops seamlessly. No camera movement and nothing leaves the canvas. No background and no ground shadow. Feet stay on the same fixed baseline. The first and last frame are the base pose.",
+        "frame_count": 4,
+        "directions": [
+          "east"
+        ],
+        "keep_first_frame": false,
+        "seed": 17021,
+        "target_palette": {
+          "name": "Mossgrove: moss, bark, berry",
+          "colors": [
+            "#1e1a26",
+            "#8c8191",
+            "#e8e0d5",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#a8344a",
+            "#d95f5f",
+            "#8f87d1"
+          ]
+        }
+      },
+      "seed": 17021,
+      "status": "completed",
+      "backgroundJobId": "8f184cbc-55f3-4494-9fc3-b4ed46152c9f",
+      "cost": {
+        "generations": 1,
+        "usd": 0
+      },
+      "createdAt": "2026-11-23T20:15:10.083Z",
+      "extra": {
+        "characterId": "581e45c1-78f7-49e1-8bfa-7c4f5fefa771",
+        "animationGroupId": "153bcab0-6ab4-4c8f-b339-86d034bf7f8f",
+        "frames": 4,
+        "frameSize": {
+          "width": 88,
+          "height": 88
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/mos-012-side/idle-east/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/mos-012-side/idle-east/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/mos-012-side/idle-east/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/mos-012-side/idle-east/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/t17/mos-012-side/idle-east/sheet.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/t17/mos-012-side/idle-east/preview.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "t17/mos-012-low-idle-south",
+      "spec": "t17",
+      "job": "mos-012-low-idle-south",
+      "endpoint": "characters/animations",
+      "params": {
+        "character_id": "e5d4de46-1530-4b51-869a-628bda308c9f",
+        "mode": "v3",
+        "animation_name": "idle-south",
+        "action_description": "Faces the viewer (south) the whole time. Gentle breathing idle in place: the body rises and falls slightly, a soft blink, loops seamlessly. No camera movement and nothing leaves the canvas. No background and no ground shadow. Feet stay on the same fixed baseline. The first and last frame are the base pose.",
+        "frame_count": 4,
+        "directions": [
+          "south"
+        ],
+        "keep_first_frame": false,
+        "seed": 17010,
+        "target_palette": {
+          "name": "Mossgrove: moss, bark, berry",
+          "colors": [
+            "#1e1a26",
+            "#8c8191",
+            "#e8e0d5",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#a8344a",
+            "#d95f5f",
+            "#8f87d1"
+          ]
+        }
+      },
+      "seed": 17010,
+      "status": "completed",
+      "backgroundJobId": "d88cca4a-c02b-44a7-b8b8-ebd3c73fd9b7",
+      "cost": {
+        "generations": 1,
+        "usd": 0
+      },
+      "createdAt": "2026-11-23T20:15:59.450Z",
+      "extra": {
+        "characterId": "e5d4de46-1530-4b51-869a-628bda308c9f",
+        "animationGroupId": "8c7f4deb-22b9-4a76-85dd-59dc48f19b87",
+        "frames": 4,
+        "frameSize": {
+          "width": 88,
+          "height": 88
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/mos-012-low/idle-south/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/mos-012-low/idle-south/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/mos-012-low/idle-south/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/mos-012-low/idle-south/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/t17/mos-012-low/idle-south/sheet.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/t17/mos-012-low/idle-south/preview.png",
+          "review": "pending"
+        }
+      ]
     }
   ]
 }

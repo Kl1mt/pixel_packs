@@ -2,6 +2,7 @@ import type { PixelLabClient } from '../api/client.js';
 import { readManifest } from '../manifest.js';
 import { fromRepo } from '../paths.js';
 import { writeCharacterBoard } from './board.js';
+import { animationStats } from './stats.js';
 import { planCharacterJobs, runCharacterSpec } from './run.js';
 import { loadCharacterSpec } from './spec.js';
 
@@ -54,6 +55,12 @@ export async function characterBoardCommand(
   const [specPath, out] = rest;
   if (!specPath || !out) throw new Error('character-board needs <spec> <out.png>');
   const spec = await loadCharacterSpec(fromRepo(specPath));
-  const labels = await writeCharacterBoard(spec, await readManifest(), out);
+  const manifest = await readManifest();
+  const labels = await writeCharacterBoard(spec, manifest, out);
   log(`wrote ${out} (columns: ${labels.join(' · ')})`);
+  for (const s of await animationStats(spec, manifest)) {
+    log(
+      `${s.id.padEnd(26)} ${String(s.frames)}f ${s.size} feet y ${s.baselines.join(',')} · bbox w ${s.bboxW.join('–')} h ${s.bboxH.join('–')} · ${String(s.colours)} colours${s.touchesEdge ? ' · TOUCHES EDGE' : ''}`,
+    );
+  }
 }
