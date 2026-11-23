@@ -1,5 +1,7 @@
 export { clampInt } from './math.js';
 export { HealthResponseSchema, type HealthResponse } from './api/health.js';
+export * from './api/auth.js';
+export { isUsernameBlocked, normalizeUsername } from './api/usernameBlocklist.js';
 
 export * from './model/enums.js';
 export * from './model/card.js';

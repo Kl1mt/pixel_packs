@@ -448,6 +448,7 @@ The task breakdown is in `docs/TASKS.md`.
 - Loot-box rules per region: odds disclosure is covered; age ratings and regional restrictions are not yet.
 - Privacy policy and imprint for the public launch.
 - Realm completion spread (econ-sim v0, T02): the medians hit the §8 targets (≈8 days for the 12 non-Mythic cards, ≈19 for the Mythic), but the p90 is ≈16 / 33 days, and crafting barely helps in M1 because only copies beyond 9 are dusted. Revisit when quests and the calendar are tuned.
+- Behind the Cloudflare Tunnel (§24), the server must trust the proxy's client-IP header (Fastify `trustProxy`, `CF-Connecting-IP`), or every request shares one rate-limit bucket. Decide in the deploy task.
 
 **User to-dos** (when a task needs them)
 - Create a Discord application for OAuth (T09; a guide will be in the README).
@@ -489,3 +490,10 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T02: dusting a ★2/★3 copy gives its ★1-equivalents (×3/×9) times the ★1 value, so fusing never changes dust value |
 | 2026-11-23 | T02: the collection score's +50 % for ★3 is rounded half up per entry (scores stay integers) |
 | 2026-11-23 | T02: the pack RNG is Web Crypto `getRandomValues` with rejection sampling (same guarantee as `crypto.randomInt`, and the shared package stays isomorphic) |
+| 2026-11-23 | T08: CSRF uses a double-submit token (readable `pp_csrf` cookie echoed in `x-csrf-token` on every mutation, login and register included) on top of SameSite=Lax |
+| 2026-11-23 | T08: sessions are opaque random tokens stored as SHA-256 in `sessions`, valid 30 days (not sliding); a password reset ends all sessions |
+| 2026-11-23 | T08: unverified accounts can log in and play; `emailVerified` is exposed so later features (e.g. trading) can require it. A password reset also verifies the email |
+| 2026-11-23 | T08: verification and reset tokens live in an extra `email_tokens` table (hashed, single-use; 24 h / 1 h) |
+| 2026-11-23 | T08: register answers `409 emailTaken` (accepted small enumeration risk for clearer UX, behind a 5 / 10 min rate limit); login and reset requests never reveal whether an email exists |
+| 2026-11-23 | T08: usernames are 3–20 of `A–Z a–z 0–9 _`, unique ignoring case, filtered by a small blocklist (reserved names + slurs, leetspeak-normalised substring match); passwords 10–128 characters |
+| 2026-11-23 | T08: users carry `onboarding_step` (scripted packs opened); pack inventory is a count per (user, pack type); pack types are synced from shared config on start with release Season 0 |

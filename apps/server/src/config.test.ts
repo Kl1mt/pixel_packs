@@ -15,4 +15,12 @@ describe('loadConfig', () => {
   it('rejects an invalid port', () => {
     expect(() => loadConfig({ PORT: 'abc' })).toThrow();
   });
+
+  it('turns secure cookies on in production unless overridden', () => {
+    expect(loadConfig({}).COOKIE_SECURE).toBe(false);
+    expect(loadConfig({ NODE_ENV: 'production' }).COOKIE_SECURE).toBe(true);
+    expect(loadConfig({ NODE_ENV: 'production', COOKIE_SECURE: 'false' }).COOKIE_SECURE).toBe(
+      false,
+    );
+  });
 });
