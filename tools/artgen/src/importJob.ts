@@ -38,7 +38,10 @@ export async function importJob(
       usd: status.last_response?.usage_cost_usd,
     },
     createdAt: status.created_at,
-    outputs: await writeOutputs(job, status.last_response?.images ?? []),
+    outputs: await writeOutputs(
+      job,
+      (status.last_response?.images ?? []).map((i) => Buffer.from(i.base64, 'base64')),
+    ),
   });
   await writeManifest(manifest, manifestPath);
 }

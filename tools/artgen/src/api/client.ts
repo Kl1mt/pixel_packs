@@ -54,7 +54,7 @@ export function createPixelLabClient(opts: ClientOptions = {}) {
   const log = opts.log ?? (() => undefined);
 
   async function request<S extends z.ZodType>(
-    method: 'GET' | 'POST',
+    method: 'GET' | 'POST' | 'DELETE',
     path: string,
     schema: S,
     body?: unknown,
@@ -110,6 +110,29 @@ export function createPixelLabClient(opts: ClientOptions = {}) {
     },
 
     waitForJob,
+
+    /** POST to any endpoint and validate the 2xx body (never retried after a 2xx). */
+    post: <S extends z.ZodType>(path: string, schema: S, body?: unknown): Promise<z.infer<S>> =>
+      request('POST', path, schema, body ?? {}),
+
+    get: <S extends z.ZodType>(path: string, schema: S): Promise<z.infer<S>> =>
+      request('GET', path, schema),
+
+    /** Downloads a result file (e.g. a UI asset's CDN `image_url`), retrying network errors. */
+    async download(url: string): Promise<Buffer> {
+      for (let attempt = 0; ; attempt++) {
+        try {
+          const res = await doFetch(url);
+          if (res.ok) return Buffer.from(await res.arrayBuffer());
+          if (!isRetryableStatus(res.status) || attempt >= maxRetries) {
+            throw new PixelLabError(`GET ${url} → ${res.status}`, res.status, false);
+          }
+        } catch (e) {
+          if (e instanceof PixelLabError || attempt >= maxRetries) throw e;
+        }
+        await sleep(backoffMs * 2 ** attempt);
+      }
+    },
   };
 }
 

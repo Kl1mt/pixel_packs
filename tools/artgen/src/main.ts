@@ -10,6 +10,7 @@ import { importJob } from './importJob.js';
 import { promote } from './promote.js';
 import { planJobs, runSpec } from './run.js';
 import { loadSpec } from './spec.js';
+import { uiSplit } from './ui.js';
 
 const USAGE = `artgen <command>
   balance                                  show remaining PixelLab generations
@@ -21,6 +22,7 @@ const USAGE = `artgen <command>
   export-gallery <out.html>                read-only gallery with embedded images
   review <entry> <index> <approved|rejected|pending> [note]
   promote <entry> <index> <dest.png>       copy an approved candidate to its final path
+  ui-split <entry>                         split a create-ui-asset template into elements (free)
   spend                                    total generations logged in the manifest`;
 
 const log = (msg: string) => {
@@ -131,6 +133,12 @@ async function main(argv: string[]): Promise<void> {
       if (!entryId || !index || !dest) throw new Error(USAGE);
       await promote(await readManifest(), entryId, Number(index), dest);
       log(`${entryId} #${index} → ${dest}`);
+      return;
+    }
+    case 'ui-split': {
+      const [entryId] = rest;
+      if (!entryId) throw new Error(USAGE);
+      await uiSplit(client, await readManifest(), entryId, log);
       return;
     }
     case 'spend': {

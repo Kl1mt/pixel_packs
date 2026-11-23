@@ -30,8 +30,68 @@ const StyleJob = JobBase.extend({
   styleDescription: z.string().max(500).optional(),
 });
 
+const Size = z.object({ width: z.number().int().min(16), height: z.number().int().min(16) });
+
+const ProFlashJob = JobBase.extend({
+  endpoint: z.literal('create-image-pro-flash'),
+  size: Size,
+  /** Optional repo-relative PNG lending its look (outline, shading); the palette wins on colour. */
+  styleImage: z.string().optional(),
+  styleUsage: z.string().optional(),
+});
+
+const PixfluxJob = JobBase.extend({
+  endpoint: z.literal('create-image-pixflux'),
+  size: Size,
+  outline: z.string().optional(),
+  shading: z.string().optional(),
+  detail: z.string().optional(),
+  view: z.string().optional(),
+});
+
+const FontJob = JobBase.extend({
+  endpoint: z.literal('generate-font-pro'),
+  weight: z.enum(['Bold', 'Regular']),
+  glyphPx: z.union([
+    z.literal(8),
+    z.literal(12),
+    z.literal(16),
+    z.literal(24),
+    z.literal(32),
+    z.literal(64),
+  ]),
+  fontName: z.string().max(200).optional(),
+});
+
+const UiAssetJob = JobBase.extend({
+  endpoint: z.literal('create-ui-asset'),
+  size: z.object({
+    width: z.number().int().min(192).max(688),
+    height: z.number().int().min(192).max(688),
+  }),
+  elements: z.array(z.string()).optional(),
+  styleImage: z.string().optional(),
+});
+
+const UiStatesJob = JobBase.extend({
+  endpoint: z.literal('ui-assets/states'),
+  /** Element ids from `artgen ui-split` (recorded in the template's manifest entry). */
+  elementIds: z.array(z.string()).min(1),
+  states: z.array(z.object({ name: z.string().min(1), description: z.string().min(1) })).min(1),
+  /** Longest side of the states grid, for the price estimate (10 up to 256 px). */
+  gridSide: z.number().int().positive().default(256),
+});
+
 export const JobSpecSchema = z
-  .discriminatedUnion('endpoint', [GenerateImageJob, StyleJob])
+  .discriminatedUnion('endpoint', [
+    GenerateImageJob,
+    StyleJob,
+    ProFlashJob,
+    PixfluxJob,
+    FontJob,
+    UiAssetJob,
+    UiStatesJob,
+  ])
   .refine((j) => (j.cardId === undefined) !== (j.description === undefined), {
     message: 'a job needs exactly one of cardId or description',
   })
