@@ -14,7 +14,7 @@ import { uiSplit } from './ui.js';
 import { composeT06, T06_PACK_NUMBERS } from './compose/t06.js';
 import { buildStyleTile } from './styleTile/build.js';
 import { writeArtLayout } from './artLayout/artLayout.js';
-import { sfxCommand, sfxSpriteCommand } from './sfx/cli.js';
+import { sfxCommand, sfxSpriteCommand, sfxSynthCommand } from './sfx/cli.js';
 
 const USAGE = `artgen <command>
   balance                                  show remaining PixelLab generations
@@ -34,6 +34,8 @@ const USAGE = `artgen <command>
   sfx <spec.json> --budget <n> [--only a,b] [--retake] [--dry-run]
                                            make sound effects (missing clips, or one more take each)
   sfx-sprite <spec.json>                   build the client SFX sprite from the picked takes (ffmpeg)
+  sfx-synth <spec.json>                    render the spec's clips with the code synth (free) and
+                                           build the sprite + docs/audio/sfx previews (ffmpeg)
   ui-split <entry>                         split a create-ui-asset template into elements (free)
   spend                                    total generations logged in the manifest`;
 
@@ -190,6 +192,12 @@ async function main(argv: string[]): Promise<void> {
       const [specPath] = rest;
       if (!specPath) throw new Error(USAGE);
       await sfxSpriteCommand(specPath, log);
+      return;
+    }
+    case 'sfx-synth': {
+      const [specPath] = rest;
+      if (!specPath) throw new Error(USAGE);
+      await sfxSynthCommand(specPath, log);
       return;
     }
     case 'spend': {

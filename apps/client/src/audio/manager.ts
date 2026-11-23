@@ -116,6 +116,10 @@ export function createAudioManager(settings: Store<Settings>, base = '/assets/au
     get unlocked(): boolean {
       return sfx !== null;
     },
+    /** Howler's load state of the sprite (`unloaded` before unlock). */
+    sfxState: (): string => sfx?.state() ?? 'unloaded',
+    /** The track the synth is playing, if any. */
+    music: (): string | null => synth?.playing ?? null,
   };
 }
 export type AudioManager = ReturnType<typeof createAudioManager>;

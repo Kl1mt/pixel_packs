@@ -22,7 +22,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T11 | Card renderer & variant shaders | T05, T07 | done |
 | T12 | Pack opening I: core flow + Mossgrove theme | T10, T11 | done |
 | T13 | Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers | T12 | todo |
-| T14 | Audio | T12 | todo |
+| T14 | Audio | T12 | done |
 | T15 | Binder, card inspect & pull history | T10, T11 | todo |
 | T16 | Home & onboarding | T09, T12, T15 | todo |
 | T17 | Character & idle-animation trial | T05 | todo |
@@ -401,6 +401,21 @@ Docs: §20
 - **Audio manager**: Howler sprites, volumes, mute, and unlocking on the first interaction.
 - **Hooks**: buttons, opening scenes, rewards.
 - **Done when**: every event in §20 has a sound and the volume settings persist.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend (0 of ≤ 40).** PixelLab audio needs a tier 2 plan. `/music` says so in its docs, and `/sound-effects` answered `403` even though its docs say tier 1; that failed call was not charged and the balance stayed 764. So, as an interim pick by the main session while the user decides, **all M1 audio is written in code** (GDD §20, §29). If the plan is upgraded, `artgen sfx` + `sfx-sprite` (spec `tools/artgen/specs/t14-sfx.json`, 26 generations planned) swap in PixelLab takes without changing the client.
+  - **Listen**: SFX previews are in `docs/audio/sfx/<key>.mp3` and music in `docs/audio/music/{home-loop,opening-loop-calm,opening-loop-epic,opening-loop-golden}.mp3`. The music is rebuilt with `MUSIC_PREVIEW=1 pnpm --filter @pixel-packs/client e2e e2e/musicPreview.spec.ts` (needs ffmpeg).
+  - **SFX** (`tools/artgen/src/sfx/synth/`): an offline sfxr-style engine (`engine.ts`: square/triangle/sine/saw/noise voices, glides, steps, vibrato, lo/hi-pass, crush, crackle; seeded so renders repeat exactly) and the 20 sounds as data (`sounds.ts`). `artgen sfx-synth tools/artgen/specs/t14-sfx.json` renders them, writes the previews and builds `apps/client/public/assets/audio/sfx.{webm,mp3}` (250 ms gaps) and the generated `apps/client/src/audio/sfxSprite.ts` (`SFX_SPRITE`, `SfxId`). Levels were balanced by measuring each clip's mean loudness, not by ear, so **the user should listen and give feedback**. To retune a sound, edit `sounds.ts` and rerun `sfx-synth`.
+  - **Music** (`apps/client/src/audio/music/`): `score.ts` (a 16-step grid, parts on layers, `loopEvents`, `validateTrack`), `tracks.ts` (home: 16 bars, 84 bpm, F major; opening: 4 bars, 100 bpm, D minor, layers `base` / `epic` sparkle arp / `golden` bells), `synth.ts` (`ChipSynth`: Web Audio lookahead scheduler, pulse/triangle/noise/bell voices, lo-pass bus, layer fades; works with `OfflineAudioContext` too).
+  - **Manager** (`src/audio/manager.ts`, app instance + hooks in `audio.ts`): Howler sprite; nothing is created before the first pointer or key press, and sounds asked for before then are dropped. Master volume = `Howler.volume`, mute = `Howler.mute` (music runs into Howler's master gain, so both follow), SFX volume on the Howl, music on its own gain. A music stack: home loop by default, `useMusic(track, layers)` pushes one while a component is mounted. Per-sound throttles (hover 70 ms). In dev, `window.__pixelPacksAudio` exposes `log()`, `unlocked`, `sfxState()` and `music()` for e2e.
+  - **Hooks**:
+    - `audio/uiSounds.ts`: one delegated listener gives hover (mouse only) and press sounds to `.btn`, `.shell__navlink` and `[data-sound="press"]`, so links styled as buttons sound too.
+    - `Notice tone="error"` → `ui.error`.
+    - Wallet increases → `reward.coin/gem/dust` (`walletGainSounds`, from the economy store).
+    - `OpeningScene`: opening music with `moodLayers(packMood)`, `open.tear` on `onTorn`, `open.slide` when the stack appears, and `flipSounds(card)` per single flip (flip, rarity stinger +90 ms, variant stinger +260 ms). "Skip" is silent.
+    - `reward.fusion` is in the sprite, but nothing calls it until fusion exists.
+  - **Settings**: new `muted` (old saved settings read as unmuted); the Settings page's "Volume" group is now "Sound" with "Mute all sound".
+  - **For T13/T16/T21**: call `audio.play(id)` / `useMusic()` from `src/audio/audio.js`. T13's Legendary/Mythic sequences may want longer stingers. Add a `SoundDef` plus a spec clip and rerun `sfx-synth`.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (340), client `e2e` (16 passed, 1 opt-in preview skipped; new `e2e/audio.spec.ts`: unlock on first press → sprite loaded + home music + `ui.press`; mute and SFX volume survive a reload; opening → tear/slide/flip + rarity stinger with opening music; back to the shelf → home music; no console errors).
 
 ### T15 — Binder, card inspect & pull history · L · done
 Docs: §9, §12

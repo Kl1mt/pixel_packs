@@ -3,7 +3,8 @@ import { readManifest } from '../manifest.js';
 import { fromRepo } from '../paths.js';
 import { planSfx, runSfx } from './run.js';
 import { loadSfxSpec } from './spec.js';
-import { buildSprite } from './sprite.js';
+import { buildSpriteFromTakes } from './sprite.js';
+import { buildSynthSprite } from './synth/build.js';
 
 export interface SfxCliOptions {
   budget: number;
@@ -35,5 +36,9 @@ export async function sfxCommand(
 }
 
 export async function sfxSpriteCommand(specPath: string, log: (msg: string) => void) {
-  await buildSprite(await loadSfxSpec(fromRepo(specPath)), await readManifest(), log);
+  await buildSpriteFromTakes(await loadSfxSpec(fromRepo(specPath)), await readManifest(), log);
+}
+
+export async function sfxSynthCommand(specPath: string, log: (msg: string) => void) {
+  await buildSynthSprite(await loadSfxSpec(fromRepo(specPath)), log);
 }

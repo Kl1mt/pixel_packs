@@ -22,7 +22,7 @@ const LEVEL: Record<Instrument, number> = {
   hat: 0.025,
 };
 
-function pulseWave(ctx: AudioContext, duty: number): PeriodicWave {
+function pulseWave(ctx: BaseAudioContext, duty: number): PeriodicWave {
   const n = 32;
   const real = new Float32Array(n);
   const imag = new Float32Array(n);
@@ -46,7 +46,7 @@ export class ChipSynth {
   private timer: ReturnType<typeof setInterval> | null = null;
 
   constructor(
-    private readonly ctx: AudioContext,
+    private readonly ctx: BaseAudioContext,
     out: AudioNode,
   ) {
     const filter = ctx.createBiquadFilter();
