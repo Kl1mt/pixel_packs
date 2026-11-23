@@ -217,7 +217,7 @@ Docs: §4 (card face), §16, §19
     - Fonts: the user isn't happy with them yet; T19 revisits them (it asks which font first).
     - Face rules text is a compact 13 px; give the full text at ≥ 16 px in inspect.
     - The Home icon is the roughest of the 8. If it reads poorly in T07, regenerate it (1 generation) or hand-pixel it.
-    - Pip and badge positions are fixed in `CARD_FACE`; draw ATK/HP numbers centred in the badge rects, in **ink** (≥ 13:1 on the cream circles, tested for every frame in `badgeContrast.test.ts`; white numbers were unreadable).
+    - Pip and badge positions are fixed in `CARD_FACE`; draw ATK/HP numbers with `statDigitPixels(value, CARD_FACE.atk|hp)` from `packages/shared/src/config/statDigits.ts`. These are chunky 5×7 pixel digits in ink at art scale, the user's pick of 4 variants. Centring is vertically exact; horizontally the spare pixel goes on the right. Contrast is ≥ 13:1, and every value 0–12 stays on the cream circle; both are tested for every frame in `badgeContrast.test.ts`. White numbers in the pixel font were unreadable.
   - **artgen additions**:
     - endpoints `create-image-pro-flash`, `create-image-pixflux`, `generate-font-pro`, `create-ui-asset` (with `pieces`), `ui-assets/states`;
     - commands `ui-split`, `compose-t06`, `style-tile`;

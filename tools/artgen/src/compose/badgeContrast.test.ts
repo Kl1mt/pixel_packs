@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { CARD_FACE, MASTER_PALETTE, RARITIES } from '@pixel-packs/shared';
+import { CARD_FACE, MASTER_PALETTE, RARITIES, statDigitPixels } from '@pixel-packs/shared';
 import { decodePng } from '../png.js';
 import { fromRepo } from '../paths.js';
-import { contrastRatio, get, hexToRgba, opaque } from './pixels.js';
+import { contrastRatio, get, hexToRgba, opaque, rgbaToHex } from './pixels.js';
 
 /** ATK/HP numbers are drawn in ink on the badge circles (style-tile feedback): check every frame. */
 describe('ATK/HP badge contrast', () => {
@@ -25,6 +25,24 @@ describe('ATK/HP badge contrast', () => {
     }
     expect(worst).toBeGreaterThanOrEqual(4.5);
   });
+
+  it.each(RARITIES)(
+    'keeps the digits of every stat 0–12 on the cream of the %s badges',
+    (rarity) => {
+      const frame = decodePng(
+        readFileSync(fromRepo(`apps/client/public/assets/frames/${rarity}.png`)),
+      );
+      const light = new Set<string>([MASTER_PALETTE.cream, MASTER_PALETTE.glow]);
+      for (const r of [CARD_FACE.atk, CARD_FACE.hp]) {
+        for (let v = 0; v <= 12; v++) {
+          const outside = statDigitPixels(v, r).filter(
+            (p) => !light.has(rgbaToHex(get(frame, p.x, p.y))),
+          );
+          expect(outside, `value ${String(v)}`).toEqual([]);
+        }
+      }
+    },
+  );
 
   it('computes WCAG ratios', () => {
     expect(contrastRatio([0, 0, 0, 255], [255, 255, 255, 255])).toBeCloseTo(21, 0);

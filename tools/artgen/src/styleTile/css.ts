@@ -81,14 +81,10 @@ h2 { font-size: var(--heading); margin-bottom: ${u(6)}; }
 .card .art { overflow: hidden; }
 .card .art img { width: 100%; height: 100%; }
 .card .frame, .card .overlay { inset: 0; width: 100%; height: 100%; }
-.variants { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: ${u(8)}; }
-.variant h3 { margin-bottom: ${u(2)}; }
 .card .name { ${rect(CARD_FACE.name)} padding: 0 ${c(3)};
   font: bold var(--name-size, 20px)/${c(CARD_FACE.name.h)} var(--font-body); text-align: center; white-space: nowrap; overflow: hidden; }
 .card .rules { ${rect(CARD_FACE.rules)}
   font: 13px/1.25 var(--font-body); text-align: center; display: grid; place-content: center; }
-.card .stat { display: grid; place-items: center;
-  font: var(--heading)/${c(CARD_FACE.atk.h)} var(--font-heading); color: var(--ink); }
 
 .home { display: grid; grid-template-columns: 1fr 1.3fr; gap: ${u(6)}; background: var(--mossDeep); padding: ${u(6)}; border: ${u(2)} solid var(--ink); box-shadow: ${u(3)} ${u(3)} 0 var(--ink); }
 .home .topbar { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: ${u(6)}; }

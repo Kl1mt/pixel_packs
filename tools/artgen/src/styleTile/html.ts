@@ -9,10 +9,10 @@ import {
   cardRulesText,
   iconFile,
   realmPaletteHex,
+  statDigitPixels,
   type Rarity,
   type Realm,
 } from '@pixel-packs/shared';
-import { BADGE_VARIANTS, pixelsSvg, type BadgeVariant } from './badges.js';
 import { styleTileCss } from './css.js';
 
 /** Inputs the generator can't read from shared config. */
@@ -21,15 +21,12 @@ export interface StyleTileInput {
   artDrop: Record<string, number>;
   /** Candidate numbers shown as the current pack picks. */
   packPicks: { mossgrove: number; starhollow: number };
-  /** Light interior pixels of the ATK/HP circles (for the dark-circle badge variant). */
-  badgeMask?: { atk: { x: number; y: number }[]; hp: { x: number; y: number }[] };
 }
 
 interface CardOptions {
   rarity?: Rarity;
   atk?: number;
   hp?: number;
-  badge?: BadgeVariant;
 }
 
 const esc = (s: string) =>
@@ -58,41 +55,28 @@ function card(id: string, opts: CardOptions, input: StyleTileInput): string {
   const r = opts.rarity ?? c.rarity;
   const atk = opts.atk ?? c.atk;
   const hp = opts.hp ?? c.hp;
-  const badge = opts.badge;
-  const mask = input.badgeMask ?? { atk: [], hp: [] };
-  const withColour = (m: { x: number; y: number }[]) => m.map((p) => ({ ...p, c: '' }));
-  const overlay = badge
-    ? pixelsSvg(
-        badge.pixels(
-          atk,
-          hp,
-          { atk: withColour(mask.atk), hp: withColour(mask.hp) },
-          MASTER_PALETTE[FRAME_MATERIALS[r].ramp[3]],
-        ),
-      )
-    : '';
-  const textStats = !badge || badge.fontPx !== undefined;
-  const statStyle = (v: number) => (badge?.fontPx ? `;font-size:${String(badge.fontPx(v))}px` : '');
   const [sky, ground] = BACKDROP[c.realm] ?? [MASTER_PALETTE.cream, MASTER_PALETTE.straw];
   const drop = input.artDrop[id] ?? 0;
   const s = (n: number) => `calc(${String(n)}px * var(--card))`;
-  const at = (r: { x: number; y: number; w: number; h: number }) =>
-    `left:${s(r.x)};top:${s(r.y)};width:${s(r.w)};height:${s(r.h)}`;
   const rules = cardRulesText(c);
-  return `<figure class="card" style="--bd-sky:${sky};--bd-ground:${ground}" aria-label="${esc(c.name)}, ${r}">
+  // ATK/HP: chunky ink digits in art pixels, centred in the badge circles (shared statDigitPixels).
+  const stats = [...statDigitPixels(atk, CARD_FACE.atk), ...statDigitPixels(hp, CARD_FACE.hp)];
+  return `<figure class="card" style="--bd-sky:${sky};--bd-ground:${ground}" aria-label="${esc(c.name)}, ${r}, attack ${String(atk)}, health ${String(hp)}">
   <div class="backdrop"></div>
   <div class="art"><img src="/assets/cards/${id}.png" alt="" style="transform:translateY(${s(drop)})"></div>
   <img class="frame" src="/assets/frames/${r}.png" alt="">
   <div class="name" style="--name-size:${String(nameSize(c.name))}px">${esc(c.name)}</div>
   <div class="rules">${rules.map((l) => `<span>${esc(l)}</span>`).join('')}</div>
-  ${overlay}
-  ${
-    textStats
-      ? `<div class="stat" style="${at(CARD_FACE.atk)}${statStyle(atk)}">${String(atk)}</div>
-  <div class="stat" style="${at(CARD_FACE.hp)}${statStyle(hp)}">${String(hp)}</div>`
-      : ''
-  }
+  ${pixelsSvg(stats, MASTER_PALETTE.ink)}
 </figure>`;
+}
+
+/** Crisp SVG of one-colour pixels over a 96×128 card at the card's CSS scale. */
+export function pixelsSvg(pixels: { x: number; y: number }[], colour: string): string {
+  const rects = pixels.map(
+    (p) => `<rect x="${String(p.x)}" y="${String(p.y)}" width="1" height="1"/>`,
+  );
+  return `<svg class="overlay" viewBox="0 0 ${String(CARD_FACE.size.w)} ${String(CARD_FACE.size.h)}" fill="${colour}" shape-rendering="crispEdges" aria-hidden="true">${rects.join('')}</svg>`;
 }
 
 function palette(): string {
@@ -134,21 +118,6 @@ function uiParts(): string {
   <p class="small" style="color:var(--straw)">Rest · hover · pressed (moves down 2 px, edge shrinks) · disabled. Hover the first one; keyboard focus shows a dashed sunflower ring.</p>
   <div class="panel-parchment" style="color:var(--ink)"><h3 class="num" style="font-size:var(--heading)">Parchment</h3>A 9-slice panel at 2×; it stretches to any size and its corners stay crisp.</div>
   <div class="row" style="margin-top:8px">${icons}</div>
-</section>`;
-}
-
-/** Numbered ATK/HP badge variants for the user to pick (single and two-digit values). */
-function badgeVariants(input: StyleTileInput): string {
-  const items = BADGE_VARIANTS.map(
-    (
-      v,
-    ) => `<div class="variant"><h3 class="num" style="font-size:var(--heading)">${String(v.n)}</h3>
-    <p class="small">${esc(v.title)}</p>
-    <div class="row">${card('MOS-012', { badge: v }, input)}${card('MOS-012', { badge: v, atk: 10, hp: 12 }, input)}</div></div>`,
-  ).join('');
-  return `<section class="panel-parchment wide"><h2>ATK/HP badge variants</h2>
-  <p>Pick one by number. Each shows Grandmother Morel as-is (3 / 9) and with two-digit values (10 / 12), at the real 3× size.</p>
-  <div class="variants">${items}</div>
 </section>`;
 }
 
@@ -207,7 +176,6 @@ export function styleTileHtml(input: StyleTileInput): string {
   ${typeScale()}
   ${uiParts()}
   ${cards(input)}
-  ${badgeVariants(input)}
   ${home(input)}
 </main>
 </body>
