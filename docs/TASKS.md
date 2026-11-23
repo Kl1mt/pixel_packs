@@ -176,7 +176,7 @@ Docs: §19
   - **Still open for T07/T11**: the art has no common feet baseline. Bottom opaque rows run from y = 54 to y = 62. Align it in the frame (bottom-align the bbox) rather than editing the files.
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (198 tests) pass.
 
-### T06 — Frames, packs, UI art + style tile · L · budget ≤ 100 (was 60; raised by the user) · in review (style tile awaiting approval)
+### T06 — Frames, packs, UI art + style tile · L · budget ≤ 100 (was 60; raised by the user) · done
 Docs: §4 (card face), §16, §19
 - **Card**: 6 rarity frames (96×128, with pips and materials) and a card back.
 - **Packs**: Mossgrove and Starhollow pack art.
@@ -185,6 +185,7 @@ Docs: §4 (card face), §16, §19
 - **Style tile**: a static page showing the palette, type scale, panels, buttons, one complete card and one home-screen fragment. Needs **user approval**.
 - **Done when**: the style tile is approved and the assets are committed.
 - **Handoff notes (2026-11-23)**:
+  - **Approval**: the user approved style tile v4 (commit 097bb3a) on 2026-11-23, after four review rounds: pack picks, centred stats and fitted names, a closed crest, ink numbers, and finally the chunky digits. The used candidates are marked `approved` in the manifest.
   - **Spend**: 85 of 100 generations (balance 958 → 888 while T05 ran in parallel), all in `tools/artgen/manifest.json` under spec `t06` (`tools/artgen/specs/t06.json`).
     - 2 × pro-flash at 96×128 (6 each): frame base, card back.
     - 2 × `/generate-with-style-v2` (10 each): packs.

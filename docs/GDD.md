@@ -526,3 +526,4 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T06: **exception to the §16 16 px body minimum** (user-approved): card-face rules text is compact (13 px) to fit two abilities in the 78×13 box at 3×; the full text at ≥ 16 px lives in card inspect (T11/T15) |
 | 2026-11-23 | T06: the user isn't happy with the fonts yet; they stay for now, and T19 revisits them (ask which font first) |
 | 2026-11-23 | T06: ATK/HP numbers on the card face are hand-pixelled chunky digits (5×7, 2 px vertical strokes; "1" is 3 wide), ink on the cream badge circles, drawn in art pixels (user pick, variant 2 of 4). They are centred in the 10×11 interior: vertically exact, horizontally ½ px left with the spare pixel on the right (all glyph runs are odd-width). Shared `STAT_DIGITS` / `statDigitPixels` |
+| 2026-11-23 | T06: the style tile (`apps/client/public/style-tile.html`, v4) is approved by the user; this clears the §16 approval gate for building screens (T07+) |

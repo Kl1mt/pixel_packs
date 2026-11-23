@@ -1069,7 +1069,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/icon-gold/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -1271,7 +1272,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/frame-base/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -1344,7 +1346,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/card-back/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -1677,7 +1680,8 @@
         {
           "index": 5,
           "file": "tools/artgen/candidates/t06/pack-mossgrove/05.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         },
         {
           "index": 6,
@@ -2071,7 +2075,8 @@
         {
           "index": 6,
           "file": "tools/artgen/candidates/t06/pack-starhollow/06.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         },
         {
           "index": 7,
@@ -2348,7 +2353,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/ui-template/01.png",
-          "review": "pending"
+          "review": "rejected",
+          "note": "one composite window with stray lettering; retried as t06/ui-pieces"
         }
       ]
     },
@@ -2375,12 +2381,14 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/font-heading/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         },
         {
           "index": 2,
           "file": "tools/artgen/candidates/t06/font-heading/font.ttf",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -2412,7 +2420,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/icon-gem/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -2444,7 +2453,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/icon-stardust/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -2476,7 +2486,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/icon-timer/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -2508,7 +2519,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/icon-nav-home/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -2540,7 +2552,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/icon-nav-packs/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -2572,7 +2585,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/icon-nav-binder/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -2604,7 +2618,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/icon-cursor/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -3120,7 +3135,8 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/ui-pieces/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
@@ -3473,17 +3489,20 @@
         {
           "index": 1,
           "file": "tools/artgen/candidates/t06/button-states/01.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         },
         {
           "index": 2,
           "file": "tools/artgen/candidates/t06/button-states/02.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         },
         {
           "index": 3,
           "file": "tools/artgen/candidates/t06/button-states/03.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "T06 style tile approved by the user (2026-11-23)"
         }
       ]
     },
