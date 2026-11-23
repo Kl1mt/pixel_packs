@@ -517,3 +517,4 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T05: card art keeps the Pro `/generate-with-style-v2` endpoint (10 generations per card, 16 candidates) with each realm's anchors; T05's budget is ≤ 230 (22 cards + one retry) instead of ≤ 70 (user decision) |
 | 2026-11-23 | T05: the user raised T05's cap to ≤ 260 for three regenerations (Lantern Shroom, Thistle Hedgehog, Lamplight Moth); the Lantern Shroom now holds a lantern, and the three art prompts were revised |
 | 2026-11-23 | T05: STA-008 "Post Moth" is renamed "Mail Moth" (name only; ID, stats and abilities unchanged; user decision) |
+| 2026-11-23 | T05: final art may be an approved candidate moved by whole pixels (no resampling), e.g. `promote --recentre` to centre a sprite that touches the canvas edge (STA-001); the catalog art test accepts such shifts |
