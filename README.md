@@ -47,6 +47,7 @@ Then set `DATABASE_URL=postgres://pixel:pixel@localhost:5432/pixel_packs` in `.e
 | `pnpm test` | All Vitest projects |
 | `pnpm format` | Prettier write |
 | `pnpm db:migrate` | Apply Drizzle migrations (PGlite, or `DATABASE_URL`) |
+| `pnpm admin <command>` | Admin CLI: grant gold/packs, reset onboarding, dev odds override (`docs/api.md`) |
 
 ## Layout
 

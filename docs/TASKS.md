@@ -18,7 +18,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T07 | Client design system & app shell | T06 | todo |
 | T08 | Database & email auth (API) | T02 | done |
 | T09 | Auth screens + Discord login | T07, T08 | todo |
-| T10 | Economy & pack API | T03, T08 | todo |
+| T10 | Economy & pack API | T03, T08 | done |
 | T11 | Card renderer & variant shaders | T05, T07 | todo |
 | T12 | Pack opening I: core flow + Mossgrove theme | T10, T11 | todo |
 | T13 | Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers | T12 | todo |
@@ -181,7 +181,7 @@ Docs: §16, §22
 - **E2E test** for email registration.
 - **Done when**: a user can register and log in in the browser. Discord login works once credentials are set, and is cleanly hidden without them.
 
-### T10 — Economy & pack API · L
+### T10 — Economy & pack API · L · done
 Docs: §5, §6 (mint numbers), §7, §8, §9 (dust), §22
 - **Wallet and free rewards**:
   - free-pack claim: every 8 h, up to 2 stored, realm chosen, added to the pack inventory;
@@ -192,6 +192,17 @@ Docs: §5, §6 (mint numbers), §7, §8, §9 (dust), §22
 - **`tools/admin`**: grant gold or packs, reset onboarding, dev-only odds override.
 - **Integration tests**: atomicity, no double claims, idempotency, and concurrency on Postgres in CI.
 - **Done when**: tests pass and the endpoints are documented briefly in `docs/api.md`.
+- **Handoff notes (2026-11-23)**:
+  - Endpoints, shapes, ledger reasons and the admin CLI are in `docs/api.md` (T10 section). Request/response schemas: `packages/shared/src/api/economy.ts`; new error codes `insufficientFunds`, `noPacks`, `notReady`, `alreadyClaimed`, `idempotencyConflict`, `packDisabled`, `cannotDust`.
+  - Shared: `config/economy.ts` (prices, free-pack timer, calendar, starter satchel), `rules/rewards.ts` (`freePackStatus`/`claimFreePack` anchor maths, `utcDayKey`, calendar), `rules/dustExtras.ts` (`planDustExtras`, `canDust`, `isPlainCopy`), `rollDevOverridePack` in `rules/scripted.ts`. econ-sim now reads the price and calendar from config (results unchanged: 8/16 days median/p90 for the 12, 19/33 for all 13).
+  - Server: `src/economy/{context,db,state,opening,mint,dust,odds,routes}.ts`; `buildApp` takes optional `rng`, `catalogIndex`, `allowDevOverrides` (main sets it to `NODE_ENV !== 'production'`). `SERVER_CATALOG` is now `CARD_CATALOG`, and `SERVER_CATALOG_INDEX` is built once at start. Registration creates the wallet with the free-pack anchor and grants the starter satchel.
+  - Migration `0001_plain_thaddeus_ross.sql`: `wallets.free_pack_anchor`, `user_cards.{removed_at, removed_reason}`, `pack_purchases`, `dev_odds_overrides`. `pack_openings.cards` now stores `OpenedCard[]` (roll + `userCardId`, `mintNumber`, `edition`, `isNew`), so resume/history need no joins.
+  - `apps/server` exports `./admin` (`src/admin/index.ts`: `findUser`, `grantCurrency`, `grantPacks`, `resetOnboarding`, `setOddsOverride`), used by `tools/admin` (`pnpm admin …`) and by tests.
+  - Tests: `src/economy/{rewards,opening,dust,concurrency}.test.ts`. The harness now syncs catalog + pack types and has `newPlayer()` / `key()`. `concurrency.test.ts` uses Postgres when `TEST_DATABASE_URL` is set (CI) and PGlite otherwise; verified locally on Postgres 16 too.
+  - For T12: the client drives "Resume reveal" from `pendingOpeningId` and must POST `/openings/:id/revealed` when the reveal finishes. Dev forcing exists server-side (`pnpm admin odds-override`, which needs the PGlite server stopped); a `/debug` page will need a small dev-only HTTP route on top of `setOddsOverride`.
+  - For T16: the 5 account-bound starter cards (§17 step 4) have no endpoint yet; copies with `source: 'starter', account_bound: true` are already supported by the schema and by dusting rules.
+  - Design details settled here are in GDD §29 (T10 rows).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (141 tests) pass; curl flow (register → economy → open scripted pack → admin grant + glitch override → buy → open → calendar → free pack → history → odds) against `pnpm start` on Postgres.
 
 ### T11 — Card renderer & variant shaders · L
 Docs: §4, §6, §18

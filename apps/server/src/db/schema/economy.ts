@@ -20,8 +20,8 @@ import {
   VARIANTS,
   type Ability,
   type CopySource,
+  type OpenedCard,
   type PityGroup,
-  type RolledCard,
 } from '@pixel-packs/shared';
 import { users } from './auth.js';
 
@@ -90,6 +90,8 @@ export const wallets = pgTable(
     gold: integer('gold').notNull().default(0),
     dust: integer('dust').notNull().default(0),
     gems: integer('gems').notNull().default(0),
+    /** Free-pack timer anchor (GDD §7, `freePackStatus` in shared). */
+    freePackAnchor: timestamp('free_pack_anchor', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [check('wallets_non_negative', sql`${t.gold} >= 0 and ${t.dust} >= 0 and ${t.gems} >= 0`)],
@@ -124,7 +126,7 @@ export const packOpenings = pgTable(
     scripted: boolean('scripted').notNull(),
     pityTrigger: text('pity_trigger', { enum: ['legendaryHard', 'mythicHard'] }),
     mythicSoftPityBonus: integer('mythic_soft_pity_bonus').notNull().default(0),
-    cards: jsonb('cards').$type<RolledCard[]>().notNull(),
+    cards: jsonb('cards').$type<OpenedCard[]>().notNull(),
     /** Set once the client has shown the full reveal; open ones can be resumed. */
     revealedAt: timestamp('revealed_at', { withTimezone: true }),
     createdAt: createdAt(),
@@ -154,6 +156,9 @@ export const userCards = pgTable(
     acquiredAt: timestamp('acquired_at', { withTimezone: true }).notNull().defaultNow(),
     tradeLockUntil: timestamp('trade_lock_until', { withTimezone: true }),
     accountBound: boolean('account_bound').notNull().default(false),
+    /** Set when the copy is used up (dusted, later fused or traded away); rows are never deleted. */
+    removedAt: timestamp('removed_at', { withTimezone: true }),
+    removedReason: text('removed_reason', { enum: ['dust'] }),
   },
   (t) => [
     index('user_cards_user_card_idx').on(t.userId, t.cardId),
@@ -220,3 +225,34 @@ export const dailyClaims = pgTable(
   },
   (t) => [uniqueIndex('daily_claims_uq').on(t.userId, t.kind, t.claimKey)],
 );
+
+/** Pack purchases; `(user_id, idempotency_key)` makes a retried purchase safe. */
+export const packPurchases = pgTable(
+  'pack_purchases',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: userRef(),
+    idempotencyKey: text('idempotency_key').notNull(),
+    packTypeId: text('pack_type_id')
+      .notNull()
+      .references(() => packTypes.id),
+    quantity: integer('quantity').notNull(),
+    currency: text('currency', { enum: CURRENCIES }).notNull(),
+    cost: integer('cost').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [uniqueIndex('pack_purchases_idempotency_uq').on(t.userId, t.idempotencyKey)],
+);
+
+/**
+ * Dev-only odds override set by `tools/admin`: the next `remaining` packs of the user get
+ * this featured rarity and/or variant. Ignored when NODE_ENV is production.
+ */
+export const devOddsOverrides = pgTable('dev_odds_overrides', {
+  userId: uuid('user_id')
+    .primaryKey()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  featuredRarity: text('featured_rarity', { enum: RARITIES }),
+  featuredVariant: text('featured_variant', { enum: VARIANTS }),
+  remaining: integer('remaining').notNull(),
+});

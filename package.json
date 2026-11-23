@@ -13,7 +13,8 @@
     "lint": "eslint . --max-warnings 0 && prettier --check .",
     "test": "vitest run",
     "format": "prettier --write .",
-    "db:migrate": "pnpm --filter @pixel-packs/server db:migrate"
+    "db:migrate": "pnpm --filter @pixel-packs/server db:migrate",
+    "admin": "pnpm --filter @pixel-packs/admin start"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

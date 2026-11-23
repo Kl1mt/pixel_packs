@@ -503,3 +503,11 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T08: users carry `onboarding_step` (scripted packs opened); pack inventory is a count per (user, pack type); pack types are synced from shared config on start with release Season 0 |
 | 2026-11-23 | T03: in M1 a card's base ATK + HP equals its rarity's power budget exactly; abilities cost nothing until the M4 cost table (which may shift stats) |
 | 2026-11-23 | T03: ability semantics — shield N absorbs the next N damage; thorns N deals N back to each attacker; regen N heals N at the end of every tick; weaken lowers ATK (not below 0); buffHp raises max and current HP; heal never exceeds max HP. Damage/weaken only target enemies, all other effects only allies or self |
+| 2026-11-23 | T10: pack prices live in shared `config/economy.ts` (realm 100 gold, Mythic 300 gems), not in `pack_types`; up to 10 packs per purchase, each purchase with an idempotency key |
+| 2026-11-23 | T10: the free-pack timer is one anchor timestamp per wallet; time is lost while 2 are stored; a new account starts with 1 free pack ready |
+| 2026-11-23 | T10: daily calendar = 7-day cycle 40 g · 50 g · 50 dust · 60 g · 70 g · 100 dust · 130 g (350 gold + 150 Stardust a week, 50 gold/day as econ-sim assumes); one claim per UTC day; missed days pause the cycle instead of resetting it |
+| 2026-11-23 | T10: every new account gets a starter satchel of one Mossgrove and one Starhollow pack; the first two realm packs a player opens (whatever their source) are the scripted onboarding packs |
+| 2026-11-23 | T10: every economy mutation locks the user's wallet row first, so one user's actions are serialised; mint rows are locked in (card, variant) order to avoid deadlocks; mint numbers are gap-free (a rolled-back pull rolls its number back) |
+| 2026-11-23 | T10: owned copies are never deleted; dusting sets `removed_at`. Account-bound (starter) copies can't be dusted. "Dust extras" counts every copy towards the 9 equivalents and dusts only plain copies beyond, lowest stars first. NEW marks only the first copy of a card the player didn't own |
+| 2026-11-23 | T10: pull history lists revealed openings only (no spoilers); "Resume reveal" serves the latest unrevealed one |
+| 2026-11-23 | T10: dev odds overrides (`tools/admin`) force the featured slot like a scripted pack (no pity) and are ignored in production |

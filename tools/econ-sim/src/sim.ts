@@ -1,6 +1,8 @@
 /** Economy simulator v0 (GDD §8): a free M1 player focusing on one realm. */
 import {
+  CALENDAR_REWARDS,
   CRAFT_COST,
+  PACK_PRICES,
   FRESH_PITY,
   MAX_EQUIVALENTS,
   buildCatalogIndex,
@@ -32,8 +34,10 @@ export const DEFAULT_PARAMS: SimParams = {
   players: 2000,
   seed: 'econ-sim-v0',
   freePacksPerDay: 3,
-  calendarGoldPerDay: 50,
-  packPriceGold: 100,
+  // The T10 calendar: 350 gold per 7 days.
+  calendarGoldPerDay:
+    CALENDAR_REWARDS.reduce((sum, r) => sum + r.gold, 0) / CALENDAR_REWARDS.length,
+  packPriceGold: PACK_PRICES.realm.amount,
   realm: 'mossgrove',
   enabledRealms: ['mossgrove', 'starhollow'],
 };

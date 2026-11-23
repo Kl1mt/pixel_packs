@@ -27,3 +27,17 @@ export function rollScriptedPack(
   if (!script) throw new RangeError(`no onboarding script for step ${step}`);
   return rollPackInternal(pack, pity, index, rng, script);
 }
+
+/**
+ * Dev-only odds override (`tools/admin`): forces the featured slot like a scripted pack.
+ * Like scripted packs it neither uses nor advances pity. The server refuses it in production.
+ */
+export function rollDevOverridePack(
+  pack: PackType,
+  pity: PityCounters,
+  index: CatalogIndex,
+  rng: Rng,
+  script: FeaturedScript,
+): PackRoll {
+  return rollPackInternal(pack, pity, index, rng, script);
+}

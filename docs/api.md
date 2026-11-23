@@ -35,3 +35,45 @@ curl -s -c $J -b $J -H "x-csrf-token: $T" -H 'content-type: application/json' \
 curl -s -b $J $B/me
 curl -s -c $J -b $J -H "x-csrf-token: $T" -X POST $B/logout
 ```
+
+## Economy & packs (T10)
+All routes except the odds need a session (`401 unauthorized`). Schemas: `packages/shared/src/api/economy.ts`. Mutations are limited to 60 / min per IP.
+
+| Method & path | Body / query | Success | Errors |
+|---|---|---|---|
+| `GET /api/packs/odds` | — (public) | `200 { packs: PackOdds[] }`: price, enabled, rarity/variant chances in %, own-realm share, pity rules | — |
+| `GET /api/economy` | — | `200 EconomyState` | — |
+| `POST /api/rewards/free-pack` | `{ realm }` | `200 EconomyState`, +1 `realm:<realm>` pack | `409 notReady`, `400 packDisabled` |
+| `POST /api/rewards/calendar` | — | `200 EconomyState` | `409 alreadyClaimed` |
+| `POST /api/packs/buy` | `{ packTypeId, quantity? (1–10), idempotencyKey }` | `200 EconomyState` (a repeated key changes nothing) | `409 insufficientFunds` / `idempotencyConflict`, `400 packDisabled` |
+| `POST /api/packs/open` | `{ packTypeId, idempotencyKey }` | `201 { opening, replayed: false }`; a repeated key → `200 { opening, replayed: true }` | `409 noPacks` / `idempotencyConflict`, `400 packDisabled` |
+| `GET /api/packs/openings/pending` | — | `200 { opening \| null }` (latest unrevealed) | — |
+| `POST /api/packs/openings/:id/revealed` | — | `204` (idempotent) | `404 notFound` |
+| `GET /api/packs/history` | `?limit=1–50&cursor=` | `200 { openings, nextCursor }`, revealed openings, newest first | `400 badRequest` (cursor) |
+| `POST /api/cards/dust` | `{ userCardIds: uuid[] (1–200) }` | `200 { dusted, dust, wallet }`, all or nothing | `404 notFound`, `400 cannotDust` (account-bound) |
+| `GET /api/cards/dust-extras` | — | `200 { copies, dust }`: what "Dust extras" would dust | — |
+| `POST /api/cards/dust-extras` | — | `200 { dusted, dust, wallet }` | — |
+
+- `packTypeId` is `realm:<realm>` or `mythic`. `idempotencyKey` is 8–64 of `A–Z a–z 0–9 _ -`; use `crypto.randomUUID()` per click and reuse it on retry.
+- `EconomyState` = `{ wallet { gold, dust, gems }, packs [{ packTypeId, count }], freePack { stored, max, nextAt }, calendar { day 1–7, claimedToday, nextResetAt, rewards[7] }, pity [{ group, packsSinceLegendaryPlus, packsSinceMythic, legendaryHardPity, mythicSoftPityStart, mythicHardPity }], pendingOpeningId }`.
+- `opening` = `{ id, packTypeId, scripted, pityTrigger, cards[5] (slot order), revealOrder [slots], createdAt, revealedAt }`; each card is `{ slot, featured, cardId, realm, rarity, variant, userCardId, mintNumber, edition, isNew }`. The result is stored before the response, so the client animates a finished roll; on load, `pendingOpeningId` / `openings/pending` drives "Resume reveal", and the client posts `revealed` when the reveal ends.
+- A new account gets a starter satchel (one Mossgrove and one Starhollow pack) and one free pack ready. Its first two realm-pack openings are the scripted onboarding packs (`scripted: true`, no pity).
+- Every change writes `ledger` rows (`reason`: `starterSatchel`, `freePack`, `calendar`, `buyPack`, `openPack`, `pull`, `dust`, `dustExtras`, `admin:grant`).
+
+### Admin CLI (`tools/admin`)
+```sh
+pnpm admin grant <email|username> <gold|dust|gems> <amount> [note]
+pnpm admin grant-packs <user> <realm:mossgrove|mythic|…> <count> [note]
+pnpm admin reset-onboarding <user>
+pnpm admin odds-override <user> <packs> [rarity] [variant]   # dev only, packs 0 clears
+```
+It uses `DATABASE_URL`, or else the server's PGlite directory (`PGLITE_DIR`, default `apps/server/.data/pglite`), which only one process can open: stop `pnpm dev` first. Odds overrides act like a scripted pack (no pity) and are ignored by a server with `NODE_ENV=production`.
+
+### curl (after logging in as above)
+```sh
+B=http://localhost:3001/api
+curl -s -b $J $B/economy
+curl -s -c $J -b $J -H "x-csrf-token: $T" -H 'content-type: application/json' \
+  -d '{"packTypeId":"realm:mossgrove","idempotencyKey":"my-first-pack-1"}' $B/packs/open
+curl -s -c $J -b $J -H "x-csrf-token: $T" -X POST $B/rewards/calendar
+```

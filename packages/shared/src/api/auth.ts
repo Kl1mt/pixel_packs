@@ -72,6 +72,14 @@ export const ApiErrorCodeSchema = z.enum([
   'rateLimited',
   'notFound',
   'internal',
+  // Economy (T10)
+  'insufficientFunds',
+  'noPacks',
+  'notReady',
+  'alreadyClaimed',
+  'idempotencyConflict',
+  'packDisabled',
+  'cannotDust',
 ]);
 export type ApiErrorCode = z.infer<typeof ApiErrorCodeSchema>;
 
