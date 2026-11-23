@@ -6777,6 +6777,94 @@
           "review": "pending"
         }
       ]
+    },
+    {
+      "id": "t17/sta-013-side-hurt-east",
+      "spec": "t17",
+      "job": "sta-013-side-hurt-east",
+      "endpoint": "characters/animations",
+      "params": {
+        "character_id": "b2a1d3b9-4535-44cc-b942-2b44dd50596e",
+        "mode": "v3",
+        "animation_name": "hurt-east",
+        "action_description": "Always faces east (right) and never turns. Recoils west from a hit with a flinch, then returns to the base pose. No camera movement and nothing leaves the canvas. No background and no ground shadow. Feet stay on the same fixed baseline. The first and last frame are the base pose.",
+        "frame_count": 4,
+        "directions": [
+          "east"
+        ],
+        "keep_first_frame": false,
+        "seed": 17044,
+        "target_palette": {
+          "name": "Starhollow: indigo, silver, lilac",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#fff8ec",
+            "#8a5a3c",
+            "#d95f5f",
+            "#e8a33d",
+            "#f6d36b",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        }
+      },
+      "seed": 17044,
+      "status": "completed",
+      "backgroundJobId": "b5af8a7f-6460-4e45-a434-21113ab4bed8",
+      "cost": {
+        "generations": 1,
+        "usd": 0
+      },
+      "createdAt": "2026-11-23T20:28:19.805Z",
+      "extra": {
+        "characterId": "b2a1d3b9-4535-44cc-b942-2b44dd50596e",
+        "animationGroupId": "62530024-5457-4c7a-aa4a-4459bd023ce6",
+        "frames": 4,
+        "frameSize": {
+          "width": 88,
+          "height": 88
+        }
+      },
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t17/sta-013-side/hurt-east/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t17/sta-013-side/hurt-east/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t17/sta-013-side/hurt-east/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t17/sta-013-side/hurt-east/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/t17/sta-013-side/hurt-east/sheet.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/t17/sta-013-side/hurt-east/preview.png",
+          "review": "pending"
+        }
+      ]
     }
   ]
 }
