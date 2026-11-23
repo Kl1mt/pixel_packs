@@ -1,0 +1,609 @@
+/* Binder book, card inspect and pull history (T15, GDD §12/§16). */
+
+.binder-tabs {
+  display: flex;
+  gap: var(--sp-6);
+  margin: calc(-1 * var(--sp-4)) 0 var(--sp-6);
+}
+
+.binder-tabs__link {
+  color: var(--straw);
+  font: var(--body) / 1.2 var(--font-body);
+  text-decoration: none;
+  padding-bottom: var(--sp-1);
+  border-bottom: var(--art-px) solid transparent;
+}
+
+.binder-tabs__link.active {
+  color: var(--glow);
+  border-bottom-color: var(--sunflower);
+}
+
+/* Toolbar */
+.binder__tools {
+  margin-bottom: var(--sp-6);
+}
+
+.binder__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-3) var(--sp-6);
+}
+
+.binder__field {
+  display: grid;
+  gap: var(--sp-1);
+  color: var(--role-textOnWoodMuted);
+}
+
+.binder__select {
+  font: var(--small) / 1.2 var(--font-body);
+  color: var(--ink);
+  background: var(--cream);
+  border: var(--art-px) solid var(--barkDeep);
+  box-shadow: var(--shadow-sm);
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: 0;
+}
+
+.binder__check {
+  margin: 0 0 var(--sp-1);
+}
+
+.binder__clear {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--sunflower);
+  text-decoration: underline;
+  font-family: var(--font-body);
+  margin-bottom: var(--sp-2);
+}
+
+.binder__extras {
+  margin-left: auto;
+  color: var(--ink);
+}
+
+.binder__extras.panel {
+  max-width: 30rem;
+}
+
+.binder__extras > .btn {
+  font-size: var(--small);
+}
+
+.binder__error {
+  color: var(--blush);
+  margin: var(--sp-2) 0 0;
+}
+
+/* Realm tabs: cloth ribbons sticking out of the top of the book. */
+.binder__realms {
+  display: flex;
+  gap: var(--sp-2);
+  padding-left: var(--sp-8);
+  margin-bottom: calc(-1 * var(--sp-1));
+  position: relative;
+  z-index: 1;
+}
+
+.binder__realm {
+  border: 0;
+  font: var(--small) / 1 var(--font-body);
+  font-weight: bold;
+  padding: var(--sp-2) var(--sp-4) var(--sp-3);
+  color: var(--glow);
+  background: var(--moss);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(var(--sp-1));
+  transition: transform var(--motion-fast) var(--motion-overshoot);
+}
+
+.binder__realm--starhollow {
+  background: var(--indigo);
+}
+
+.binder__realm[aria-selected='true'] {
+  transform: none;
+  outline: var(--art-px) solid var(--sunflower);
+  outline-offset: calc(-1 * var(--art-px));
+}
+
+.binder__done {
+  color: var(--lichen);
+  font-weight: normal;
+}
+
+.binder__realm--starhollow .binder__done {
+  color: var(--lavender);
+}
+
+/* The book: wood cover, parchment pages, a stitched spine between them. */
+.binder__book-wrap {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-4);
+}
+
+.binder__book {
+  padding: var(--sp-3);
+  max-width: 100%;
+}
+
+.binder__spread {
+  position: relative;
+  display: flex;
+  gap: var(--sp-6);
+  perspective: 1600px;
+}
+
+.binder__book[data-spread='2'] .binder__spread::after {
+  /* Spine stitches between the two pages. */
+  content: '';
+  position: absolute;
+  top: var(--sp-4);
+  bottom: var(--sp-4);
+  left: calc(50% - var(--art-px) / 2);
+  width: var(--art-px);
+  background: repeating-linear-gradient(var(--straw) 0 var(--sp-3), transparent 0 var(--sp-6));
+}
+
+.binder__page {
+  position: relative;
+  background: var(--cream);
+  box-shadow:
+    inset 0 0 0 var(--art-px) var(--straw),
+    var(--shadow-sm);
+  padding: var(--sp-6) var(--sp-6) var(--sp-3);
+}
+
+.binder__pockets {
+  display: grid;
+  grid-template-columns: repeat(3, calc(96px * var(--pocket-scale)));
+  gap: var(--sp-4);
+}
+
+.binder__folio {
+  margin: var(--sp-2) 0 0;
+  text-align: center;
+  color: var(--role-textMuted);
+}
+
+.binder__turns {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+.binder__where {
+  margin: 0;
+  min-width: 14em;
+  text-align: center;
+}
+
+/* Turning leaf: a blank page sweeping over the spine, 250 ms (MOTION.slow). */
+.binder__leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(50% - var(--sp-3));
+  background: var(--cream);
+  box-shadow: inset 0 0 0 var(--art-px) var(--straw);
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.binder__leaf[data-pages='1'] {
+  width: 100%;
+}
+
+.binder__leaf--next {
+  right: 0;
+  transform-origin: left center;
+  animation: leaf-next var(--motion-slow) ease-in forwards;
+}
+
+.binder__leaf--prev {
+  left: 0;
+  transform-origin: right center;
+  animation: leaf-prev var(--motion-slow) ease-in forwards;
+}
+
+.binder__leaf--next[data-pages='1'] {
+  transform-origin: left center;
+}
+
+@keyframes leaf-next {
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(-180deg);
+  }
+}
+
+@keyframes leaf-prev {
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(180deg);
+  }
+}
+
+html[data-motion='reduced'] .binder__leaf {
+  display: none;
+}
+
+/* Pockets */
+.pocket {
+  position: relative;
+  width: calc(96px * var(--pocket-scale));
+  height: calc(128px * var(--pocket-scale));
+}
+
+.pocket--empty,
+.pocket--missing {
+  background: var(--glow);
+  box-shadow: inset 0 0 0 var(--art-px) var(--straw);
+}
+
+.pocket__silhouette {
+  position: absolute;
+  left: calc(16px * var(--pocket-scale));
+  top: calc(17px * var(--pocket-scale));
+  width: calc(64px * var(--pocket-scale));
+  height: calc(64px * var(--pocket-scale));
+  background: var(--straw);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  mask-position: 0 calc(var(--drop, 0) * 1px * var(--pocket-scale));
+  image-rendering: pixelated;
+}
+
+.pocket__id {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--sp-4);
+  text-align: center;
+  font: var(--small) / 1 var(--font-body);
+  color: var(--role-textMuted);
+}
+
+.pocket--owned {
+  transition: transform var(--motion-fast) var(--motion-overshoot);
+}
+
+.pocket--owned:hover,
+.pocket--owned:focus-within {
+  transform: translateY(calc(-1 * var(--art-px)));
+}
+
+.pocket--owned > div > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.pocket--owned > div > .pocket__count {
+  /* Pinned to the frame's top-right corner, clear of the stats and badges. */
+  top: calc(-1 * var(--sp-2));
+  left: auto;
+  right: calc(-1 * var(--sp-2));
+}
+
+.pocket__hit {
+  position: absolute;
+  inset: 0;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+.pocket__count {
+  font-size: 16px;
+  color: var(--glow);
+  background: var(--bark);
+  padding: var(--sp-1) var(--sp-2);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Still variant overlays: shaders only run on the hovered or inspected card (§18). */
+.pocket__sheen {
+  position: absolute;
+  left: calc(16px * var(--pocket-scale)) !important;
+  top: calc(17px * var(--pocket-scale)) !important;
+  width: calc(64px * var(--pocket-scale));
+  height: calc(64px * var(--pocket-scale));
+  pointer-events: none;
+}
+
+.pocket__sheen--foil {
+  opacity: 0.5;
+  background: linear-gradient(
+    120deg,
+    transparent 36%,
+    var(--glow) 36% 44%,
+    transparent 44% 50%,
+    var(--glow) 50% 52%,
+    transparent 52%
+  );
+}
+
+.pocket__sheen--prismatic {
+  opacity: 0.35;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    var(--rose) 20% 32%,
+    var(--sunflower) 32% 44%,
+    var(--seafoam) 44% 56%,
+    var(--lilac) 56% 68%,
+    transparent 68%
+  );
+}
+
+.pocket__sheen--void {
+  opacity: 0.6;
+  box-shadow: inset 0 0 0 calc(1px * var(--pocket-scale)) var(--lilac);
+  background: radial-gradient(var(--night) 0 calc(1px * var(--pocket-scale)), transparent 0) 0 0 /
+    calc(11px * var(--pocket-scale)) calc(9px * var(--pocket-scale));
+}
+
+.pocket__sheen--glitch {
+  opacity: 0.4;
+  background: repeating-linear-gradient(
+    var(--seafoam) 0 calc(1px * var(--pocket-scale)),
+    transparent 0 calc(3px * var(--pocket-scale))
+  );
+  box-shadow: calc(1px * var(--pocket-scale)) 0 0 var(--rose) inset;
+}
+
+/* Inspect */
+.inspect {
+  max-width: min(1180px, calc(100vw - var(--sp-8)));
+  max-height: calc(100vh - var(--sp-8));
+  overflow: auto;
+  color: var(--glow);
+  background: none;
+}
+
+.inspect::backdrop {
+  background: var(--ink);
+  opacity: 0.75;
+}
+
+.inspect {
+  width: min(1100px, calc(100vw - var(--sp-8)));
+}
+
+.inspect__body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+  padding: var(--sp-4);
+}
+
+.inspect__side {
+  display: grid;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.inspect .panel--parchment .muted {
+  color: var(--role-textMuted);
+}
+
+@media (max-width: 900px) {
+  .inspect__body {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+
+  .inspect__side {
+    width: 100%;
+  }
+}
+
+.inspect__side .card-details {
+  max-width: none;
+  color: var(--ink);
+}
+
+.inspect__copies {
+  color: var(--ink);
+}
+
+.inspect__copies > h2 {
+  margin-bottom: var(--sp-2);
+}
+
+.inspect__count {
+  color: var(--role-textMuted);
+}
+
+.inspect__actions,
+.inspect__confirm .row {
+  align-items: center;
+  margin-top: var(--sp-4);
+}
+
+.inspect__actions .btn,
+.inspect__confirm .btn {
+  font-size: var(--small);
+}
+
+.inspect__confirm {
+  margin-top: var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--glow);
+  box-shadow: inset 0 0 0 var(--art-px) var(--berry);
+}
+
+.inspect__confirm p {
+  margin: 0;
+}
+
+.inspect__warnings {
+  margin: var(--sp-3) 0 0;
+  padding-left: var(--sp-8);
+  color: var(--berryDeep);
+}
+
+.inspect__card {
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-4);
+}
+
+.inspect__card > .btn {
+  font-size: var(--small);
+}
+
+.tilt {
+  perspective: 900px;
+  padding: var(--sp-4);
+}
+
+.tilt__card {
+  transform: rotateX(var(--tilt-x, 0)) rotateY(var(--tilt-y, 0));
+  transition: transform var(--motion-fast) ease-out;
+}
+
+/* Copies list (windowed) */
+.copies {
+  overflow-y: auto;
+  position: relative;
+  background: var(--glow);
+  box-shadow: inset 0 0 0 var(--art-px) var(--straw);
+}
+
+.copies__row {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-4);
+  border-bottom: 1px solid var(--cream);
+}
+
+.copies__row[data-shown='true'] {
+  background: var(--lichen);
+}
+
+.copies__row input {
+  width: var(--sp-8);
+  height: var(--sp-8);
+  margin: 0;
+  accent-color: var(--wood);
+  flex: none;
+}
+
+.copies__show {
+  flex: 1;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: var(--small) / 1.2 var(--font-body);
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.copies__bound {
+  color: var(--role-textMuted);
+}
+
+/* Pull history */
+.history__list {
+  list-style: none;
+  margin: 0 0 var(--sp-6);
+  padding: 0;
+  display: grid;
+  gap: var(--sp-6);
+}
+
+.pull__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  align-items: baseline;
+}
+
+.pull__tag {
+  background: var(--straw);
+  padding: 0 var(--sp-2);
+  box-shadow: var(--shadow-sm);
+}
+
+.pull__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+}
+
+.pull__card {
+  position: relative;
+}
+
+.pull__card .pocket__sheen {
+  left: calc(16px * var(--pocket-scale));
+  top: calc(17px * var(--pocket-scale));
+}
+
+.pull__link {
+  display: block;
+}
+
+.pull__new {
+  position: absolute;
+  top: calc(-1 * var(--sp-2));
+  left: calc(-1 * var(--sp-2));
+  background: var(--berry);
+  color: var(--glow);
+  padding: 0 var(--sp-2);
+  box-shadow: var(--shadow-sm);
+  font-weight: bold;
+}
+
+@media (max-width: 720px) {
+  .binder__book {
+    padding: 0;
+  }
+
+  .binder__page {
+    padding: var(--sp-2) var(--sp-2) var(--sp-1);
+  }
+
+  .binder__pockets {
+    gap: var(--sp-2);
+  }
+
+  .binder__turns {
+    gap: var(--sp-2);
+  }
+
+  .binder__turns .btn {
+    font-size: var(--small);
+  }
+
+  .binder__where {
+    min-width: 0;
+  }
+
+  .binder__extras {
+    margin-left: 0;
+  }
+}
