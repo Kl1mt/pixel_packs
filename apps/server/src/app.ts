@@ -11,6 +11,7 @@ import {
 import { SERVER_CATALOG_INDEX } from './catalog.js';
 import { registerDevRoutes } from './dev/routes.js';
 import { registerEconomyRoutes } from './economy/routes.js';
+import { registerOnboardingRoutes } from './onboarding/routes.js';
 import type { DbHandle } from './db/client.js';
 import type { Mailer } from './mail/mailer.js';
 import { registerErrorHandler } from './http/errors.js';
@@ -79,6 +80,7 @@ export async function buildApp(
     allowDevOverrides: deps.allowDevOverrides ?? false,
   };
   registerEconomyRoutes(app, economy);
+  registerOnboardingRoutes(app, economy);
   // `/api/dev/*` (forcing results from `/debug`) exists only where overrides are honoured.
   if (economy.allowDevOverrides) registerDevRoutes(app, economy);
 

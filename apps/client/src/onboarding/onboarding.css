@@ -1,0 +1,138 @@
+/* Onboarding (T16, GDD §17). */
+.welcome__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.welcome__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+}
+
+/* A quiet text button: skipping is always there, never shouting. */
+.welcome__skip-all {
+  padding: var(--sp-1) 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-family: inherit;
+}
+
+.welcome > .welcome__head .welcome__skip-all {
+  color: var(--role-textOnWoodMuted);
+}
+
+/* The courier: the Mail Moth perched on the letter's top edge. */
+.courier {
+  position: relative;
+  max-width: 640px;
+  /* The moth (192 px) stands on the letter's top edge, overlapping it by 24 px. */
+  padding-top: 168px;
+}
+
+.courier__moth {
+  position: absolute;
+  top: 0;
+  right: var(--sp-8);
+  z-index: 1;
+}
+
+.courier__letter {
+  min-height: 300px;
+}
+
+.courier__line {
+  font-size: var(--body);
+  max-width: 30em;
+  min-height: 3em;
+}
+
+.courier__satchel {
+  display: flex;
+  gap: var(--sp-4);
+  min-height: 96px;
+}
+
+.courier__satchel img:nth-child(1) {
+  transform: rotate(-6deg);
+}
+
+.courier__satchel img:nth-child(2) {
+  transform: rotate(5deg);
+}
+
+.scripted {
+  max-width: 640px;
+}
+
+.scripted__pack {
+  display: block;
+  margin: var(--sp-4) auto;
+}
+
+/* Starter cards: a caravan, front first. */
+.starter__row {
+  list-style: none;
+  margin: var(--sp-6) 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+}
+
+.starter__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  animation: starter-in var(--motion-slow) var(--motion-overshoot) both;
+  animation-delay: calc(var(--i) * 120ms);
+}
+
+.starter__place {
+  padding: 0 var(--sp-2);
+  background: var(--straw);
+  border: var(--art-px) solid var(--ink);
+}
+
+@keyframes starter-in {
+  from {
+    transform: translateY(calc(8 * var(--art-px)));
+    opacity: 0;
+  }
+}
+
+/* Binder tour: a parchment note under the element it explains. */
+.tour {
+  position: absolute;
+  z-index: 20;
+  width: calc(100vw - 16px);
+  padding: var(--sp-4) var(--sp-6);
+  background: var(--cream);
+  border: var(--art-px) solid var(--ink);
+  box-shadow: var(--shadow-md);
+}
+
+.tour::before {
+  content: '';
+  position: absolute;
+  left: var(--sp-8);
+  top: calc(-4 * var(--art-px));
+  width: calc(6 * var(--art-px));
+  height: calc(4 * var(--art-px));
+  background: var(--ink);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.tour-target {
+  outline: calc(2 * var(--art-px)) dashed var(--sunflower);
+  outline-offset: var(--sp-2);
+}

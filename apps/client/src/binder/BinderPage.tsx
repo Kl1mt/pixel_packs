@@ -12,6 +12,7 @@ import { Notice } from '../components/Notice.js';
 import { Panel } from '../components/Panel.js';
 import { binderApi } from './api.js';
 import { BinderTabs } from './BinderTabs.js';
+import { BinderTour } from '../onboarding/BinderTour.js';
 import { Book } from './Book.js';
 import { DustExtras } from './DustExtras.js';
 import { Filters } from './Filters.js';
@@ -171,6 +172,7 @@ export function BinderPage({ api = binderApi }: { api?: typeof binderApi }) {
           }}
         />
       )}
+      {params.get('tour') === '1' && state.status === 'ready' && !inspected && <BinderTour />}
     </>
   );
 }

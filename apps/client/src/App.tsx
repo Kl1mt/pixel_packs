@@ -47,6 +47,13 @@ const router = createBrowserRouter([
     element: <RequireAuth children={<AppShell />} />,
     children: [
       { path: '/', element: <HomePage /> },
+      {
+        // Onboarding (T16): courier, scripted packs, starter cards; the binder tour is on /binder.
+        path: '/welcome',
+        hydrateFallbackElement: <p className="on-ground">A moth is fluttering in…</p>,
+        lazy: () =>
+          import('./onboarding/WelcomePage.js').then((m) => ({ Component: m.WelcomePage })),
+      },
       { path: '/packs', element: <PacksPage /> },
       {
         // Binder, inspect and pull history (T15): lazy, so their chunk loads on first visit.

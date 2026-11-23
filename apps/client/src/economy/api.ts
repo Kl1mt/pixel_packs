@@ -32,6 +32,8 @@ export function createEconomyApi(h: Http = http) {
     odds: (): Promise<OddsResponse> => h.get('/api/packs/odds', OddsResponseSchema),
     buy: async (packTypeId: PackTypeId, idempotencyKey: string): Promise<EconomyState> =>
       must(await h.post('/api/packs/buy', { packTypeId, idempotencyKey }, EconomyStateSchema)),
+    claimCalendar: async (): Promise<EconomyState> =>
+      must(await h.post('/api/rewards/calendar', undefined, EconomyStateSchema)),
     claimFreePack: async (realm: Realm): Promise<EconomyState> =>
       must(await h.post('/api/rewards/free-pack', { realm }, EconomyStateSchema)),
     open: async (packTypeId: PackTypeId, idempotencyKey: string): Promise<PackOpening> =>

@@ -1,4 +1,5 @@
 import { sql } from 'drizzle-orm';
+import { ONBOARDING_STAGES } from '@pixel-packs/shared';
 import { index, pgTable, smallint, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
 
 const createdAt = () => timestamp('created_at', { withTimezone: true }).notNull().defaultNow();
@@ -15,6 +16,12 @@ export const users = pgTable(
     emailVerifiedAt: timestamp('email_verified_at', { withTimezone: true }),
     /** Scripted onboarding packs opened so far (GDD §17); 2 = done. */
     onboardingStep: smallint('onboarding_step').notNull().default(0),
+    /** Where the player is in the onboarding flow (GDD §17, T16); only moves forward. */
+    onboardingStage: text('onboarding_stage', { enum: ONBOARDING_STAGES })
+      .notNull()
+      .default('courier'),
+    /** When the five account-bound starter cards were granted (once per account). */
+    starterCardsAt: timestamp('starter_cards_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
