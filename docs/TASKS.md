@@ -10,7 +10,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 |---|---|---|---|
 | T00 | Design docs & working agreement | — | done |
 | T01 | Monorepo scaffold & tooling | T00 | done |
-| T02 | Game rules core (odds, pack roll, pity, scores) | T01 | todo |
+| T02 | Game rules core (odds, pack roll, pity, scores) | T01 | done |
 | T03 | Card set design: Mossgrove & Starhollow (26 cards) | T02 | todo |
 | T04 | PixelLab pipeline + style anchors | T01, T03 | todo |
 | T05 | Card art batch | T04 | todo |
@@ -59,7 +59,7 @@ Docs: §21, §26
   - Markdown is excluded from Prettier so the hand-written docs keep their table/list layout.
   - Verified: fresh clone → install, typecheck, lint, test, build pass; `pnpm dev` served the page ("Server ok (pglite)") and `/api/health` through the Vite proxy. CI status: see the PR.
 
-### T02 — Game rules core · M
+### T02 — Game rules core · M · done
 Docs: §4, §5, §6, §7, §9 (dust values), §15, §17 (scripted packs)
 - All code lives in `packages/shared` as pure functions with an injectable RNG.
 - **Types** (Zod schemas): Realm, Rarity, Variant, Ability, Card, CardInstance traits, PackType.
@@ -75,6 +75,27 @@ Docs: §4, §5, §6, §7, §9 (dust values), §15, §17 (scripted packs)
   - exact pity counts, scripted packs, scores.
 - **`tools/econ-sim` v0**: simulates N days of a free player with M1 sources and prints packs/day and time to complete a realm (with and without the Mythic).
 - **Done when**: tests pass, and the econ-sim report is in the handoff notes.
+- **Handoff notes (2026-11-23)**:
+  - Layout of `packages/shared/src`: `model/` (Zod schemas: enums, `Card`, `Ability`, `CardInstanceTraits`, `PackType`, `PityCounters`, `PackRoll`), `config/odds.ts`, `rng/rng.ts`, `rules/` (weighted pick, catalog index, `rollPack`, `rollScriptedPack`, `revealOrder`, `featuredRarityOdds`, pity, scores, dust, craft costs, edition stamp, mint interface, analytic expectations), `testing/placeholderCatalog.ts`. Everything is re-exported from `index.ts`.
+  - Odds are integer weights: rarities per mille, variants per 6000 (exact for 1/12 … 1/1500 and for the Mythic pack's ×3). Rolls draw `rng.int(total)`; `Rng` is just `{ int(max) }`.
+  - RNG: `createSeededRng(seed)` (sfc32 + cyrb128, deterministic everywhere) and `createCryptoRng()` (Web Crypto `getRandomValues` + rejection sampling, so the shared package stays isomorphic; it is the server's pack RNG).
+  - Rolling needs a `CatalogIndex` from `buildCatalogIndex(cards, enabledRealms)`, which validates the 4/3/2/2/1/1 composition per enabled realm and skips event cards. Until T03, tests and econ-sim use `buildPlaceholderCatalog()` (ids numbered by rarity). T03 should run its catalog through `buildCatalogIndex` in a test.
+  - `rollPack(pack, pityOfItsGroup, index, rng)` returns 5 cards in slot order (slot 5 featured), the new counters, `pityTrigger` (`legendaryHard`/`mythicHard`/null) and the soft-pity bonus. Use `pityGroupOf(pack)` to pick the stored counters. `revealOrder()` gives the reveal sequence. Scripted packs: `rollScriptedPack(step 0|1, …)` returns the input counters unchanged.
+  - Mint numbers: `needsMintNumber(variant)` + `MintNumberAllocator` interface for T10. `editionStampFor(source, packReleaseSeason, currentSeason)` is ready for T10 too.
+  - Event packs are not in `PackTypeSchema` yet (their pity group would be `event:<id>`).
+  - Design details settled here are in GDD §29 (2026-11-23, T02 rows).
+  - `tools/econ-sim` v0 (`pnpm --filter @pixel-packs/econ-sim start [-- --days 90 --players 2000 --calendar 50 --seed s]`): free player, 3 free packs/day + calendar gold, all spent on Mossgrove packs (M1 realms), real pity, "Dust extras" (Normal copies beyond 9) and crafting of missing cards. Report (2 000 players, 90 days, calendar 50 gold/day):
+    ```
+    packs/day: 3.50
+    days to complete a realm | median | p90 | ≤ 7 d | ≤ 21 d
+    12 non-Mythic, luck only |      8 |   16 |  42 % |   97 %
+    12 non-Mythic, + crafting|      8 |   16 |  42 % |   98 %
+    all 13, luck only        |     19 |   33 |  10 % |   55 %
+    all 13, + crafting       |     19 |   33 |  10 % |   56 %
+    unspent dust at day 21 (median): 2420
+    ```
+    With the calendar at its low end (20 gold/day, 3.2 packs/day): 10 / 17 days for the 12, 21 / 37 days for all 13. So the §8 targets (≈1 week, Mythic ≈3 weeks) hold at the median, but the p90 is about twice the target, and crafting barely helps in M1 because "Dust extras" only dusts copies beyond 9 (≈2.4k dust by day 21 vs 12k for a Mythic). Worth a look when T10/M2 tune the calendar and quests (added to GDD §27).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (63 tests; 100k-roll stats run in ~2 s) pass.
 
 ### T03 — Card set design: Mossgrove & Starhollow · M
 Docs: §3, §4, §10 (ability semantics)

@@ -120,7 +120,7 @@ Each realm also has a sub-palette (§19), a village building (§11) and realm ba
   - Legendary or better: guaranteed in the featured slot of the 40th pack without one (≈ 11 % of players ever reach it).
   - Mythic: soft pity from pack 100 (+1 percentage point per pack on the featured slot), hard pity at pack 150.
   - Scripted onboarding packs don't count towards pity.
-- **RNG**: packs use server-side `crypto.randomInt`. Only battles use the seeded RNG.
+- **RNG**: packs use a server-side cryptographic RNG (Web Crypto, unbiased by rejection sampling). Only battles use the seeded RNG.
 - All odds, including pity rules, are shown in-game via a "?" on every pack. Config lives in `packages/shared/src/config/odds.ts`.
 
 ## 6. Variants, editions & mint numbers
@@ -447,6 +447,7 @@ The task breakdown is in `docs/TASKS.md`.
 - Which payment provider?
 - Loot-box rules per region: odds disclosure is covered; age ratings and regional restrictions are not yet.
 - Privacy policy and imprint for the public launch.
+- Realm completion spread (econ-sim v0, T02): the medians hit the §8 targets (≈8 days for the 12 non-Mythic cards, ≈19 for the Mythic), but the p90 is ≈16 / 33 days, and crafting barely helps in M1 because only copies beyond 9 are dusted. Revisit when quests and the calendar are tuned.
 
 **User to-dos** (when a task needs them)
 - Create a Discord application for OAuth (T09; a guide will be in the README).
@@ -482,3 +483,9 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | Login: email + password, and Discord |
 | 2026-11-23 | Local first (Windows) with PGlite for dev; later the VPS with its own Postgres container behind the existing Cloudflare Tunnel; friends alpha after M3 |
 | 2026-11-23 | Workflow: one task per Claude session; the docs in the repo are the shared memory |
+| 2026-11-23 | T02: the 20 % "any enabled realm" share of a realm pack includes its own realm (own realm = 80 % + 20 %/n) |
+| 2026-11-23 | T02: pity counters reset when a Legendary+ (or Mythic) appears in any slot; a forced Legendary+ featured slot rolls Legendary vs Mythic at their current weights |
+| 2026-11-23 | T02: the Mythic soft-pity bonus (+1 pp/pack) is taken from the featured slot's lowest rarity (Uncommon), so Rare–Legendary odds stay unchanged |
+| 2026-11-23 | T02: dusting a ★2/★3 copy gives its ★1-equivalents (×3/×9) times the ★1 value, so fusing never changes dust value |
+| 2026-11-23 | T02: the collection score's +50 % for ★3 is rounded half up per entry (scores stay integers) |
+| 2026-11-23 | T02: the pack RNG is Web Crypto `getRandomValues` with rejection sampling (same guarantee as `crypto.randomInt`, and the shared package stays isomorphic) |
