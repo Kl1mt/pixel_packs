@@ -27,7 +27,7 @@ describe('apng', () => {
       { image: blue, delayMs: 100 },
     ]);
     const types: string[] = [];
-    for (let o = 8; o < buf.length; ) {
+    for (let o = 8; o < buf.length;) {
       const len = buf.readUInt32BE(o);
       types.push(buf.toString('ascii', o + 4, o + 8));
       o += 12 + len;
