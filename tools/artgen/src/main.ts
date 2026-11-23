@@ -20,7 +20,9 @@ const USAGE = `artgen <command>
   gallery [--port 5180]                    local review gallery (approve/reject → manifest)
   export-gallery <out.html>                read-only gallery with embedded images
   review <entry> <index> <approved|rejected|pending> [note]
-  promote <entry> <index> <dest.png>       copy an approved candidate to its final path
+  promote <entry> <index> <dest.png> [--recentre]
+                                           copy an approved candidate to its final path
+                                           (--recentre: centre it horizontally, whole pixels)
   spend                                    total generations logged in the manifest`;
 
 const log = (msg: string) => {
@@ -36,6 +38,7 @@ async function main(argv: string[]): Promise<void> {
       only: { type: 'string' },
       budget: { type: 'string' },
       port: { type: 'string', default: '5180' },
+      recentre: { type: 'boolean', default: false },
     },
   });
   const [command, ...rest] = positionals;
@@ -129,8 +132,10 @@ async function main(argv: string[]): Promise<void> {
     case 'promote': {
       const [entryId, index, dest] = rest;
       if (!entryId || !index || !dest) throw new Error(USAGE);
-      await promote(await readManifest(), entryId, Number(index), dest);
-      log(`${entryId} #${index} → ${dest}`);
+      const shift = await promote(await readManifest(), entryId, Number(index), dest, {
+        recentre: values.recentre,
+      });
+      log(`${entryId} #${index} → ${dest}${shift ? ` (shifted ${String(shift)} px)` : ''}`);
       return;
     }
     case 'spend': {

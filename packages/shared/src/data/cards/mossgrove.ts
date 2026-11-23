@@ -56,7 +56,7 @@ export const MOSSGROVE_CARDS: readonly Card[] = defineRealmCards('mossgrove', [
     abilities: [{ trigger: 'onFaint', effect: 'heal', target: 'allAllies', value: 2 }],
     flavour: 'It glows brightest right at the very end.',
     artPrompt:
-      'a tall slender mushroom with a glowing pale-green bell cap like a lantern, kind sleepy face on its stem',
+      'a tall slender mushroom with a softly glowing pale-green bell cap and a kind sleepy face on its stem, holding a small glowing lantern by its handle in one little hand',
   },
   {
     n: 6,
@@ -67,7 +67,7 @@ export const MOSSGROVE_CARDS: readonly Card[] = defineRealmCards('mossgrove', [
     abilities: [{ trigger: 'onEnter', effect: 'thorns', target: 'self', value: 2 }],
     flavour: 'Grows a purple thistle on its back every spring, out of pure spite.',
     artPrompt:
-      'a hedgehog with spines that end in purple thistle flowers, standing on hind legs with tiny fists raised',
+      'a round little hedgehog standing on its hind legs in a brave boxing pose with tiny fists raised, a neat crown of brown spines each tipped with a small purple thistle blossom, determined smile',
   },
   {
     n: 7,

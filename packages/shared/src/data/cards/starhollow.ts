@@ -48,7 +48,7 @@ export const STARHOLLOW_CARDS: readonly Card[] = defineRealmCards('starhollow', 
     abilities: [{ trigger: 'startOfBattle', effect: 'damage', target: 'randomEnemy', value: 1 }],
     flavour: 'Drawn to every lantern but yours.',
     artPrompt:
-      'a slim moth with warm cream wings that glow faintly at the edges, a tiny lantern hanging from its front legs',
+      'a small moth with rounded warm honey-and-cream wings that glow softly, big dark eyes, fluffy cream collar, holding a tiny glowing lantern in its front legs',
   },
   {
     n: 5,
@@ -85,7 +85,7 @@ export const STARHOLLOW_CARDS: readonly Card[] = defineRealmCards('starhollow', 
   },
   {
     n: 8,
-    name: 'Post Moth',
+    name: 'Mail Moth',
     rarity: 'rare',
     atk: 4,
     hp: 6,

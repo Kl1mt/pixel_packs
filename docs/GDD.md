@@ -374,7 +374,7 @@ Every step can be skipped. In scripted packs only the forced slot is scripted; e
 **QA & budget**
 - Every asset is approved in the review gallery before use. Rejects are regenerated with a new seed, at most 2 retries before the prompt is revised. Approved files are immutable: a new version gets a new filename.
 - Check `GET /v2/balance` at the start of every art task, and record the real cost per endpoint in the API notes.
-- Budget in generations: M1 ≈ 260 · M2 ≈ 250 · M4 ≈ 350 · M5 ≈ 150, so ~1 000 in total against 1 163 left on 2026-11-23. Whether the allotment renews monthly is still open (§27).
+- Budget in generations: M1 ≈ 450 (T05 card art ≤ 260, see §29) · M2 ≈ 250 · M4 ≈ 350 · M5 ≈ 150, so ~1 190 in total against 1 163 left on 2026-11-23. Whether the allotment renews monthly is still open (§27).
 
 ## 20. Audio
 - **Music** (`/music`, instrumental, looped with `/music/{id}/loop`), in a cozy lo-fi chiptune style:
@@ -452,7 +452,7 @@ The task breakdown is in `docs/TASKS.md`.
 - Loot-box rules per region: odds disclosure is covered; age ratings and regional restrictions are not yet.
 - Privacy policy and imprint for the public launch.
 - Realm completion spread (econ-sim v0, T02): the medians hit the §8 targets (≈8 days for the 12 non-Mythic cards, ≈19 for the Mythic), but the p90 is ≈16 / 33 days, and crafting barely helps in M1 because only copies beyond 9 are dusted. Revisit when quests and the calendar are tuned.
-- **PixelLab budget per card (T04)**: `/generate-image-v2` and `/generate-with-style-v2` cost 10 generations per call (16 candidates of one subject at 64×64), not ~1 per image. Card art is therefore ≈10 per card (+10 per retry): T05 needs ≈220 for its 22 cards instead of ≤ 70, and the M1 estimate (≈260) is short by ≈150. Decide T05's budget (or a cheaper endpoint such as pixflux at 1 generation) before T05 starts. Costs: `docs/pixellab-api-notes.md`.
+- **PixelLab budget per card (T04, settled in T05)**: `/generate-image-v2` and `/generate-with-style-v2` cost 10 generations per call (16 candidates of one subject at 64×64), confirmed by T05's receipts. The user chose to keep the Pro style endpoint for card art (T05 ≤ 260 including three user-requested retries, §29), so the M1 estimate (≈260) grows to ≈450 and the total (~1 190) now exceeds the 1 163 left on 2026-11-23 unless the allotment renews. Costs: `docs/pixellab-api-notes.md`.
 - Behind the Cloudflare Tunnel (§24), the server must trust the proxy's client-IP header (Fastify `trustProxy`, `CF-Connecting-IP`), or every request shares one rate-limit bucket. Decide in the deploy task.
 
 **User to-dos** (when a task needs them)
@@ -514,3 +514,7 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T10: dev odds overrides (`tools/admin`) force the featured slot like a scripted pack (no pity) and are ignored in production |
 | 2026-11-23 | T04: style anchors are per realm — Mossgrove: Burr Hoglet ×2 + Grandmother Morel; Starhollow: Yawning Dormouse ×2 + Lady Lunamoth ×2 (user picks). Card art uses only its own realm's anchors as `style_images` (≤ 4), plus the shared `style_description` in `tools/artgen/anchors.json`. The first pick per anchor card is that card's final art |
 | 2026-11-23 | T04: master palette of 32 named colours, with 16-colour Mossgrove and Starhollow sub-palettes, in `packages/shared/src/config/palettes.ts`; sent as `target_palette` with the palette name |
+| 2026-11-23 | T05: card art keeps the Pro `/generate-with-style-v2` endpoint (10 generations per card, 16 candidates) with each realm's anchors; T05's budget is ≤ 230 (22 cards + one retry) instead of ≤ 70 (user decision) |
+| 2026-11-23 | T05: the user raised T05's cap to ≤ 260 for three regenerations (Lantern Shroom, Thistle Hedgehog, Lamplight Moth); the Lantern Shroom now holds a lantern, and the three art prompts were revised |
+| 2026-11-23 | T05: STA-008 "Post Moth" is renamed "Mail Moth" (name only; ID, stats and abilities unchanged; user decision) |
+| 2026-11-23 | T05: final art may be an approved candidate moved by whole pixels (no resampling), e.g. `promote --recentre` to centre a sprite that touches the canvas edge (STA-001); the catalog art test accepts such shifts |
