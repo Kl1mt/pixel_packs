@@ -2,6 +2,7 @@ export { clampInt } from './math.js';
 export { HealthResponseSchema, type HealthResponse } from './api/health.js';
 export * from './api/auth.js';
 export * from './api/economy.js';
+export * from './api/dev.js';
 export * from './api/collection.js';
 export { isUsernameBlocked, normalizeUsername } from './api/usernameBlocklist.js';
 

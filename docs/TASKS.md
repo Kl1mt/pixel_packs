@@ -20,7 +20,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T09 | Auth screens + Discord login | T07, T08 | todo |
 | T10 | Economy & pack API | T03, T08 | done |
 | T11 | Card renderer & variant shaders | T05, T07 | done |
-| T12 | Pack opening I: core flow + Mossgrove theme | T10, T11 | todo |
+| T12 | Pack opening I: core flow + Mossgrove theme | T10, T11 | done |
 | T13 | Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers | T12 | todo |
 | T14 | Audio | T12 | todo |
 | T15 | Binder, card inspect & pull history | T10, T11 | todo |
@@ -28,6 +28,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T17 | Character & idle-animation trial | T05 | todo |
 | T18 | M1 QA & polish | all M1 | todo |
 | T20 | Realm crest in the card crest socket | T11 | todo |
+| T21 | Mythic pack on the shelf + staged opening | T12, T13 | todo |
 
 ---
 
@@ -360,7 +361,7 @@ Docs: §4, §6, §18
   - Design decisions are in GDD §29 (T11 rows). New task T20: the realm crest socket on the frame is still empty.
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (290 tests), client `build` and `e2e` (10 tests) pass.
 
-### T12 — Pack opening I: core flow + Mossgrove theme · L
+### T12 — Pack opening I: core flow + Mossgrove theme · L · done
 Docs: §5, §7, §16
 - **Pack shelf screen**: owned packs, buying, the odds "?" panel and the pity meter.
 - **Opening scene framework**: drag-to-tear with a click fallback, and the Mossgrove theme (vines unwrap, petals fall).
@@ -368,6 +369,20 @@ Docs: §5, §7, §16
 - **After the reveal**: a results summary (NEW badges, dupes, "Dust extras") and "Resume reveal".
 - **Dev forcing** of results via `/debug`.
 - **Done when**: the full loop works end-to-end against the API, with Playwright screenshots of each stage.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.** Vines, petals, light and the tear are drawn in code with palette colours.
+  - **Screenshots** (`pnpm --filter @pixel-packs/client e2e` rewrites them; petals are random, so they differ run to run): `docs/opening/{shelf,odds,tear,tear-half,tear-burst,reveal-stack,reveal-flip,reveal-featured,summary,resume,reveal-epic-back,reveal-void,debug-forcing}.png`, and a 12 s capture `docs/opening/opening-flow.gif`. `docs/cards/card-lab.png` now shows the forcing panel.
+  - **Economy store** (`apps/client/src/economy/`): `api.ts` (typed, Zod-checked calls for every T10 endpoint + dev routes; `newIdempotencyKey()`), `store.ts` (`createEconomyStore`: `idle | loading | ready | error`, `refresh` shares one request, `set`, `setWallet`, `clear`), `useEconomy.ts` (app-wide `economyStore`). The top bar (`useWallet`) reads the same store, so buys/claims/dusting update the balances at once; `main.tsx` clears it when the logged-in user changes.
+  - **Packs page** (`pages/PacksPage.tsx`, parts in `src/packs/`): `ShopShelf` (owned count sticker, "?" odds, price tag, Open, Buy), `OddsDialog` (native `<dialog>`, numbers from `GET /api/packs/odds`), `PityMeter` (realm group, `pityProgress`), free-pack claim, "Resume reveal" banner, errors as `Notice`. An action keeps its idempotency key until it succeeds or the server says a definite 4xx, so retries after network errors are safe. The old static `PackShelf` is still used by Home and the style guide.
+  - **Opening scene** (`src/opening/`, lazy chunk with Pixi): `OpeningScene` (overlay dialog, `revealReducer` phases `tear → reveal → summary`, posts `/revealed` on reaching the results, then refreshes the economy), `TearStage` + `tearScene.ts` (canvas engine: pack sprite, seam tear `SeamTear`, theme wrap, light, petals `petals.ts`, Epic+ shake/leak), `themes.ts` (`PackTheme`: seam, `wrap()` pixel list, vine windows, petal colours, ground; `MOSSGROVE_THEME`, `PLAIN_THEME` for Starhollow until T13 — **T13 adds `STARHOLLOW_THEME` here and the Legendary/Mythic moments**), `RevealStage` (stack with rarity rings, spotlight with `OpenedFace` = Pixi `CardStage` for special variants / DOM `Card` otherwise, tray chips), `SummaryStage` (New/Extra, "Dust extras" with preview + confirm, Open another, Back to the shelf). Pure helpers with tests: `reveal.ts`, `packs/format.ts`.
+  - `.card-stage` CSS lives in `components/components.css` (moved there by T15), so the scene can use it.
+  - **Dev forcing**: `apps/server/src/dev/routes.ts` (`POST /api/dev/odds-override`, `POST /api/dev/grant`, registered only when `allowDevOverrides`), schemas in `packages/shared/src/api/dev.ts`, documented in `docs/api.md`. `/debug` has a "Dev forcing" panel (`pages/DevForcing.tsx`): featured rarity/variant for the next 1/3/10 packs, +1000 gold, +5 packs per realm. Remember the first two realm packs of an account are scripted and come before any override.
+  - **For T13**: the Legendary/Mythic reveal is only the gold ring + "Featured" sticker and a gold leak at the tear; the unique sequences (§5) and variant stingers go in `RevealStage` / a new stage between flip and spotlight. `packMood()` and `backGlow()` are the hooks.
+  - **For T14**: sound hooks are the flip (`dispatch({type:'flip'})`), the burst (`TearScene` `onTorn`), and Uncommon's "soft chime" on flip.
+  - **For T16**: Home can link to `/packs`; "Resume reveal" lives on the Packs page only.
+  - Not done here (new task T21): the Mythic pack has no shelf spot, art or staged opening yet (`packArt('mythic')` falls back to the Starhollow sprite).
+  - Design decisions are in GDD §29 (T12 rows).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (303 tests), client `build` (scene is its own chunk) and client `e2e` (12 tests, 2 new in `e2e/opening.spec.ts`: drag tear → flips → Reveal all → results → revealed; Starhollow click fallback → reload → Resume reveal → Skip; free pack, buying, `/debug` forcing → Epic Void featured with live shader).
 
 ### T13 — Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers · L · budget ≤ 20 (VFX)
 Docs: §5, §6, §7
@@ -448,6 +463,14 @@ Docs: §4, §16, §19
 - Found in T11: the round crest socket on the frame (`CARD_FACE.crest`, 10×10 at 43,4) is still empty on every card. §4 asks for a realm crest on the face.
 - Draw a crest per enabled realm (hand-pixelled 10×10, or ask before spending PixelLab generations). Draw it in both the DOM card and the Pixi `CardView` (as a badge-like pixel list, so they keep matching), and update the style guide.
 - **Done when**: both realms show their crest, the Pixi = DOM e2e check passes, and the user has approved a screenshot.
+
+---
+
+### T21 — Mythic pack on the shelf + staged opening · M · budget ≤ 15
+Docs: §5, §7, §19
+- Found in T12: the Mythic pack (300 gems) is enabled on the server but has no pack art, so the shelf leaves it out.
+- Pack art (PixelLab, ask before spending), a shelf spot that shows gems, and its staged opening (lock → runes → burst, §7) as a `PackTheme` in `apps/client/src/opening/themes.ts`.
+- **Done when**: a Mythic pack can be bought, opened and revealed end to end, with screenshots.
 
 ## Later milestones
 These are broken down into tasks in a planning session at the start of each milestone.

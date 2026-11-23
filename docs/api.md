@@ -83,6 +83,14 @@ pnpm admin odds-override <user> <packs> [rarity] [variant]   # dev only, packs 0
 ```
 It uses `DATABASE_URL`, or else the server's PGlite directory (`PGLITE_DIR`, default `apps/server/.data/pglite`), which only one process can open: stop `pnpm dev` first. Odds overrides act like a scripted pack (no pity) and are ignored by a server with `NODE_ENV=production`.
 
+### Dev routes (T12)
+Only on a server with dev overrides allowed (`NODE_ENV` ≠ `production`); production has no `/api/dev`, so they answer `404`. Both act on the logged-in player (`401` otherwise). Schemas: `packages/shared/src/api/dev.ts`. The `/debug` page's "Dev forcing" panel uses them.
+
+| Method & path | Body | Success |
+|---|---|---|
+| `POST /api/dev/odds-override` | `{ packs (0–50), rarity?, variant? }` | `204`; forces the featured slot of the next `packs` non-scripted packs, `packs: 0` clears |
+| `POST /api/dev/grant` | `{ gold?, gems?, packs? { packTypeId, count } }` (at least one) | `200 EconomyState` |
+
 ### curl (after logging in as above)
 ```sh
 B=http://localhost:3001/api

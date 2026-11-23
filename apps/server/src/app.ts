@@ -9,6 +9,7 @@ import {
   type Rng,
 } from '@pixel-packs/shared';
 import { SERVER_CATALOG_INDEX } from './catalog.js';
+import { registerDevRoutes } from './dev/routes.js';
 import { registerEconomyRoutes } from './economy/routes.js';
 import type { DbHandle } from './db/client.js';
 import type { Mailer } from './mail/mailer.js';
@@ -70,13 +71,16 @@ export async function buildApp(
     cookies,
     appOrigin: deps.appOrigin,
   });
-  registerEconomyRoutes(app, {
+  const economy = {
     db: deps.db.db,
     now: deps.now ?? (() => new Date()),
     rng: deps.rng ?? createCryptoRng(),
     index: deps.catalogIndex ?? SERVER_CATALOG_INDEX,
     allowDevOverrides: deps.allowDevOverrides ?? false,
-  });
+  };
+  registerEconomyRoutes(app, economy);
+  // `/api/dev/*` (forcing results from `/debug`) exists only where overrides are honoured.
+  if (economy.allowDevOverrides) registerDevRoutes(app, economy);
 
   return app;
 }

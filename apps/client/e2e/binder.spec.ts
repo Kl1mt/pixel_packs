@@ -92,7 +92,7 @@ test('binder: starter pulls, inspect, dust and pull history', async ({ page }) =
   await expect(page.locator('.binder__where')).toContainText('Starhollow');
   await expect(page.locator('.pocket--owned').first()).toHaveAttribute('data-card', /^STA-/);
 
-  // Inspect the first owned card and dust one copy.
+  // Inspect the first owned card and dust every copy (starter pulls are random: it may have two).
   const first = page.locator('.pocket--owned').first();
   const cardId = await first.getAttribute('data-card');
   await first.locator('.pocket__hit').click();
@@ -100,12 +100,12 @@ test('binder: starter pulls, inspect, dust and pull history', async ({ page }) =
   await expect(dialog).toBeVisible();
   await expect(page).toHaveURL(new RegExp(`card=${cardId ?? ''}`));
   await expect(dialog.locator('.card-details')).toBeVisible();
-  await dialog.getByRole('checkbox').first().check();
-  await dialog.getByRole('button', { name: /^Dust 1/ }).click();
+  for (const box of await dialog.getByRole('checkbox').all()) await box.check();
+  await dialog.getByRole('button', { name: /^Dust \d/ }).click();
   await expect(dialog.getByRole('alertdialog')).toContainText('last copies');
   await dialog.getByRole('button', { name: 'Dust them' }).click();
   await expect(dialog).toBeHidden();
-  await expect(page.getByRole('status').filter({ hasText: 'Dusted 1 copy' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: /Dusted \d+ cop/ })).toBeVisible();
   await expect(page.locator(`.pocket--missing[data-card="${cardId ?? ''}"]`)).toBeVisible();
 
   // Pull history lists both starter packs; the filter narrows it down.

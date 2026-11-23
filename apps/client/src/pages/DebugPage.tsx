@@ -6,6 +6,7 @@ import { CardDetails } from '../components/CardDetails.js';
 import { Panel } from '../components/Panel.js';
 import { CardStage } from '../render/CardStage.js';
 import { FpsMeter } from '../render/FpsMeter.js';
+import { DevForcing } from './DevForcing.js';
 import { debugSpec, parseDebugParams, type DebugParams } from './debugParams.js';
 import './debug.css';
 
@@ -163,6 +164,8 @@ export function DebugPage() {
           />
         </section>
       )}
+
+      <DevForcing />
 
       {stress.length > 0 && (
         <section className="lab__row" aria-label="Stress test" data-testid="stress">

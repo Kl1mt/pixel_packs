@@ -45,3 +45,18 @@
   color: var(--glow);
   font-size: var(--small);
 }
+
+/* Dev forcing (T12). */
+.lab__forcing-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-4) var(--sp-8);
+  margin-bottom: var(--sp-4);
+}
+
+.lab__status {
+  margin: 0;
+  min-height: 1.45em;
+  font-size: var(--small);
+}
