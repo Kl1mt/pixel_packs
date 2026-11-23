@@ -1,0 +1,192 @@
+/* Home (T16, GDD §16): the satchel counter on the left, the post on the right. */
+.home {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: var(--sp-8);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .home {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.home-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.home-packs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.home-packs__shelf {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+  padding-bottom: var(--sp-2);
+  border-bottom: calc(4 * var(--art-px)) solid var(--bark);
+  box-shadow: 0 var(--art-px) 0 var(--barkDeep);
+}
+
+.home-packs__pack {
+  position: relative;
+}
+
+.home-packs__pack[data-empty] img {
+  opacity: 0.45;
+}
+
+.home-packs__count {
+  position: absolute;
+  left: calc(6 * var(--art-px));
+  bottom: calc(10 * var(--art-px));
+  padding: var(--sp-1) var(--sp-2);
+  background: var(--berry);
+  color: var(--glow);
+  font: 32px / 1 var(--font-heading);
+  box-shadow: var(--shadow-sm);
+  transform: rotate(-4deg);
+}
+
+.home-packs__line {
+  color: var(--role-textOnWood);
+  margin: 0;
+}
+
+.home-packs__open {
+  align-self: flex-start;
+  font-size: var(--heading);
+}
+
+/* Free-pack timer: a stepped bar of 16 hard segments. */
+.home-timer {
+  position: relative;
+}
+
+.home-timer__bar {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: var(--art-px);
+  height: calc(6 * var(--art-px));
+  padding: var(--art-px);
+  margin-bottom: var(--sp-4);
+  background: var(--ink);
+}
+
+.home-timer__bar span {
+  background: var(--stone);
+}
+
+.home-timer__bar span.is-lit {
+  background: var(--sunflower);
+}
+
+.home-timer__take {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+/* Just after onboarding: a dashed sunflower frame and a hand-stuck note (§17 step 5). */
+.home-timer--highlight {
+  outline: calc(2 * var(--art-px)) dashed var(--sunflower);
+  outline-offset: var(--sp-2);
+  animation: timer-nudge var(--motion-slow) var(--motion-overshoot) 3;
+}
+
+.home-timer__note {
+  position: absolute;
+  right: var(--sp-4);
+  top: calc(-1 * var(--sp-4));
+  padding: var(--sp-1) var(--sp-3);
+  background: var(--sunflower);
+  color: var(--ink);
+  font-size: var(--small);
+  box-shadow: var(--shadow-sm);
+  transform: rotate(3deg);
+}
+
+@keyframes timer-nudge {
+  50% {
+    transform: translateY(calc(-2 * var(--art-px)));
+  }
+}
+
+/* Daily calendar: seven little envelopes, stamped once claimed. */
+.calendar {
+  list-style: none;
+  margin: var(--sp-4) 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+@media (max-width: 520px) {
+  .calendar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.calendar__day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-1) var(--sp-3);
+  background: var(--cream);
+  border: var(--art-px) solid var(--ink);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--small);
+}
+
+.calendar__day .currency .num {
+  font-size: var(--small);
+}
+
+.calendar__day--today {
+  background: var(--sunflower);
+}
+
+.calendar__day--claimed {
+  background: var(--straw);
+  color: var(--dusk);
+}
+
+.calendar__day--claimed .currency {
+  opacity: 0.5;
+}
+
+.calendar__stamp {
+  position: absolute;
+  inset: auto 0 var(--sp-6);
+  margin: auto;
+  width: max-content;
+  padding: 0 var(--sp-1);
+  border: var(--art-px) solid var(--berry);
+  color: var(--berry);
+  background: var(--cream);
+  font-size: var(--small);
+  transform: rotate(-12deg);
+}
+
+.home-purse__coins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+  margin: var(--sp-4) 0;
+}
+
+/* Badges default to the wood bar's light digits; on parchment they need ink. */
+.calendar .currency,
+.home-purse .currency {
+  color: var(--role-text);
+}

@@ -60,7 +60,7 @@ Written in T04 (2026-11-23) from `https://api.pixellab.ai/v2/llms.txt`, selected
 ### `POST /create-image-pixflux` — cheap single image (T06 icons)
 - **Synchronous**: the response is `{ usage, image: Base64Image }`, no background job.
 - Body: `description`, `image_size` (area 32×32 to 400×400), `seed`, `no_background`, `color_image` (forced palette: an image containing the allowed colours; artgen sends a 1-px strip of the palette), `outline` (`single color black outline` · `single color outline` · `selective outline` · `lineless`), `shading` (`flat` … `highly detailed shading`), `detail` (`low` · `medium` · `highly detailed`), `view`, `init_image`.
-- **Cost (measured): 1 per image at 32×32.**
+- **Cost (measured): 1 per image at 32×32 and at 64×64** (T13: 4 calls, 2 of each).
 
 ### `POST /create-ui-asset` + `/ui-assets/{id}/split` + `/ui-assets/states` (T06 panels and button)
 - `create-ui-asset` body: `description`, `image_size` (192–688 per side), `pieces` (shape template in editor coords, longer side 0–512: `rounded_rect {id,kind,label,x,y,w,h,radius}`, `circle`, `polygon`), or `elements` (named scaffolds: button, panel, window…), `target_palette`, `style_image`, `seed`, `name`. Answers `{ background_job_id, ui_asset_id }`; after the job, `GET /ui-assets/{id}` has `image_url` (a public CDN PNG), `elements`, `states`, `split_preview`.
@@ -85,6 +85,11 @@ Written in T04 (2026-11-23) from `https://api.pixellab.ai/v2/llms.txt`, selected
 | `POST /characters/animations` (v3) | battle animations per direction (T17) | ceil(w·h·frames/65536) per direction, so 64 px × 8 frames ≈ 1 |
 | `POST /create-character-pro` | Pro character redraw | 10 / 15 / 25 by art size |
 | `/vfx` | battle VFX | look up before use |
+
+## Audio (T14) — needs tier 2
+- `POST /sound-effects` `{ prompt, seconds 0.5–30, name? }` → `202 { background_job_id, quoted_generations, sound_effect: { id } }`. Poll `GET /sound-effects/{id}` until `status` is `completed` (WAV at `audio_url`, no auth, plus `duration_ms`) or `failed`. Documented cost: 0.614 generations per second, rounded up (≤1.6 s → 1, 3.2 s → 2, 10 s → 7, 30 s → 19).
+- `POST /music` `{ style, instrumental, length_s?, bpm?, exclude? }` → two takes, 10 generations. `POST /music/{id}/loop` → two looping takes with `loop_start_s` / `loop_end_s`, 4 generations.
+- **Measured (2026-11-23)**: on our Tier 1 plan, `POST /sound-effects` answers `403 {"detail":"Music and sound effects need a tier 2 subscription or higher"}`, although its docs say tier 1. Nothing is charged. So M1 audio is synthesised in code (GDD §20, §29). `artgen sfx` / `sfx-sprite` (spec `tools/artgen/specs/t14-sfx.json`) are ready for when the plan allows it.
 
 ## Budget implications (found in T04)
 - The GDD §19 budget assumed about 1 generation per image. The Pro image endpoints cost **10 per call** (16 candidates of one subject). So:

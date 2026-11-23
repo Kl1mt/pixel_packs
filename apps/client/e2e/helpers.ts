@@ -30,7 +30,9 @@ let n = 0;
 /** A fresh, unique player identity. */
 export function newIdentity() {
   n += 1;
-  const tag = `${Date.now().toString(36)}${String(n)}`;
+  // Hex only: the username blocklist reads digits as letters (5→s, 4→a…) and matches
+  // substrings, so a base-36 tag could spell a blocked word; a–f plus those digits cannot.
+  const tag = `${Date.now().toString(16)}${String(n)}`;
   return {
     email: `e2e${tag}@example.com`,
     username: `e2e_${tag}`.slice(0, 20),
@@ -49,4 +51,21 @@ export async function loggedIn(page: Page) {
   });
   expect(res.status()).toBe(201);
   return who;
+}
+
+/** POSTs JSON with the CSRF token, as the page's logged-in player. */
+export async function apiPost(page: Page, path: string, data?: object) {
+  const csrf = await page.request.get('/api/auth/csrf');
+  const { csrfToken } = (await csrf.json()) as { csrfToken: string };
+  const res = await page.request.post(path, {
+    ...(data ? { data } : {}),
+    headers: { 'x-csrf-token': csrfToken },
+  });
+  expect(res.ok()).toBe(true);
+  return res;
+}
+
+/** Skips the whole onboarding (T16), as "Skip the welcome" does: Home opens straight away. */
+export async function skipOnboarding(page: Page) {
+  await apiPost(page, '/api/onboarding/advance', { stage: 'done' });
 }

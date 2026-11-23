@@ -15,6 +15,7 @@ import { composeT06, T06_PACK_NUMBERS } from './compose/t06.js';
 import { buildStyleTile } from './styleTile/build.js';
 import { writeArtLayout } from './artLayout/artLayout.js';
 import { characterBoardCommand, characterCommand, characterLaneCommand } from './character/cli.js';
+import { sfxCommand, sfxSpriteCommand, sfxSynthCommand } from './sfx/cli.js';
 
 const USAGE = `artgen <command>
   balance                                  show remaining PixelLab generations
@@ -31,6 +32,11 @@ const USAGE = `artgen <command>
   compose-t06                              build T06's final frames/packs/UI/icons/font from candidates
   style-tile                               write the static style tile page (apps/client/public/style-tile.html)
   art-layout                               write per-card art bottom-alignment (shared CARD_ART_DROP)
+  sfx <spec.json> --budget <n> [--only a,b] [--retake] [--dry-run]
+                                           make sound effects (missing clips, or one more take each)
+  sfx-sprite <spec.json>                   build the client SFX sprite from the picked takes (ffmpeg)
+  sfx-synth <spec.json>                    render the spec's clips with the code synth (free) and
+                                           build the sprite + docs/audio/sfx previews (ffmpeg)
   ui-split <entry>                         split a create-ui-asset template into elements (free)
   character <spec.json> --budget <n> [--only a,b] [--dry-run]
                                            create characters + animations (T17, /create-character-v3)
@@ -53,6 +59,7 @@ async function main(argv: string[]): Promise<void> {
       budget: { type: 'string' },
       port: { type: 'string', default: '5180' },
       recentre: { type: 'boolean', default: false },
+      retake: { type: 'boolean', default: false },
     },
   });
   const [command, ...rest] = positionals;
@@ -181,6 +188,35 @@ async function main(argv: string[]): Promise<void> {
     }
     case 'character-board': {
       await characterBoardCommand(rest, log);
+      return;
+    }
+    case 'sfx': {
+      const [specPath] = rest;
+      const budget = Number(values.budget);
+      if (!specPath || !Number.isInteger(budget) || budget < 0) throw new Error(USAGE);
+      await sfxCommand(
+        client,
+        specPath,
+        {
+          budget,
+          only: values.only ? values.only.split(',') : [],
+          retake: values.retake,
+          dryRun: values['dry-run'],
+        },
+        log,
+      );
+      return;
+    }
+    case 'sfx-sprite': {
+      const [specPath] = rest;
+      if (!specPath) throw new Error(USAGE);
+      await sfxSpriteCommand(specPath, log);
+      return;
+    }
+    case 'sfx-synth': {
+      const [specPath] = rest;
+      if (!specPath) throw new Error(USAGE);
+      await sfxSynthCommand(specPath, log);
       return;
     }
     case 'spend': {

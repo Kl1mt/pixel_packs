@@ -74,7 +74,8 @@
 }
 
 .card__backdrop {
-  background: linear-gradient(var(--bd-sky) 78%, var(--bd-ground) 0);
+  /* Sky over ground, split on a whole art pixel (CARD_SKY_ROWS) so the Pixi card matches. */
+  background: linear-gradient(var(--bd-sky) calc(50px * var(--card)), var(--bd-ground) 0);
 }
 
 .card__art {
@@ -113,4 +114,42 @@
   text-align: center;
   display: grid;
   place-content: center;
+}
+
+/* Live Pixi cards (T11) and the full card text beside them (moved from debug.css in T15). */
+.card-stage canvas {
+  display: block;
+}
+
+.card-stage--static {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(8px * var(--card));
+}
+
+/* Full card text beside a card (inspect): body size, never the compact face size. */
+.card-details {
+  max-width: 26rem;
+  font-size: var(--body);
+}
+
+.card-details__name {
+  margin: 0 0 var(--sp-2);
+  font: var(--heading) / 1 var(--font-heading);
+}
+
+.card-details__meta,
+.card-details__stats {
+  margin: 0 0 var(--sp-2);
+}
+
+.card-details__rules {
+  margin: var(--sp-4) 0;
+  padding-left: var(--sp-8);
+}
+
+.card-details__flavour {
+  margin: 0;
+  font-style: italic;
+  font-size: var(--small);
 }

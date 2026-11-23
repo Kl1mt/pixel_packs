@@ -62,7 +62,8 @@ All routes except the odds need a session (`401 unauthorized`). Schemas: `packag
 | `POST /api/packs/open` | `{ packTypeId, idempotencyKey }` | `201 { opening, replayed: false }`; a repeated key → `200 { opening, replayed: true }` | `409 noPacks` / `idempotencyConflict`, `400 packDisabled` |
 | `GET /api/packs/openings/pending` | — | `200 { opening \| null }` (latest unrevealed) | — |
 | `POST /api/packs/openings/:id/revealed` | — | `204` (idempotent) | `404 notFound` |
-| `GET /api/packs/history` | `?limit=1–50&cursor=` | `200 { openings, nextCursor }`, revealed openings, newest first | `400 badRequest` (cursor) |
+| `GET /api/packs/history` | `?limit=1–50&cursor=&packTypeId=&minRarity=&variant=` (filters T15) | `200 { openings, nextCursor }`, revealed openings, newest first; `minRarity` keeps openings with a card of that rarity or better, `variant` those with a copy of that variant | `400 badRequest` (cursor, bad filter) |
+| `GET /api/cards` (T15) | — | `200 { copies }`: every live copy, oldest first; each is `{ userCardId, cardId, variant, stars, edition, mintNumber, source, acquiredAt, tradeLockUntil, accountBound }` (`CollectionResponseSchema`, `api/collection.ts`) | — |
 | `POST /api/cards/dust` | `{ userCardIds: uuid[] (1–200) }` | `200 { dusted, dust, wallet }`, all or nothing | `404 notFound`, `400 cannotDust` (account-bound) |
 | `GET /api/cards/dust-extras` | — | `200 { copies, dust }`: what "Dust extras" would dust | — |
 | `POST /api/cards/dust-extras` | — | `200 { dusted, dust, wallet }` | — |
@@ -71,7 +72,19 @@ All routes except the odds need a session (`401 unauthorized`). Schemas: `packag
 - `EconomyState` = `{ wallet { gold, dust, gems }, packs [{ packTypeId, count }], freePack { stored, max, nextAt }, calendar { day 1–7, claimedToday, nextResetAt, rewards[7] }, pity [{ group, packsSinceLegendaryPlus, packsSinceMythic, legendaryHardPity, mythicSoftPityStart, mythicHardPity }], pendingOpeningId }`.
 - `opening` = `{ id, packTypeId, scripted, pityTrigger, cards[5] (slot order), revealOrder [slots], createdAt, revealedAt }`; each card is `{ slot, featured, cardId, realm, rarity, variant, userCardId, mintNumber, edition, isNew }`. The result is stored before the response, so the client animates a finished roll; on load, `pendingOpeningId` / `openings/pending` drives "Resume reveal", and the client posts `revealed` when the reveal ends.
 - A new account gets a starter satchel (one Mossgrove and one Starhollow pack) and one free pack ready. Its first two realm-pack openings are the scripted onboarding packs (`scripted: true`, no pity).
-- Every change writes `ledger` rows (`reason`: `starterSatchel`, `freePack`, `calendar`, `buyPack`, `openPack`, `pull`, `dust`, `dustExtras`, `admin:grant`).
+- Every change writes `ledger` rows (`reason`: `starterSatchel`, `starterCards`, `freePack`, `calendar`, `buyPack`, `openPack`, `pull`, `dust`, `dustExtras`, `admin:grant`).
+- `calendar.day`: before today's claim, the day the claim will pay; after it (`claimedToday`), the day just paid.
+
+### Onboarding (T16)
+Both need a session (`401`). Schemas: `packages/shared/src/api/onboarding.ts`. The stage lives on `users.onboarding_stage`; `scriptedPacksOpened` is `users.onboarding_step` (T08).
+
+| Method & path | Body | Success | Errors |
+|---|---|---|---|
+| `GET /api/onboarding` | — | `200 { stage, scriptedPacksOpened, starterCards }` | — |
+| `POST /api/onboarding/advance` | `{ stage }` | `200` the same shape; moves forward only (an earlier stage is a no-op) | `400 badRequest` |
+
+- `stage` is `courier → packs → tour → starter → done` (GDD §17). The client shows `/welcome` until `done`.
+- The first time a player reaches `starter` or `done` (skipping counts), the five account-bound starter cards (`STARTER_CARDS`, `rules/onboarding.ts`) are granted in one transaction: plain, ★1, no stamp, `source: 'starter'`, `accountBound: true`, ledger reason `starterCards`. `starterCards` lists them (in caravan order) from then on, else `null`. They are granted once per account, even after `pnpm admin reset-onboarding` (which sets the stage back to `courier` and the scripted packs to 0).
 
 ### Admin CLI (`tools/admin`)
 ```sh
@@ -81,6 +94,14 @@ pnpm admin reset-onboarding <user>
 pnpm admin odds-override <user> <packs> [rarity] [variant]   # dev only, packs 0 clears
 ```
 It uses `DATABASE_URL`, or else the server's PGlite directory (`PGLITE_DIR`, default `apps/server/.data/pglite`), which only one process can open: stop `pnpm dev` first. Odds overrides act like a scripted pack (no pity) and are ignored by a server with `NODE_ENV=production`.
+
+### Dev routes (T12)
+Only on a server with dev overrides allowed (`NODE_ENV` ≠ `production`); production has no `/api/dev`, so they answer `404`. Both act on the logged-in player (`401` otherwise). Schemas: `packages/shared/src/api/dev.ts`. The `/debug` page's "Dev forcing" panel uses them.
+
+| Method & path | Body | Success |
+|---|---|---|
+| `POST /api/dev/odds-override` | `{ packs (0–50), rarity?, variant? }` | `204`; forces the featured slot of the next `packs` non-scripted packs, `packs: 0` clears |
+| `POST /api/dev/grant` | `{ gold?, gems?, packs? { packTypeId, count } }` (at least one) | `200 EconomyState` |
 
 ### curl (after logging in as above)
 ```sh

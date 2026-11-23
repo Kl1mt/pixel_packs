@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 /**
- * Player settings (GDD §18), kept in localStorage. Audio volumes are stored now
- * and used by T14.
+ * Player settings (GDD §18, §20), kept in localStorage. Volumes and mute drive
+ * the audio manager (`src/audio/`).
  */
 const Volume = z.number().min(0).max(1);
 
@@ -12,6 +12,8 @@ export const SettingsSchema = z.object({
   /** Removes shake and flashes and softens the Glitch flicker (photosensitivity). */
   reduceEffects: z.boolean(),
   volume: z.object({ master: Volume, music: Volume, sfx: Volume }),
+  /** Silences everything without losing the volume levels. */
+  muted: z.boolean(),
 });
 export type Settings = z.infer<typeof SettingsSchema>;
 export type MotionPreference = Settings['motion'];
@@ -20,6 +22,7 @@ export const DEFAULT_SETTINGS: Settings = {
   motion: 'system',
   reduceEffects: false,
   volume: { master: 0.8, music: 0.6, sfx: 0.8 },
+  muted: false,
 };
 
 export const SETTINGS_KEY = 'pixel-packs:settings:v1';
@@ -53,6 +56,7 @@ export function parseSettings(raw: string | null): Settings {
       music: pick(Volume, vol.music, d.volume.music),
       sfx: pick(Volume, vol.sfx, d.volume.sfx),
     },
+    muted: pick(z.boolean(), obj.muted, d.muted),
   };
 }
 

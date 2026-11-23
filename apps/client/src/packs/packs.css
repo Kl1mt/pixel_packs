@@ -1,0 +1,192 @@
+/* Shop counter (T12, GDD §7, §16). Lengths in art px (--art-px = 1 art px at UI_SCALE). */
+.shop {
+  margin-bottom: var(--sp-8);
+}
+
+.shop-shelf {
+  list-style: none;
+  margin: 0 0 var(--sp-4);
+  padding: 0 var(--sp-4) var(--sp-2);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--sp-8) var(--sp-12);
+  /* The plank the packs stand on. */
+  border-bottom: calc(4 * var(--art-px)) solid var(--bark);
+  box-shadow: 0 var(--art-px) 0 var(--barkDeep);
+}
+
+.shop-pack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.shop-pack__art {
+  position: relative;
+  width: 192px;
+  height: 192px;
+}
+
+.shop-pack__art img {
+  display: block;
+}
+
+/* A hand-stuck count sticker on the pack. */
+.shop-pack__count {
+  position: absolute;
+  left: calc(6 * var(--art-px));
+  bottom: calc(10 * var(--art-px));
+  padding: var(--sp-1) var(--sp-2);
+  background: var(--berry);
+  color: var(--glow);
+  font: 32px / 1 var(--font-heading);
+  box-shadow: var(--shadow-sm);
+  transform: rotate(-4deg);
+}
+
+.shop-pack__odds {
+  position: absolute;
+  top: calc(4 * var(--art-px));
+  right: calc(6 * var(--art-px));
+  width: calc(14 * var(--art-px));
+  height: calc(14 * var(--art-px));
+  padding: 0;
+  border: var(--art-px) solid var(--ink);
+  background: var(--cream);
+  color: var(--ink);
+  font: 16px / 1 var(--font-heading);
+  box-shadow: var(--shadow-sm);
+}
+
+.shop-pack__odds:hover {
+  background: var(--glow);
+}
+
+.shop-pack__odds:active {
+  transform: translateY(var(--art-px));
+  box-shadow: none;
+}
+
+/* A parchment price tag on a string. */
+.shop-pack__tag {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-1) var(--sp-4);
+  background: var(--cream);
+  color: var(--ink);
+  font-size: var(--small);
+  box-shadow: var(--shadow-sm);
+}
+
+.shop-pack__buttons {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.shop-side {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+  align-items: flex-start;
+}
+
+.shop-free,
+.shop-pity {
+  flex: 1 1 20rem;
+}
+
+.shop-free {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.shop-free p,
+.shop-resume p,
+.pity__label {
+  margin: 0;
+}
+
+.shop-resume {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-8);
+}
+
+.pity {
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.pity__bar {
+  display: flex;
+  gap: var(--art-px);
+  width: max-content;
+  padding: var(--art-px);
+  background: var(--ink);
+}
+
+.pity__seg {
+  width: calc(4 * var(--art-px));
+  height: calc(6 * var(--art-px));
+  background: var(--bark);
+}
+
+.pity__seg.is-lit {
+  background: var(--amber);
+  box-shadow: inset 0 var(--art-px) 0 var(--sunflower);
+}
+
+/* The odds "?" dialog. */
+.odds {
+  max-width: min(36rem, calc(100vw - 2rem));
+  color: var(--ink);
+}
+
+.odds::backdrop {
+  background: rgb(30 26 38 / 70%);
+}
+
+.odds h2 {
+  margin-bottom: var(--sp-6);
+}
+
+.odds__table {
+  border-collapse: collapse;
+  margin-bottom: var(--sp-6);
+  font-size: var(--small);
+}
+
+.odds__table th,
+.odds__table td {
+  padding: var(--sp-1) var(--sp-4);
+  text-align: right;
+  border-bottom: var(--art-px) solid var(--mist);
+}
+
+.odds__table th:first-child {
+  text-align: left;
+}
+
+.odds__line {
+  font-size: var(--small);
+}
+
+.odds__close {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+/* Digits on the cream tag are ink, not the wood-bar glow. */
+.shop-pack__tag .currency {
+  color: var(--ink);
+}

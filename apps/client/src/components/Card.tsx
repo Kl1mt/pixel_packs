@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
-import { CARD_FACE, type Card as CatalogCard, type Rect } from '@pixel-packs/shared';
-import { cardFaceModel, type CardFaceOverrides } from './cardFace.js';
+import { CARD_FACE, CARD_SCALE, type Card as CatalogCard, type Rect } from '@pixel-packs/shared';
+import { cardFaceModel, faceText, type CardFaceOverrides } from './cardFace.js';
 
 /** Absolute position of a `CARD_FACE` rect, in art px times `--card`. */
 const at = (r: Rect): CSSProperties => ({
@@ -13,22 +13,34 @@ const at = (r: Rect): CSSProperties => ({
 export interface CardProps extends CardFaceOverrides {
   card: CatalogCard;
   className?: string;
+  /** Integer screen px per art px; below `CARD_SCALE` the face drops its rules text. */
+  scale?: number;
 }
 
 /**
  * DOM card face at `CARD_SCALE` (GDD §4): realm backdrop, bottom-aligned art,
  * rarity frame (material + pips), name, compact rules text and chunky ATK/HP
- * digits. Variant shaders come in T11.
+ * digits, plus star / edition / mint badges. This is the static card: the
+ * animated variant shaders live in the Pixi renderer (`src/render/`), which
+ * draws the same model.
  */
-export function Card({ card, className, ...overrides }: CardProps) {
+export function Card({ card, className, scale = CARD_SCALE, ...overrides }: CardProps) {
   const m = cardFaceModel(card, overrides);
+  const text = faceText(m, scale);
   const { w, h } = CARD_FACE.size;
   return (
     <figure
       className={['card', className].filter(Boolean).join(' ')}
       aria-label={m.label}
       data-rarity={m.rarity}
-      style={{ '--bd-sky': m.backdrop[0], '--bd-ground': m.backdrop[1] } as CSSProperties}
+      data-variant={m.variant}
+      style={
+        {
+          '--bd-sky': m.backdrop[0],
+          '--bd-ground': m.backdrop[1],
+          ...(scale === CARD_SCALE ? {} : { '--card': scale }),
+        } as CSSProperties
+      }
     >
       <div className="card__backdrop" style={at(CARD_FACE.art)} />
       <div className="card__art" style={at(CARD_FACE.art)}>
@@ -40,18 +52,22 @@ export function Card({ card, className, ...overrides }: CardProps) {
         />
       </div>
       <img className="card__frame" src={m.frame} alt="" draggable={false} />
-      <div
-        className="card__name"
-        style={{ ...at(CARD_FACE.name), fontSize: `${String(m.nameSize)}px` }}
-        aria-hidden="true"
-      >
-        {m.name}
-      </div>
-      <div className="card__rules" style={at(CARD_FACE.rules)} aria-hidden="true">
-        {m.rules.map((line) => (
-          <span key={line}>{line}</span>
-        ))}
-      </div>
+      {text.name && (
+        <div
+          className="card__name"
+          style={{ ...at(CARD_FACE.name), fontSize: `${String(text.nameSize)}px` }}
+          aria-hidden="true"
+        >
+          {m.name}
+        </div>
+      )}
+      {text.rules && (
+        <div className="card__rules" style={at(CARD_FACE.rules)} aria-hidden="true">
+          {m.rules.map((line) => (
+            <span key={line}>{line}</span>
+          ))}
+        </div>
+      )}
       <svg
         className="card__overlay"
         viewBox={`0 0 ${String(w)} ${String(h)}`}
@@ -60,6 +76,9 @@ export function Card({ card, className, ...overrides }: CardProps) {
       >
         {m.statPixels.map((p) => (
           <rect key={`${String(p.x)},${String(p.y)}`} x={p.x} y={p.y} width={1} height={1} />
+        ))}
+        {m.badgePixels.map((p, i) => (
+          <rect key={`b${String(i)}`} x={p.x} y={p.y} width={1} height={1} fill={p.colour} />
         ))}
       </svg>
     </figure>

@@ -23,6 +23,7 @@ export async function createTestApp(
     rng?: Rng;
     databaseUrl?: string;
     discord?: DiscordClient;
+    allowDevOverrides?: boolean;
   } = {},
 ): Promise<TestApp> {
   const db = createDb({ pgliteDir: 'memory://', databaseUrl: opts.databaseUrl });
@@ -36,7 +37,7 @@ export async function createTestApp(
     appOrigin: 'http://app.test',
     cookieSecure: false,
     rateLimit: opts.rateLimit ?? false,
-    allowDevOverrides: true,
+    allowDevOverrides: opts.allowDevOverrides ?? true,
     ...(opts.now ? { now: opts.now } : {}),
     ...(opts.rng ? { rng: opts.rng } : {}),
     discord: opts.discord ?? null,
@@ -102,7 +103,9 @@ let playerCounter = 0;
 /** Registers a fresh player and returns the logged-in client and the user id. */
 export async function newPlayer(app: FastifyInstance): Promise<{ c: Client; userId: string }> {
   playerCounter += 1;
-  const tag = `${Date.now().toString(36)}${playerCounter}`;
+  // Hex only: the username blocklist reads digits as letters (5→s, 4→a…) and matches
+  // substrings, so a base-36 tag could spell a blocked word; a–f plus those digits cannot.
+  const tag = `${Date.now().toString(16)}${playerCounter}`;
   const c = new Client(app);
   await c.csrf();
   const res = await c.post('/api/auth/register', {

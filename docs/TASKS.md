@@ -19,14 +19,16 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T08 | Database & email auth (API) | T02 | done |
 | T09 | Auth screens + Discord login | T07, T08 | todo |
 | T10 | Economy & pack API | T03, T08 | done |
-| T11 | Card renderer & variant shaders | T05, T07 | todo |
-| T12 | Pack opening I: core flow + Mossgrove theme | T10, T11 | todo |
+| T11 | Card renderer & variant shaders | T05, T07 | done |
+| T12 | Pack opening I: core flow + Mossgrove theme | T10, T11 | done |
 | T13 | Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers | T12 | todo |
-| T14 | Audio | T12 | todo |
+| T14 | Audio | T12 | done |
 | T15 | Binder, card inspect & pull history | T10, T11 | todo |
-| T16 | Home & onboarding | T09, T12, T15 | todo |
+| T16 | Home & onboarding | T09, T12, T15 | done |
 | T17 | Character & idle-animation trial | T05 | todo |
 | T18 | M1 QA & polish | all M1 | todo |
+| T20 | Realm crest in the card crest socket | T11 | todo |
+| T21 | Mythic pack on the shelf + staged opening | T12, T13 | todo |
 
 ---
 
@@ -327,7 +329,7 @@ Docs: §5, §6 (mint numbers), §7, §8, §9 (dust), §22
   - Design details settled here are in GDD §29 (T10 rows).
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (141 tests) pass; curl flow (register → economy → open scripted pack → admin grant + glitch override → buy → open → calendar → free pack → history → odds) against `pnpm start` on Postgres.
 
-### T11 — Card renderer & variant shaders · L
+### T11 — Card renderer & variant shaders · L · done
 Docs: §4, §6, §18
 - **PixiJS v8** in the client, with a Pixi card renderer that matches the DOM card.
 - **Variant filters**: Foil, Prismatic, Void, Glitch, each with a reduced-effects version.
@@ -335,8 +337,31 @@ Docs: §4, §6, §18
 - **`/debug` page**: any card × variant × stars, with an FPS meter.
 - The same renderer is used by the binder, inspect and reveal.
 - **Done when**: every variant can be previewed at 60 fps and screenshots are in the handoff notes.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.** Badges and glyphs are hand-pixelled in code.
+  - **Screenshots** (`pnpm --filter @pixel-packs/client e2e` rewrites them; the clock is frozen at 1 s, so they're stable): `docs/cards/variant-{normal,foil,prismatic,void,glitch}.png` (3×; ★2 except normal), `variants.png` and `variants-reduced.png` (all five, full and reduced), `badges.png` (STA-003 Void ★3, 1st Edition S1, #12), `card-lab.png` (the `/debug` page).
+  - **Renderer** (`apps/client/src/render/`, Pixi 8.23, loaded lazily — only the `/debug` chunk pulls Pixi in; the main bundle has none):
+    - `CardView` (`cardView.ts`): one card as a Pixi `Container`. Art and frame are composited on a 96×128 canvas, shaded by one quad `Mesh` into a 96×128 `RenderTexture` (1 texel = 1 art px), and shown at `scale` with nearest sampling. Stat digits and badges are a `Graphics` layer above the shader. Name and rules are Pixi `Text` at screen resolution (same sizes and boxes as the DOM card). `update(time, renderer)` re-shades only when something changed and returns whether a redraw is needed.
+    - `createStage()` (`stage.ts`): a WebGL `Application` with a grid of `CardView`s, rendered **on demand** (own rAF loop; a stage of still cards costs nothing), pointer → foil light per card, `frozenAt` for screenshots, `data-ready` on the host after the first frame.
+    - `<CardStage specs scale columns gap reduced frozenAt>` (`CardStage.tsx`): the React wrapper. `reduced` defaults to `useReducedCardEffects()` (= reduced motion **or** "reduce effects"). If WebGL is missing it shows DOM `Card`s instead. The wrapper is `role="img"` with every card's label.
+    - **For T12/T15**: reveal scenes can add `CardView.root`s to their own Pixi stage (call `update()` each frame); inspect uses `<CardStage>` + `<CardDetails>`; the binder grid should use DOM `Card`s and mount a `CardStage` only for hovered / on-screen variant copies (§18). Measured in headless Chromium (software GL): one live card of any variant at 60 fps; 6 live cards ≈ 30 fps and 24 ≈ 10 fps there (24 reduced ≈ 48), so don't make a whole binder page live.
+  - **Shader** (`cardShader.ts`, one GLSL program, `uVariant` = `variantRank`): written to run on WebGL1 and WebGL2 (headless Chromium only has WebGL1; the palette is a `uPalette[32]` uniform, not a const array). It works on whole art pixels, paints the realm backdrop itself, and **snaps every pixel it changes to the master palette** (§16).
+    - Foil: a stepped diagonal light band (core, soft edge, trailing glint). It sweeps on its own every 4.5 s and eases under the pointer when hovered (`motion.ts`).
+    - Prismatic: a moving rainbow on the frame and a light one on the backdrop (the critter keeps its colours), plus 8×8-cell twinkling plus-sparkles.
+    - Void: a starfield replaces the backdrop, the outer edge ripples purple (1 px warp on wave crests), the window rim pulses, and 10 motes spiral inward.
+    - Glitch: 1–2 px RGB split, scanlines, row jitter in bursts, a rolling scan bar, and every ~4.5 s a 160 ms corrupt frame (8×8 blocks swapped, channels rotated).
+    - Prismatic and Glitch leave the name/rules parchment (`TEXT_AREA`) alone, so the text stays readable.
+    - Reduced versions: no clock (everything still); foil rests as a still sheen and only follows the pointer; prismatic sparkles fixed; void without motes or ripple; glitch a fixed 1 px split + scanlines, with no jitter or corrupt frames. E2E checks that reduced cards don't change over time.
+  - **Badges** (`components/cardBadges.ts`; glyphs `packages/shared/src/config/badgeGlyphs.ts`): pixel lists in palette colours, drawn by **both** the DOM card (SVG overlay) and the Pixi card. In the art window's top corners: ★2/★3 amber stars top-left (★1 shows none), the First-Edition plate "1ST S‹n›" (berry) below them, and the mint plate "#‹n›" top-right (Void: night/lavender, Glitch: ink/seafoam).
+  - **Stars**: `starredCard()` / `starScaled()` (`packages/shared/src/rules/stars.ts`, +30 % / +60 %, rounded half up) scale ATK, HP and ability values; the face and the rules text show the ★ numbers. Every ★3 catalog stat still fits its badge (tested).
+  - **`cardFaceModel(card, { variant, stars, edition, mintNumber, … })`** now carries the copy look; the label adds e.g. "Void #7, 3 stars, First Edition, Season 1". The DOM backdrop split is now exactly 50 rows (`CARD_SKY_ROWS`, was 78 %); the style-guide screenshot is pixel-identical.
+  - **`<CardDetails>`** (`components/CardDetails.tsx`): the full text at body size (18 px) — name, rarity · realm · id, copy traits, ★ stats, every ability line, flavour. It's the ≥ 16 px inspect text promised in T06.
+  - **`/debug` "Card lab"**: public like `/styleguide`, not in the nav, lazy route. Every option is in the URL: `card, variant, stars, edition (0 = none), mint, fx (settings|full|reduced), stress (0/6/12/24 live cards), all (overview row), freeze (seconds, -1 = live)`. It shows the live Pixi card, the static DOM card, `CardDetails`, all five variants, and an FPS meter. T12 adds its dev forcing here.
+  - **E2E** `e2e/cards.spec.ts`: screenshots, no console errors, **Pixi = DOM pixel for pixel outside the text boxes** (3 cards, ★3 + edition), reduced = still and full = animated, and ≥ 55 fps per variant locally (≥ 25 on CI's software GL; measured 59.8–60.6).
+  - Design decisions are in GDD §29 (T11 rows). New task T20: the realm crest socket on the frame is still empty.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (290 tests), client `build` and `e2e` (10 tests) pass.
 
-### T12 — Pack opening I: core flow + Mossgrove theme · L
+### T12 — Pack opening I: core flow + Mossgrove theme · L · done
 Docs: §5, §7, §16
 - **Pack shelf screen**: owned packs, buying, the odds "?" panel and the pity meter.
 - **Opening scene framework**: drag-to-tear with a click fallback, and the Mossgrove theme (vines unwrap, petals fall).
@@ -344,8 +369,22 @@ Docs: §5, §7, §16
 - **After the reveal**: a results summary (NEW badges, dupes, "Dust extras") and "Resume reveal".
 - **Dev forcing** of results via `/debug`.
 - **Done when**: the full loop works end-to-end against the API, with Playwright screenshots of each stage.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.** Vines, petals, light and the tear are drawn in code with palette colours.
+  - **Screenshots** (`pnpm --filter @pixel-packs/client e2e` rewrites them; petals are random, so they differ run to run): `docs/opening/{shelf,odds,tear,tear-half,tear-burst,reveal-stack,reveal-flip,reveal-featured,summary,resume,reveal-epic-back,reveal-void,debug-forcing}.png`, and a 12 s capture `docs/opening/opening-flow.gif`. `docs/cards/card-lab.png` now shows the forcing panel.
+  - **Economy store** (`apps/client/src/economy/`): `api.ts` (typed, Zod-checked calls for every T10 endpoint + dev routes; `newIdempotencyKey()`), `store.ts` (`createEconomyStore`: `idle | loading | ready | error`, `refresh` shares one request, `set`, `setWallet`, `clear`), `useEconomy.ts` (app-wide `economyStore`). The top bar (`useWallet`) reads the same store, so buys/claims/dusting update the balances at once; `main.tsx` clears it when the logged-in user changes.
+  - **Packs page** (`pages/PacksPage.tsx`, parts in `src/packs/`): `ShopShelf` (owned count sticker, "?" odds, price tag, Open, Buy), `OddsDialog` (native `<dialog>`, numbers from `GET /api/packs/odds`), `PityMeter` (realm group, `pityProgress`), free-pack claim, "Resume reveal" banner, errors as `Notice`. An action keeps its idempotency key until it succeeds or the server says a definite 4xx, so retries after network errors are safe. The old static `PackShelf` is still used by Home and the style guide.
+  - **Opening scene** (`src/opening/`, lazy chunk with Pixi): `OpeningScene` (overlay dialog, `revealReducer` phases `tear → reveal → summary`, posts `/revealed` on reaching the results, then refreshes the economy), `TearStage` + `tearScene.ts` (canvas engine: pack sprite, seam tear `SeamTear`, theme wrap, light, petals `petals.ts`, Epic+ shake/leak), `themes.ts` (`PackTheme`: seam, `wrap()` pixel list, vine windows, petal colours, ground; `MOSSGROVE_THEME`, `PLAIN_THEME` for Starhollow until T13 — **T13 adds `STARHOLLOW_THEME` here and the Legendary/Mythic moments**), `RevealStage` (stack with rarity rings, spotlight with `OpenedFace` = Pixi `CardStage` for special variants / DOM `Card` otherwise, tray chips), `SummaryStage` (New/Extra, "Dust extras" with preview + confirm, Open another, Back to the shelf). Pure helpers with tests: `reveal.ts`, `packs/format.ts`.
+  - `.card-stage` CSS lives in `components/components.css` (moved there by T15), so the scene can use it.
+  - **Dev forcing**: `apps/server/src/dev/routes.ts` (`POST /api/dev/odds-override`, `POST /api/dev/grant`, registered only when `allowDevOverrides`), schemas in `packages/shared/src/api/dev.ts`, documented in `docs/api.md`. `/debug` has a "Dev forcing" panel (`pages/DevForcing.tsx`): featured rarity/variant for the next 1/3/10 packs, +1000 gold, +5 packs per realm. Remember the first two realm packs of an account are scripted and come before any override.
+  - **For T13**: the Legendary/Mythic reveal is only the gold ring + "Featured" sticker and a gold leak at the tear; the unique sequences (§5) and variant stingers go in `RevealStage` / a new stage between flip and spotlight. `packMood()` and `backGlow()` are the hooks.
+  - **For T14**: sound hooks are the flip (`dispatch({type:'flip'})`), the burst (`TearScene` `onTorn`), and Uncommon's "soft chime" on flip.
+  - **For T16**: Home can link to `/packs`; "Resume reveal" lives on the Packs page only.
+  - Not done here (new task T21): the Mythic pack has no shelf spot, art or staged opening yet (`packArt('mythic')` falls back to the Starhollow sprite).
+  - Design decisions are in GDD §29 (T12 rows).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (303 tests), client `build` (scene is its own chunk) and client `e2e` (12 tests, 2 new in `e2e/opening.spec.ts`: drag tear → flips → Reveal all → results → revealed; Starhollow click fallback → reload → Resume reveal → Skip; free pack, buying, `/debug` forcing → Epic Void featured with live shader).
 
-### T13 — Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers · L · budget ≤ 20 (VFX)
+### T13 — Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers · L · budget ≤ 20 (VFX) · done
 Docs: §5, §6, §7
 - **Starhollow theme**: the moon clasp turns, stardust swirls.
 - **Rarity moments**:
@@ -355,6 +394,18 @@ Docs: §5, §6, §7
 - **Variant stingers**: Foil glint, Prismatic rainbow wash, Void implosion, Glitch tear + "ERR_LUCK_OVERFLOW".
 - Reduced-effects versions of all of the above.
 - **Done when**: every rarity × variant can be forced and has been reviewed with screenshots.
+- **Handoff notes (2026-11-23)**:
+  - **PixelLab: 4 generations** (balance 764 → 760), all `create-image-pixflux`, master palette, first candidates approved (spec `tools/artgen/specs/t13.json`, manifest `t13/*`): `public/assets/moments/crest-{mossgrove,starhollow}.png` (32×32) and `vignette-{umbra,stump}.png` (64×64). pixflux costs 1 at 64×64 too. The moon clasp, rays, cutscene skies, shockwave and stingers are drawn in code. T20 can reuse the crests for the frame socket.
+  - **Screenshots** (`e2e/moments.spec.ts` rewrites the PNGs; frames are held with `?at=`, so they're stable): `docs/opening/moments/` — `legendary-{1-rays,2-descend,3-crest}`, `mythic-{1-takeover,2-freeze,3-starhollow-eclipse,3-mossgrove-bloom,4-shockwave,5-crest}`, `stinger-{foil,prismatic,void,glitch}`, `reduced-{legendary,mythic,glitch}`, `starhollow-tear{,-clasp,-burst}`. GIFs (made by hand from live screenshot frames, not by e2e): `legendary`, `mythic-{starhollow,mossgrove}`, `stinger-{foil,prismatic,void,glitch}`, `starhollow-tear`.
+  - **Timeline** (`opening/moment.ts`, pure + tested): `momentPlan(card, reduced)` → beats with durations (Legendary `dim rays descend crest`; Mythic `takeover freeze cutscene shockwave descend crest`; then the variant's stinger), `beatAt(plan, ms)`, `cardShown()` (the card is hidden until `descend`). Common–Epic normal cards have no moment, so their flip stays quick.
+  - **Drawing**: `momentScene.ts` (engine: two canvases at `CARD_SCALE`, back under the spotlight card and front over it, a `PixelBuffer` framebuffer blitted per frame; `frozenAt` holds a frame), `momentFx.ts` (dim, god-rays, shockwave, foil glint, rainbow wash, void implosion, glitch noise), `cutscenes.ts` (sprites from PNGs trimmed to their opaque box, crest burst, the two Mythic cutscenes, code fallbacks if art is missing), `pixels.ts` (framebuffer, Bayer dither, seeded RNG, midpoint ring). No alpha anywhere: "half dark" is a dither, so every pixel is a palette colour.
+  - **React**: `RevealMoment.tsx` (canvases, "Skip animation" — also a tap anywhere —, the ERR_LUCK_OVERFLOW banner, an aria-live label) mounted by `RevealStage` for the current card; the figure gets `data-arrival waiting|arriving|landed` (CSS `descend-spin`), `.reveal` gets `data-beat` (CSS camera shake, Glitch UI corruption, all off when `data-reduced`). `RevealStage` reports `onBusy`, and `OpeningScene` pauses "Reveal all" while a moment plays; Flip / Reveal all / See results are disabled meanwhile. Styles in `opening/moment.css`.
+  - **Starhollow** (`opening/starhollow.ts`, `STARHOLLOW_THEME` in `themes.ts`): `claspPixels()` redraws the satchel's moon medallion (centre measured on the sprite: 33.5, 42) turning ¾ round with the tear, full moon once open; `Stardust` orbits the pack and flies out on the burst. `PackTheme` gained `clasp` and `stardust`. `packMood()` now returns `mythic` too (harder shake, rose-gold leak).
+  - **Moment lab** `/debug/moments` (public, lazy, `pages/MomentLab.tsx` + `momentLabParams.ts`): `scene=reveal|tear`, `rarity`, `variant`, `realm`, `fx=settings|full|reduced`, `at` (ms, -1 = live), Replay. It fakes an opening locally; real forcing is still `/debug` "Dev forcing", which covers every rarity × variant.
+  - **For T14**: sound hooks are the beats — `RevealMoment` `onBeat` (dim/takeover = swell, rays, descend = whoosh, crest = burst, freeze = tick, shockwave = boom, and one per stinger); the Starhollow clasp turn is the tear progress (`onProgress`).
+  - **Not done / for later**: the other three realms' Mythic cutscenes and crests (they fall back to the Starhollow sky and a code crest) belong with those realms; the Mythic pack's staged opening is still T21. The T12 questions (vine density, results layout) were left alone.
+  - Design decisions are in GDD §29 (T13 rows).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (343 tests after merging T16), client `build` and `e2e` (23 tests, 4 new: key frames full + reduced with a stillness check, the Starhollow tear, a live moment + skip, a forced Mythic Glitch in a real pack holding "Reveal all").
 
 ### T14 — Audio · M · budget ≤ 40
 Docs: §20
@@ -362,20 +413,63 @@ Docs: §20
 - **Audio manager**: Howler sprites, volumes, mute, and unlocking on the first interaction.
 - **Hooks**: buttons, opening scenes, rewards.
 - **Done when**: every event in §20 has a sound and the volume settings persist.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend (0 of ≤ 40).** PixelLab audio needs a tier 2 plan. `/music` says so in its docs, and `/sound-effects` answered `403` even though its docs say tier 1; that failed call was not charged and the balance stayed 764. So, as an interim pick by the main session while the user decides, **all M1 audio is written in code** (GDD §20, §29). If the plan is upgraded, `artgen sfx` + `sfx-sprite` (spec `tools/artgen/specs/t14-sfx.json`, 26 generations planned) swap in PixelLab takes without changing the client.
+  - **Listen**: SFX previews are in `docs/audio/sfx/<key>.mp3` and music in `docs/audio/music/{home-loop,opening-loop-calm,opening-loop-epic,opening-loop-golden}.mp3`. The music is rebuilt with `MUSIC_PREVIEW=1 pnpm --filter @pixel-packs/client e2e e2e/musicPreview.spec.ts` (needs ffmpeg).
+  - **SFX** (`tools/artgen/src/sfx/synth/`): an offline sfxr-style engine (`engine.ts`: square/triangle/sine/saw/noise voices, glides, steps, vibrato, lo/hi-pass, crush, crackle; seeded so renders repeat exactly) and the 27 sounds as data (`sounds.ts`): §20's 20, plus 7 for T13's moments and tears (`open.clasp`, `open.rustle`, `moment.{swell,rays,whoosh,tick,boom}`). `artgen sfx-synth tools/artgen/specs/t14-sfx.json` renders them, writes the previews and builds `apps/client/public/assets/audio/sfx.{webm,mp3}` (250 ms gaps) and the generated `apps/client/src/audio/sfxSprite.ts` (`SFX_SPRITE`, `SfxId`). Levels were balanced by measuring each clip's mean loudness, not by ear, so **the user should listen and give feedback**. To retune a sound, edit `sounds.ts` and rerun `sfx-synth`.
+  - **Music** (`apps/client/src/audio/music/`): `score.ts` (a 16-step grid, parts on layers, `loopEvents`, `validateTrack`), `tracks.ts` (home: 16 bars, 84 bpm, F major; opening: 4 bars, 100 bpm, D minor, layers `base` / `epic` sparkle arp / `golden` bells), `synth.ts` (`ChipSynth`: Web Audio lookahead scheduler, pulse/triangle/noise/bell voices, lo-pass bus, layer fades; works with `OfflineAudioContext` too).
+  - **Manager** (`src/audio/manager.ts`, app instance + hooks in `audio.ts`): Howler sprite; nothing is created before the first pointer or key press, and sounds asked for before then are dropped. Master volume = `Howler.volume`, mute = `Howler.mute` (music runs into Howler's master gain, so both follow), SFX volume on the Howl, music on its own gain. A music stack: home loop by default, `useMusic(track, layers)` pushes one while a component is mounted. Per-sound throttles (hover 70 ms). In dev, `window.__pixelPacksAudio` exposes `log()`, `unlocked`, `sfxState()` and `music()` for e2e.
+  - **Hooks**:
+    - `audio/uiSounds.ts`: one delegated listener gives hover (mouse only) and press sounds to `.btn`, `.shell__navlink` and `[data-sound="press"]`, so links styled as buttons sound too.
+    - `Notice tone="error"` → `ui.error`.
+    - Wallet increases → `reward.coin/gem/dust` (`walletGainSounds`, from the economy store).
+    - `OpeningScene`: opening music with `moodLayers(packMood)`, `open.tear` on `onTorn`, `open.slide` when the stack appears, and `flipSounds(card)` per single flip (flip, rarity stinger +90 ms, variant stinger +260 ms). "Skip" is silent.
+    - T13 reveal moments (`RevealStage` → `RevealMoment` `onBeat`, mapped by `beatSounds`): dim/takeover → swell, rays → rays, descend → whoosh, freeze → tick, shockwave → boom, crest → the Legendary/Mythic rarity stinger, each variant beat → its variant stinger, cutscene → silent (the music carries it). So `flipSounds` now plays only flip + rarity stinger, and Legendary/Mythic wait for the crest. "Skip animation" silences the beats it skips.
+    - Tear (`TearStage` progress, `crossedTearStep` at each quarter): Starhollow's moon clasp clicks (`open.clasp`), Mossgrove's vines rustle (`open.rustle`). A Mythic pack mood uses the `epic` + `golden` music layers.
+    - `reward.fusion` is in the sprite, but nothing calls it until fusion exists.
+  - **Settings**: new `muted` (old saved settings read as unmuted); the Settings page's "Volume" group is now "Sound" with "Mute all sound".
+  - **For T13/T16/T21**: call `audio.play(id)` / `useMusic()` from `src/audio/audio.js`. T13's Legendary/Mythic sequences may want longer stingers. Add a `SoundDef` plus a spec clip and rerun `sfx-synth`.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (340), client `e2e` (16 passed, 1 opt-in preview skipped; new `e2e/audio.spec.ts` (after merging T13 and T16: 25 passed): unlock on first press → sprite loaded + home music + `ui.press`; mute and SFX volume survive a reload; opening → tear/slide/flip + rarity stinger with opening music; back to the shelf → home music; no console errors; and a Legendary Foil moment in `/debug/moments` → swell, rays, whoosh, `rarity.legendary`, `variant.foil`). Also fixed a CI flake: test usernames (server harness, e2e helper) now use hex tags, because base-36 ones could spell a blocklisted word.
 
-### T15 — Binder, card inspect & pull history · L
+### T15 — Binder, card inspect & pull history · L · done
 Docs: §9, §12
 - **Binder book**: realm tabs, pages with page turns, silhouettes, stacks, filters and sorting, virtualisation.
 - **Card inspect**: tilt, shader, lore, traits of each copy, and dusting with the safety rules.
 - **Pull history** screen.
 - **Done when**: it stays at 60 fps with 1 000+ owned copies and screenshots have been reviewed.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.**
+  - **Screenshots** (`pnpm --filter @pixel-packs/client e2e` rewrites them): `docs/binder/binder-starter.png` (a new player after the two starter packs, 1280 px: one page), `binder-full.png` (1 200 mocked copies, 1440 px: two-page spread, still variant overlays, ×n stacks, a silhouette), `inspect.png` (the 625-copy Glitch Pebble Snail stack), `history.png`, `binder-phone.png` (390 px, 1× cards).
+  - **API**: `GET /api/cards` (the collection; `apps/server/src/economy/collection.ts`) and history filters `packTypeId`, `minRarity`, `variant` (`history.ts`, moved out of `opening.ts`; jsonb `exists` queries that run on PGlite and Postgres). Schemas: `packages/shared/src/api/collection.ts` (`CollectionCopy` — `OwnedCopy` was already taken by `rules/scores.ts`). Documented in `docs/api.md`.
+  - **Shared rules** (`rules/binder.ts`, tested): `stacksByCard` + `compareCopies` (best copy first: variant, stars, stamp, lower mint, older), `binderSlots` (filters: rarity, variant, stars ≥, owned/missing, edition, minted; sorts: number, rarity, name, count, newest), `binderPages` (9 per page), `realmCompletion`, and `checkDust` (blocked starters, warnings `variant | mint | edition | stars | lastCopy`, dust value).
+  - **Client** (`apps/client/src/binder/`, lazy routes `/binder` and `/binder/history`; Pixi loads only with the first live card via `LiveCard`):
+    - `BinderPage` (URL: `?realm=` start, `?card=` inspect, `?freeze=` shader clock for screenshots), `Book` (wood cover, parchment pages, stitched spine, a turning leaf over 250 ms, ←/→ and PageUp/PageDown, off under reduced motion), `Pocket` (best copy + still overlay + "×n", or silhouette/empty sleeve; hover/focus → one live `CardStage`), `Filters`, `DustExtras` (preview → confirm), `Inspect` (native `<dialog>`: `TiltCard`, `CardDetails`, windowed `CopyList`, select → confirm → dust), `HistoryPage` (filters, "Show older pulls", cards link to inspect).
+    - `Card` and `CardView` take a `scale` below 3 (`faceText`: no rules text, smaller name; no name at 1×). `publishWallet()` (`shell/useWallet.ts`) updates the top bar after dusting. `card-stage` / `card-details` styles moved from `debug.css` to `components.css`.
+  - **Performance** (headless Chromium, software GL, 1 200 copies): hover with a live card 60.8 fps, page/realm turning 60.5, inspecting a 625-copy stack 60.4; the copy list keeps < 30 rows in the DOM. `e2e/binder.spec.ts` asserts ≥ 55 fps locally, ≥ 25 on CI.
+  - **For T16**: the binder tour can target `.binder__realms`, `.binder__tools` and `.pocket--owned`; the empty state keeps the "Nothing tucked in yet" heading. Starter copies are listed as "starter card · kept".
+  - **For T17**: no binder idle loops were built. The natural hook is the art layer of the best copy: `Pocket` (thumbnail) and `TiltCard` (inspect) both render one `CardSpec`, so a Legendary/Mythic idle strip can replace the still art there.
+  - Design decisions are in GDD §29 (T15 rows). Open point for the user: the inspect 3D tilt (§12) vs. T11's "no 3D rotation" — kept to inspect only.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (304 tests), client `build` and `e2e` (13 tests) pass.
 
-### T16 — Home & onboarding · M
+### T16 — Home & onboarding · M · done
 Docs: §16, §17
 - **Home screen**: Open Packs button, free-pack timer, daily calendar UI, wallet.
 - **Onboarding flow**: courier intro, 2 scripted packs, binder tour, 5 account-bound starter cards; every step skippable.
 - **E2E test**: a new user goes through onboarding to the home screen.
 - **Done when**: a new account gets from registering to the home screen in ≤ 90 s.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.** The courier is the Mail Moth card art (STA-008); everything else reuses packs, panels and cards.
+  - **Screenshots** (`pnpm --filter @pixel-packs/client e2e` rewrites them): `docs/onboarding/{courier,pack-1,tour-1,tour-2,starter-cards,home-welcome,home,home-claimed,home-phone}.png`. The E2E run takes ~10 s from "Sign up" to Home (limit 90 s).
+  - **API** (`docs/api.md` → Onboarding): `GET /api/onboarding`, `POST /api/onboarding/advance { stage }` (`apps/server/src/onboarding/`). Stages `courier → packs → tour → starter → done`, forward only, stored in `users.onboarding_stage` (migration `0003_wandering_vapor.sql`, plus `users.starter_cards_at`). Reaching `starter` or `done` grants the five account-bound starter cards once (ledger `starterCards`). `pnpm admin reset-onboarding` now also sets the stage back to `courier` (cards are never granted twice). `economy/collection.ts` exports `liveCopies(db, userId, where?)`.
+  - **Shared**: `api/onboarding.ts` (schemas, `ONBOARDING_STAGES`), `rules/onboarding.ts` (`STARTER_CARDS` in caravan order, `advanceStage`, `grantsStarterCards`; tested).
+  - **Client**:
+    - `onboarding/`: `WelcomePage` (lazy route `/welcome`; "Skip the welcome" ends the whole flow), `Courier` (3 lines, Next / Skip), `ScriptedPacks` (opens the next scripted pack in the T12 `OpeningScene`; "Save it for later" skips both packs, which stay on the shelf and stay scripted), `BinderTour` (mounted by `BinderPage` on `/binder?tour=1`: 2 parchment notes on `.binder__realms` and the first `.pocket--owned`, with a dashed frame; "Skip the tour"), `StarterCards`, `useOnboarding` (app-wide store, cleared with the economy store on user change), `api.ts`.
+    - `home/`: `FreePackTimer` (Ready / countdown, 16-segment bar, "Take <realm>", refreshes the economy when the timer runs out), `DailyCalendar` (7 tiles, "Open today's letter"), `format.ts` (`countdownText`, `timerFill`, `calendarTiles`; tested). `pages/HomePage.tsx` = satchel counter + Open packs, timer, calendar, purse; it redirects to `/welcome` until onboarding is done. `/?welcome=1` highlights the timer (§17 step 5).
+    - `OpeningScene` / `SummaryStage` take an optional `doneLabel` (default "Back to the shelf"). `economyApi.claimCalendar()` added.
+  - **E2E**: `e2e/onboarding.spec.ts` (full flow by UI with timing and scripted-pack checks; step-by-step skips; "Skip the welcome"; Home free pack + calendar + phone). `helpers.ts` has `apiPost` and `skipOnboarding`; the shell test skips onboarding first, and the auth test now expects a logged-in, not-yet-onboarded player to land on the welcome flow.
+  - **Not done** (later milestones per §16): quests and the season bar on Home.
+  - **For T13/T14**: the welcome flow uses `OpeningScene` unchanged apart from `doneLabel`, so new reveals and sounds show up in onboarding too.
+  - Design decisions are in GDD §29 (T16 rows).
 
 ### T17 — Character & idle-animation trial · M · budget ≤ 30
 Docs: §19
@@ -405,6 +499,20 @@ Docs: §16, §29
 - **Done when**: the user approves the new font(s) on the style tile.
 
 ---
+
+### T20 — Realm crest in the card crest socket · S
+Docs: §4, §16, §19
+- Found in T11: the round crest socket on the frame (`CARD_FACE.crest`, 10×10 at 43,4) is still empty on every card. §4 asks for a realm crest on the face.
+- Draw a crest per enabled realm (hand-pixelled 10×10, or ask before spending PixelLab generations). Draw it in both the DOM card and the Pixi `CardView` (as a badge-like pixel list, so they keep matching), and update the style guide.
+- **Done when**: both realms show their crest, the Pixi = DOM e2e check passes, and the user has approved a screenshot.
+
+---
+
+### T21 — Mythic pack on the shelf + staged opening · M · budget ≤ 15
+Docs: §5, §7, §19
+- Found in T12: the Mythic pack (300 gems) is enabled on the server but has no pack art, so the shelf leaves it out.
+- Pack art (PixelLab, ask before spending), a shelf spot that shows gems, and its staged opening (lock → runes → burst, §7) as a `PackTheme` in `apps/client/src/opening/themes.ts`.
+- **Done when**: a Mythic pack can be bought, opened and revealed end to end, with screenshots.
 
 ## Later milestones
 These are broken down into tasks in a planning session at the start of each milestone.

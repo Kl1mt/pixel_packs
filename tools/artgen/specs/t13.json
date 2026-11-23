@@ -1,0 +1,56 @@
+{
+  "id": "t13",
+  "description": "T13 reveal-moment art: realm crests (Legendary crest burst) and Mythic mini-cutscene subjects (GDD §3, §5).",
+  "jobs": [
+    {
+      "id": "crest-mossgrove",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 13001,
+      "size": { "width": 32, "height": 32 },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "medium detail",
+      "description": "round heraldic medallion crest of a cozy mossy forest realm: a carved oak wood ring framing a single bright green leaf with a tiny mushroom, front view, centered, symmetric, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t13/crest-mossgrove"
+    },
+    {
+      "id": "crest-starhollow",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 13002,
+      "size": { "width": 32, "height": 32 },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "medium detail",
+      "description": "round heraldic medallion crest of a sleepy night realm: a silver ring framing a pale crescent moon and two tiny stars on deep indigo, front view, centered, symmetric, bold simple shapes, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t13/crest-starhollow"
+    },
+    {
+      "id": "vignette-umbra",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 13011,
+      "size": { "width": 64, "height": 64 },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "medium detail",
+      "view": "side",
+      "description": "a huge round dark indigo bear curled up asleep on the ground, side view, eyes closed, peaceful, a few tiny silver stars in its fur, low and wide silhouette filling the width, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t13/vignette-umbra"
+    },
+    {
+      "id": "vignette-stump",
+      "endpoint": "create-image-pixflux",
+      "palette": "master",
+      "seed": 13012,
+      "size": { "width": 64, "height": 64 },
+      "outline": "single color black outline",
+      "shading": "basic shading",
+      "detail": "medium detail",
+      "view": "side",
+      "description": "a wide old hollow tree stump house with a small round wooden door and a tiny lit window, moss and little mushrooms on top, roots spreading at the base, side view, cozy storybook pixel art, no text",
+      "outDir": "tools/artgen/candidates/t13/vignette-stump"
+    }
+  ]
+}
