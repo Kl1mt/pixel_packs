@@ -3370,6 +3370,394 @@
           "review": "pending"
         }
       ]
+    },
+    {
+      "id": "cards/mos-005-lantern-shroom-r1",
+      "spec": "cards",
+      "job": "mos-005-lantern-shroom-r1",
+      "cardId": "MOS-005",
+      "endpoint": "generate-with-style-v2",
+      "params": {
+        "description": "a tall slender mushroom with a softly glowing pale-green bell cap and a kind sleepy face on its stem, holding a small glowing lantern by its handle in one little hand, cozy whimsical fantasy critter, full body, facing the viewer in 3/4 front view, centered, feet on one ground line, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 5305,
+        "no_background": true,
+        "target_palette": {
+          "name": "Mossgrove: moss, bark, berry",
+          "colors": [
+            "#1e1a26",
+            "#8c8191",
+            "#e8e0d5",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#a8344a",
+            "#d95f5f",
+            "#8f87d1"
+          ]
+        },
+        "style_images": [
+          "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+          "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+          "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+        ],
+        "style_description": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame."
+      },
+      "seed": 5305,
+      "status": "completed",
+      "backgroundJobId": "03bacece-a2a9-4656-b629-ae0e1e3cf327",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08258369149102106
+      },
+      "createdAt": "2026-11-23T17:59:56.154Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/cards/mos-005-lantern-shroom-r1/16.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "cards/mos-006-thistle-hedgehog-r1",
+      "spec": "cards",
+      "job": "mos-006-thistle-hedgehog-r1",
+      "cardId": "MOS-006",
+      "endpoint": "generate-with-style-v2",
+      "params": {
+        "description": "a round little hedgehog standing on its hind legs in a brave boxing pose with tiny fists raised, a neat crown of brown spines each tipped with a small purple thistle blossom, determined smile, cozy whimsical fantasy critter, full body, facing the viewer in 3/4 front view, centered, feet on one ground line, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 5306,
+        "no_background": true,
+        "target_palette": {
+          "name": "Mossgrove: moss, bark, berry",
+          "colors": [
+            "#1e1a26",
+            "#8c8191",
+            "#e8e0d5",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#a8344a",
+            "#d95f5f",
+            "#8f87d1"
+          ]
+        },
+        "style_images": [
+          "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-01.png",
+          "tools/artgen/anchors/mossgrove/mos-012-grandmother-morel-05.png",
+          "tools/artgen/anchors/mossgrove/mos-003-burr-hoglet-04.png"
+        ],
+        "style_description": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame."
+      },
+      "seed": 5306,
+      "status": "completed",
+      "backgroundJobId": "1a0cae7d-0155-42e4-9c64-a18a513a0271",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08158414236704509
+      },
+      "createdAt": "2026-11-23T18:01:43.507Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/cards/mos-006-thistle-hedgehog-r1/16.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
+      "id": "cards/sta-004-lamplight-moth-r1",
+      "spec": "cards",
+      "job": "sta-004-lamplight-moth-r1",
+      "cardId": "STA-004",
+      "endpoint": "generate-with-style-v2",
+      "params": {
+        "description": "a small moth with rounded warm honey-and-cream wings that glow softly, big dark eyes, fluffy cream collar, holding a tiny glowing lantern in its front legs, cozy whimsical fantasy critter, full body, facing the viewer in 3/4 front view, centered, feet on one ground line, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 5404,
+        "no_background": true,
+        "target_palette": {
+          "name": "Starhollow: indigo, silver, lilac",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#fff8ec",
+            "#8a5a3c",
+            "#d95f5f",
+            "#e8a33d",
+            "#f6d36b",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "style_images": [
+          "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-02.png",
+          "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-05.png",
+          "tools/artgen/anchors/starhollow/sta-003-yawning-dormouse-07.png",
+          "tools/artgen/anchors/starhollow/sta-012-lady-lunamoth-14.png"
+        ],
+        "style_description": "Cozy whimsical storybook pixel art of a single fantasy critter as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes and big expressive eyes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy realm palette. Transparent background, no ground, no shadow, no text, no frame."
+      },
+      "seed": 5404,
+      "status": "completed",
+      "backgroundJobId": "945f6507-db19-4f69-9849-f6cee710f847",
+      "cost": {
+        "generations": 10,
+        "usd": 0.0828712657292684
+      },
+      "createdAt": "2026-11-23T18:03:22.306Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/10.png",
+          "review": "pending"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/cards/sta-004-lamplight-moth-r1/16.png",
+          "review": "pending"
+        }
+      ]
     }
   ]
 }
