@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { and, desc, eq, inArray, isNotNull, isNull, lt, or } from 'drizzle-orm';
+import { and, desc, eq, inArray, isNull } from 'drizzle-orm';
 import {
   FRESH_PITY,
   ONBOARDING_SCRIPTS,
@@ -17,7 +17,6 @@ import {
   type PackOpening,
   type PackRoll,
   type PackType,
-  type PullHistoryResponse,
 } from '@pixel-packs/shared';
 import {
   devOddsOverrides,
@@ -247,37 +246,4 @@ export async function markRevealed(
     .from(packOpenings)
     .where(and(eq(packOpenings.id, openingId), eq(packOpenings.userId, userId)));
   if (!exists) throw new HttpError(404, 'notFound', 'No such opening.');
-}
-
-const CURSOR_RE = /^(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z)_([0-9a-f-]{36})$/;
-
-/** Revealed openings, newest first, keyset-paged by (created_at, id). */
-export async function pullHistory(
-  ctx: EconomyCtx,
-  userId: string,
-  limit: number,
-  cursor: string | undefined,
-): Promise<PullHistoryResponse> {
-  let after = undefined;
-  if (cursor !== undefined) {
-    const m = CURSOR_RE.exec(cursor);
-    if (!m?.[1] || !m[2]) throw new HttpError(400, 'badRequest', 'Invalid cursor.');
-    const at = new Date(m[1]);
-    after = or(
-      lt(packOpenings.createdAt, at),
-      and(eq(packOpenings.createdAt, at), lt(packOpenings.id, m[2])),
-    );
-  }
-  const rows = await ctx.db
-    .select()
-    .from(packOpenings)
-    .where(and(eq(packOpenings.userId, userId), isNotNull(packOpenings.revealedAt), after))
-    .orderBy(desc(packOpenings.createdAt), desc(packOpenings.id))
-    .limit(limit + 1);
-  const page = rows.slice(0, limit);
-  const last = page.at(-1);
-  return {
-    openings: page.map(toPackOpening),
-    nextCursor: rows.length > limit && last ? `${last.createdAt.toISOString()}_${last.id}` : null,
-  };
 }

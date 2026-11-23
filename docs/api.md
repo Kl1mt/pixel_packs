@@ -62,7 +62,8 @@ All routes except the odds need a session (`401 unauthorized`). Schemas: `packag
 | `POST /api/packs/open` | `{ packTypeId, idempotencyKey }` | `201 { opening, replayed: false }`; a repeated key → `200 { opening, replayed: true }` | `409 noPacks` / `idempotencyConflict`, `400 packDisabled` |
 | `GET /api/packs/openings/pending` | — | `200 { opening \| null }` (latest unrevealed) | — |
 | `POST /api/packs/openings/:id/revealed` | — | `204` (idempotent) | `404 notFound` |
-| `GET /api/packs/history` | `?limit=1–50&cursor=` | `200 { openings, nextCursor }`, revealed openings, newest first | `400 badRequest` (cursor) |
+| `GET /api/packs/history` | `?limit=1–50&cursor=&packTypeId=&minRarity=&variant=` (filters T15) | `200 { openings, nextCursor }`, revealed openings, newest first; `minRarity` keeps openings with a card of that rarity or better, `variant` those with a copy of that variant | `400 badRequest` (cursor, bad filter) |
+| `GET /api/cards` (T15) | — | `200 { copies }`: every live copy, oldest first; each is `{ userCardId, cardId, variant, stars, edition, mintNumber, source, acquiredAt, tradeLockUntil, accountBound }` (`CollectionResponseSchema`, `api/collection.ts`) | — |
 | `POST /api/cards/dust` | `{ userCardIds: uuid[] (1–200) }` | `200 { dusted, dust, wallet }`, all or nothing | `404 notFound`, `400 cannotDust` (account-bound) |
 | `GET /api/cards/dust-extras` | — | `200 { copies, dust }`: what "Dust extras" would dust | — |
 | `POST /api/cards/dust-extras` | — | `200 { dusted, dust, wallet }` | — |

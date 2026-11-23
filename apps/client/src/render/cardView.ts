@@ -15,6 +15,7 @@ import {
 import { CARD_FACE, MASTER_PALETTE, variantRank, type Card } from '@pixel-packs/shared';
 import {
   cardFaceModel,
+  faceText,
   type CardFaceModel,
   type CardFaceOverrides,
 } from '../components/cardFace.js';
@@ -143,6 +144,7 @@ export class CardView {
 
   private text(): Text[] {
     const s = this.opts.scale;
+    const face = faceText(this.model, s);
     const n = CARD_FACE.name;
     const r = CARD_FACE.rules;
     const name = new Text({
@@ -150,7 +152,7 @@ export class CardView {
       style: {
         fontFamily: FONT_STACKS.body,
         fontWeight: 'bold',
-        fontSize: this.model.nameSize,
+        fontSize: face.nameSize,
         fill: MASTER_PALETTE.ink,
       },
     });
@@ -170,7 +172,7 @@ export class CardView {
     });
     rules.anchor.set(0.5);
     rules.position.set((r.x + r.w / 2) * s, (r.y + r.h / 2) * s);
-    return [name, rules];
+    return [...(face.name ? [name] : []), ...(face.rules ? [rules] : [])];
   }
 
   /** Pointer in art px over the card, or null when it leaves (foil follows it). */

@@ -1,5 +1,6 @@
 import {
   CARD_ART_DROP,
+  CARD_SCALE,
   CARD_FACE,
   MASTER_PALETTE,
   cardNameSize,
@@ -111,4 +112,19 @@ export function cardFaceModel(card: Card, o: CardFaceOverrides = {}): CardFaceMo
       atk,
     )}, health ${String(hp)}${rules.length ? `. ${rules.join(' ')}` : ''}`,
   };
+}
+
+/**
+ * Face text at a card scale other than `CARD_SCALE` (binder thumbnails, T15): the name
+ * shrinks with the card (and goes at 1×), and the compact rules only show at full size (inspect pairs
+ * the card with `CardDetails` at body size).
+ */
+export function faceText(
+  m: CardFaceModel,
+  scale: number,
+): { nameSize: number; name: boolean; rules: boolean } {
+  if (scale >= CARD_SCALE) return { nameSize: m.nameSize, name: true, rules: true };
+  const nameSize = Math.round((m.nameSize * scale) / CARD_SCALE);
+  // Below ~11 px (1× thumbnails) the name is unreadable: the pocket's label carries it.
+  return { nameSize, name: nameSize >= 11, rules: false };
 }

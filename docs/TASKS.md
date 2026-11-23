@@ -387,12 +387,25 @@ Docs: §20
 - **Hooks**: buttons, opening scenes, rewards.
 - **Done when**: every event in §20 has a sound and the volume settings persist.
 
-### T15 — Binder, card inspect & pull history · L
+### T15 — Binder, card inspect & pull history · L · done
 Docs: §9, §12
 - **Binder book**: realm tabs, pages with page turns, silhouettes, stacks, filters and sorting, virtualisation.
 - **Card inspect**: tilt, shader, lore, traits of each copy, and dusting with the safety rules.
 - **Pull history** screen.
 - **Done when**: it stays at 60 fps with 1 000+ owned copies and screenshots have been reviewed.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.**
+  - **Screenshots** (`pnpm --filter @pixel-packs/client e2e` rewrites them): `docs/binder/binder-starter.png` (a new player after the two starter packs, 1280 px: one page), `binder-full.png` (1 200 mocked copies, 1440 px: two-page spread, still variant overlays, ×n stacks, a silhouette), `inspect.png` (the 625-copy Glitch Pebble Snail stack), `history.png`, `binder-phone.png` (390 px, 1× cards).
+  - **API**: `GET /api/cards` (the collection; `apps/server/src/economy/collection.ts`) and history filters `packTypeId`, `minRarity`, `variant` (`history.ts`, moved out of `opening.ts`; jsonb `exists` queries that run on PGlite and Postgres). Schemas: `packages/shared/src/api/collection.ts` (`CollectionCopy` — `OwnedCopy` was already taken by `rules/scores.ts`). Documented in `docs/api.md`.
+  - **Shared rules** (`rules/binder.ts`, tested): `stacksByCard` + `compareCopies` (best copy first: variant, stars, stamp, lower mint, older), `binderSlots` (filters: rarity, variant, stars ≥, owned/missing, edition, minted; sorts: number, rarity, name, count, newest), `binderPages` (9 per page), `realmCompletion`, and `checkDust` (blocked starters, warnings `variant | mint | edition | stars | lastCopy`, dust value).
+  - **Client** (`apps/client/src/binder/`, lazy routes `/binder` and `/binder/history`; Pixi loads only with the first live card via `LiveCard`):
+    - `BinderPage` (URL: `?realm=` start, `?card=` inspect, `?freeze=` shader clock for screenshots), `Book` (wood cover, parchment pages, stitched spine, a turning leaf over 250 ms, ←/→ and PageUp/PageDown, off under reduced motion), `Pocket` (best copy + still overlay + "×n", or silhouette/empty sleeve; hover/focus → one live `CardStage`), `Filters`, `DustExtras` (preview → confirm), `Inspect` (native `<dialog>`: `TiltCard`, `CardDetails`, windowed `CopyList`, select → confirm → dust), `HistoryPage` (filters, "Show older pulls", cards link to inspect).
+    - `Card` and `CardView` take a `scale` below 3 (`faceText`: no rules text, smaller name; no name at 1×). `publishWallet()` (`shell/useWallet.ts`) updates the top bar after dusting. `card-stage` / `card-details` styles moved from `debug.css` to `components.css`.
+  - **Performance** (headless Chromium, software GL, 1 200 copies): hover with a live card 60.8 fps, page/realm turning 60.5, inspecting a 625-copy stack 60.4; the copy list keeps < 30 rows in the DOM. `e2e/binder.spec.ts` asserts ≥ 55 fps locally, ≥ 25 on CI.
+  - **For T16**: the binder tour can target `.binder__realms`, `.binder__tools` and `.pocket--owned`; the empty state keeps the "Nothing tucked in yet" heading. Starter copies are listed as "starter card · kept".
+  - **For T17**: no binder idle loops were built. The natural hook is the art layer of the best copy: `Pocket` (thumbnail) and `TiltCard` (inspect) both render one `CardSpec`, so a Legendary/Mythic idle strip can replace the still art there.
+  - Design decisions are in GDD §29 (T15 rows). Open point for the user: the inspect 3D tilt (§12) vs. T11's "no 3D rotation" — kept to inspect only.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (304 tests), client `build` and `e2e` (13 tests) pass.
 
 ### T16 — Home & onboarding · M
 Docs: §16, §17
