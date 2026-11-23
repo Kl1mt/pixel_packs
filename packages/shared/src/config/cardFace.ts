@@ -5,6 +5,8 @@ import { MASTER_PALETTE, type PaletteColourName } from './palettes.js';
  * Card-face geometry (GDD §4) in art pixels on the 96×128 frame
  * (`apps/client/public/assets/frames/<rarity>.png`, composed in T06).
  * The renderer (T07/T11) places art, text, stats and pips with these rects.
+ * The generated base sits 2 px lower than generated (`TOP_PAD`) so the crest
+ * ring on the top edge is fully inside the canvas.
  */
 export interface Rect {
   readonly x: number;
@@ -16,18 +18,18 @@ export interface Rect {
 export const CARD_FACE = {
   size: { w: 96, h: 128 },
   /** Transparent 64×64 art window; the art is bottom-aligned inside it. */
-  art: { x: 16, y: 15, w: 64, h: 64 },
+  art: { x: 16, y: 17, w: 64, h: 64 },
   /** Round crest socket on the top edge (realm crest). */
-  crest: { x: 42, y: 2, w: 11, h: 11 },
+  crest: { x: 43, y: 4, w: 10, h: 10 },
   /** Name banner text box. */
-  name: { x: 10, y: 81, w: 76, h: 9 },
+  name: { x: 10, y: 83, w: 76, h: 9 },
   /** Rules text box. */
-  rules: { x: 9, y: 94, w: 78, h: 13 },
-  /** ATK (left) and HP (right) badge sockets. */
-  atk: { x: 5, y: 112, w: 10, h: 11 },
-  hp: { x: 81, y: 112, w: 10, h: 11 },
+  rules: { x: 9, y: 96, w: 78, h: 13 },
+  /** ATK (left) and HP (right) badge sockets: the cream interior of each circle. */
+  atk: { x: 7, y: 114, w: 10, h: 11 },
+  hp: { x: 79, y: 114, w: 10, h: 11 },
   /** Six 5×5 rarity pips along the bottom edge, left to right. */
-  pips: [0, 1, 2, 3, 4, 5].map((i) => ({ x: 22 + i * 9, y: 117, w: 5, h: 5 })),
+  pips: [0, 1, 2, 3, 4, 5].map((i) => ({ x: 22 + i * 9, y: 119, w: 5, h: 5 })),
 } as const;
 
 /**

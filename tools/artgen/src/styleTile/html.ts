@@ -33,6 +33,15 @@ const BACKDROP: Partial<Record<Realm, [string, string]>> = {
 const icon = (name: (typeof ICONS)[number], cls = 'icon') =>
   `<img class="${cls}" src="${iconFile(name)}" alt="" width="16" height="16">`;
 
+/**
+ * Card-name size in screen px at 3×: 20 px for most names, smaller for long ones
+ * so even "Umbra, the Dreaming Bear" keeps a margin inside the banner (checked
+ * for the whole catalog in styleTile.test.ts).
+ */
+export function nameSize(name: string): number {
+  return name.length <= 15 ? 20 : name.length <= 19 ? 18 : 16;
+}
+
 function card(id: string, rarity: Rarity | undefined, input: StyleTileInput): string {
   const c = CARD_CATALOG.find((x) => x.id === id);
   if (!c) throw new Error(`unknown card ${id}`);
@@ -40,13 +49,14 @@ function card(id: string, rarity: Rarity | undefined, input: StyleTileInput): st
   const [sky, ground] = BACKDROP[c.realm] ?? [MASTER_PALETTE.cream, MASTER_PALETTE.straw];
   const drop = input.artDrop[id] ?? 0;
   const s = (n: number) => `calc(${String(n)}px * var(--card))`;
-  const at = (rect: { x: number; y: number }) => `left:${s(rect.x)};top:${s(rect.y)}`;
+  const at = (r: { x: number; y: number; w: number; h: number }) =>
+    `left:${s(r.x)};top:${s(r.y)};width:${s(r.w)};height:${s(r.h)}`;
   const rules = cardRulesText(c);
   return `<figure class="card" style="--bd-sky:${sky};--bd-ground:${ground}" aria-label="${esc(c.name)}, ${r}">
   <div class="backdrop"></div>
   <div class="art"><img src="/assets/cards/${id}.png" alt="" style="transform:translateY(${s(drop)})"></div>
   <img class="frame" src="/assets/frames/${r}.png" alt="">
-  <div class="name">${esc(c.name)}</div>
+  <div class="name" style="--name-size:${String(nameSize(c.name))}px">${esc(c.name)}</div>
   <div class="rules">${rules.map((l) => `<span>${esc(l)}</span>`).join('')}</div>
   <div class="stat" style="${at(CARD_FACE.atk)}">${String(c.atk)}</div>
   <div class="stat" style="${at(CARD_FACE.hp)}">${String(c.hp)}</div>

@@ -1,4 +1,5 @@
 import {
+  CARD_FACE,
   CARD_SCALE,
   HEADING_FONT,
   MASTER_PALETTE,
@@ -11,6 +12,10 @@ const P = MASTER_PALETTE;
 const u = (n: number) => `${String(n * UI_SCALE)}px`;
 const slice = (s: readonly number[]) => s.join(' ');
 const sliceW = (s: readonly number[]) => s.map(u).join(' ');
+const c = (n: number) => `calc(${String(n)}px * var(--card))`;
+/** Absolute position of a CARD_FACE rect on a card drawn at --card scale. */
+const rect = (r: { x: number; y: number; w: number; h: number }) =>
+  `left: ${c(r.x)}; top: ${c(r.y)}; width: ${c(r.w)}; height: ${c(r.h)};`;
 
 /** Style-tile CSS (GDD §16): palette tokens only, integer pixel scales, hard shadows. */
 export function styleTileCss(): string {
@@ -71,16 +76,16 @@ h2 { font-size: var(--heading); margin-bottom: ${u(6)}; }
 
 .card { position: relative; width: calc(96px * var(--card)); height: calc(128px * var(--card)); flex: none; }
 .card > * { position: absolute; }
-.card .backdrop, .card .art { left: calc(16px * var(--card)); top: calc(15px * var(--card)); width: calc(64px * var(--card)); height: calc(64px * var(--card)); }
+.card .backdrop, .card .art { ${rect(CARD_FACE.art)} }
 .card .backdrop { background: linear-gradient(var(--bd-sky) 78%, var(--bd-ground) 0); }
 .card .art { overflow: hidden; }
 .card .art img { width: 100%; height: 100%; }
 .card .frame { inset: 0; width: 100%; height: 100%; }
-.card .name { left: calc(10px * var(--card)); top: calc(81px * var(--card)); width: calc(76px * var(--card)); height: calc(9px * var(--card));
-  font: calc(8px * var(--card))/calc(9px * var(--card)) var(--font-body); font-weight: bold; text-align: center; white-space: nowrap; overflow: hidden; }
-.card .rules { left: calc(9px * var(--card)); top: calc(94px * var(--card)); width: calc(78px * var(--card)); height: calc(13px * var(--card));
+.card .name { ${rect(CARD_FACE.name)} padding: 0 ${c(3)};
+  font: bold var(--name-size, 20px)/${c(CARD_FACE.name.h)} var(--font-body); text-align: center; white-space: nowrap; overflow: hidden; }
+.card .rules { ${rect(CARD_FACE.rules)}
   font: 13px/1.25 var(--font-body); text-align: center; display: grid; place-content: center; }
-.card .stat { width: calc(10px * var(--card)); height: calc(11px * var(--card)); display: grid; place-items: center;
+.card .stat { display: grid; place-items: center;
   font: var(--heading)/1 var(--font-heading); color: var(--glow); text-shadow: ${u(1)} ${u(1)} 0 var(--ink); }
 
 .home { display: grid; grid-template-columns: 1fr 1.3fr; gap: ${u(6)}; background: var(--mossDeep); padding: ${u(6)}; border: ${u(2)} solid var(--ink); box-shadow: ${u(3)} ${u(3)} 0 var(--ink); }

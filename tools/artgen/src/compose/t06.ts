@@ -17,7 +17,7 @@ const CAND = 'tools/artgen/candidates/t06';
 const OUT = 'apps/client/public/assets';
 
 /** Pack candidates picked on the style tile (1-based, see the candidates' sheet.png). */
-export const T06_PACK_NUMBERS = { mossgrove: 1, starhollow: 11 };
+export const T06_PACK_NUMBERS = { mossgrove: 5, starhollow: 6 };
 const pick = (n: number) => String(n).padStart(2, '0');
 
 export const T06_PICKS = {

@@ -50,12 +50,23 @@ const BY_HEX = new Map<string, PaletteColourName>(
 const INK = hexToRgba(MASTER_PALETTE.ink);
 const WINDOW_FILL = new Set<string>([MASTER_PALETTE.glow, MASTER_PALETTE.cream]);
 
+/**
+ * The generated crest ring touches the canvas top (its outline is cut off), and the
+ * bottom 2 rows are empty, so the whole frame moves down 2 px and the ring gets a cap.
+ */
+export const TOP_PAD = 2;
+
 /** Restructures the base (geometry only, still wood). */
 export function reshapeBase(base: PNG): PNG {
   const out = blank(CARD_FACE.size.w, CARD_FACE.size.h);
-  for (let y = 0; y < out.height; y++) {
-    const sy = sourceRow(y);
+  for (let y = TOP_PAD; y < out.height; y++) {
+    const sy = sourceRow(y - TOP_PAD);
     for (let x = 0; x < out.width; x++) set(out, x, y, get(base, x, sy));
+  }
+  // Crest cap: close the ring with an ink row above its old top row.
+  for (let x = 36; x <= 60; x++) {
+    const c = get(out, x, TOP_PAD);
+    if (c[3] > 0 && rgbaToHex(c) !== MASTER_PALETTE.ink) set(out, x, TOP_PAD - 1, INK);
   }
   const woodMid = hexToRgba(MASTER_PALETTE.wood);
   // Art window: exact 64×64 hole with a 1 px ink rim; leftover window fill becomes wood.
@@ -70,7 +81,9 @@ export function reshapeBase(base: PNG): PNG {
     }
   }
   // Pip strip: wipe the four generated sockets with the plain wood row above them.
-  for (let y = 116; y <= 122; y++) for (let x = 20; x <= 74; x++) set(out, x, y, get(out, x, 115));
+  const pipTop = 116 + TOP_PAD;
+  for (let y = pipTop; y <= pipTop + 6; y++)
+    for (let x = 20; x <= 74; x++) set(out, x, y, get(out, x, pipTop - 1));
   return out;
 }
 
