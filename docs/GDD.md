@@ -288,7 +288,7 @@ Goal: simple, intuitive and modern with eye-candy, and clearly hand-crafted, **n
 **Do**
 - Use one **master palette** (~32 colours) for all art and UI. UI tokens only reference palette entries.
 - Use **one pixel scale per context** (e.g. 1 art pixel = 3 screen px in the UI). Never mix pixel sizes, and scale only by integers.
-- Use a pixel display font for headings and numbers, a readable body font at ≥ 16 px, and no more than ~4 text sizes.
+- Use a pixel display font for headings and numbers, a readable body font at ≥ 16 px (exception: compact card-face rules text, §29), and no more than ~4 text sizes.
 - Build panels as 9-slice pixel art made of materials (parchment, wood, cloth, brass) instead of flat boxes. Shadows are hard 2–4 px offsets, never blurred.
 - Make buttons chunky, with rest / hover / pressed states (pressed moves down 2 px and the shadow shrinks) and a click sound.
 - Use physical metaphors: a shop counter with a pack shelf, a binder book, a fusion workbench, a post office for trades.
@@ -519,4 +519,5 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T06: icons are 16×16 art px, generated with pixflux at 32×32 and reduced in code with a fresh 1 px ink outline (user-approved plan) |
 | 2026-11-23 | T06: pack art is 64×64 (the style endpoint returns squares), shown at 3× (user-approved plan) |
 | 2026-11-23 | T06: pixel scales — menus/panels 1 art px = 2 screen px (`UI_SCALE`), cards and packs 3 (`CARD_SCALE`). Type scale of 4 sizes: Display 48 px and Heading/Numbers 32 px in the generated "Pixel Packs Hollow" font (16 px glyphs, integer multiples only); Body 18 px and Small 16 px in a storybook serif stack (Iowan Old Style / Palatino / Georgia) |
-| 2026-11-23 | T06: card-face rules text is compact (13 px) to fit two abilities in the 78×13 box at 3×; the full text at ≥ 16 px lives in card inspect (T11/T15) |
+| 2026-11-23 | T06: **exception to the §16 16 px body minimum** (user-approved): card-face rules text is compact (13 px) to fit two abilities in the 78×13 box at 3×; the full text at ≥ 16 px lives in card inspect (T11/T15) |
+| 2026-11-23 | T06: the user isn't happy with the fonts yet; they stay for now, and T19 revisits them (ask which font first) |
