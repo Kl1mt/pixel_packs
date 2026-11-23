@@ -19,7 +19,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T08 | Database & email auth (API) | T02 | done |
 | T09 | Auth screens + Discord login | T07, T08 | todo |
 | T10 | Economy & pack API | T03, T08 | done |
-| T11 | Card renderer & variant shaders | T05, T07 | todo |
+| T11 | Card renderer & variant shaders | T05, T07 | done |
 | T12 | Pack opening I: core flow + Mossgrove theme | T10, T11 | todo |
 | T13 | Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers | T12 | todo |
 | T14 | Audio | T12 | todo |
@@ -27,6 +27,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T16 | Home & onboarding | T09, T12, T15 | todo |
 | T17 | Character & idle-animation trial | T05 | todo |
 | T18 | M1 QA & polish | all M1 | todo |
+| T20 | Realm crest in the card crest socket | T11 | todo |
 
 ---
 
@@ -327,7 +328,7 @@ Docs: §5, §6 (mint numbers), §7, §8, §9 (dust), §22
   - Design details settled here are in GDD §29 (T10 rows).
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (141 tests) pass; curl flow (register → economy → open scripted pack → admin grant + glitch override → buy → open → calendar → free pack → history → odds) against `pnpm start` on Postgres.
 
-### T11 — Card renderer & variant shaders · L
+### T11 — Card renderer & variant shaders · L · done
 Docs: §4, §6, §18
 - **PixiJS v8** in the client, with a Pixi card renderer that matches the DOM card.
 - **Variant filters**: Foil, Prismatic, Void, Glitch, each with a reduced-effects version.
@@ -335,6 +336,29 @@ Docs: §4, §6, §18
 - **`/debug` page**: any card × variant × stars, with an FPS meter.
 - The same renderer is used by the binder, inspect and reveal.
 - **Done when**: every variant can be previewed at 60 fps and screenshots are in the handoff notes.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend.** Badges and glyphs are hand-pixelled in code.
+  - **Screenshots** (`pnpm --filter @pixel-packs/client e2e` rewrites them; the clock is frozen at 1 s, so they're stable): `docs/cards/variant-{normal,foil,prismatic,void,glitch}.png` (3×; ★2 except normal), `variants.png` and `variants-reduced.png` (all five, full and reduced), `badges.png` (STA-003 Void ★3, 1st Edition S1, #12), `card-lab.png` (the `/debug` page).
+  - **Renderer** (`apps/client/src/render/`, Pixi 8.23, loaded lazily — only the `/debug` chunk pulls Pixi in; the main bundle has none):
+    - `CardView` (`cardView.ts`): one card as a Pixi `Container`. Art and frame are composited on a 96×128 canvas, shaded by one quad `Mesh` into a 96×128 `RenderTexture` (1 texel = 1 art px), and shown at `scale` with nearest sampling. Stat digits and badges are a `Graphics` layer above the shader. Name and rules are Pixi `Text` at screen resolution (same sizes and boxes as the DOM card). `update(time, renderer)` re-shades only when something changed and returns whether a redraw is needed.
+    - `createStage()` (`stage.ts`): a WebGL `Application` with a grid of `CardView`s, rendered **on demand** (own rAF loop; a stage of still cards costs nothing), pointer → foil light per card, `frozenAt` for screenshots, `data-ready` on the host after the first frame.
+    - `<CardStage specs scale columns gap reduced frozenAt>` (`CardStage.tsx`): the React wrapper. `reduced` defaults to `useReducedCardEffects()` (= reduced motion **or** "reduce effects"). If WebGL is missing it shows DOM `Card`s instead. The wrapper is `role="img"` with every card's label.
+    - **For T12/T15**: reveal scenes can add `CardView.root`s to their own Pixi stage (call `update()` each frame); inspect uses `<CardStage>` + `<CardDetails>`; the binder grid should use DOM `Card`s and mount a `CardStage` only for hovered / on-screen variant copies (§18). Measured in headless Chromium (software GL): one live card of any variant at 60 fps; 6 live cards ≈ 30 fps and 24 ≈ 10 fps there (24 reduced ≈ 48), so don't make a whole binder page live.
+  - **Shader** (`cardShader.ts`, one GLSL program, `uVariant` = `variantRank`): written to run on WebGL1 and WebGL2 (headless Chromium only has WebGL1; the palette is a `uPalette[32]` uniform, not a const array). It works on whole art pixels, paints the realm backdrop itself, and **snaps every pixel it changes to the master palette** (§16).
+    - Foil: a stepped diagonal light band (core, soft edge, trailing glint). It sweeps on its own every 4.5 s and eases under the pointer when hovered (`motion.ts`).
+    - Prismatic: a moving rainbow on the frame and a light one on the backdrop (the critter keeps its colours), plus 8×8-cell twinkling plus-sparkles.
+    - Void: a starfield replaces the backdrop, the outer edge ripples purple (1 px warp on wave crests), the window rim pulses, and 10 motes spiral inward.
+    - Glitch: 1–2 px RGB split, scanlines, row jitter in bursts, a rolling scan bar, and every ~4.5 s a 160 ms corrupt frame (8×8 blocks swapped, channels rotated).
+    - Prismatic and Glitch leave the name/rules parchment (`TEXT_AREA`) alone, so the text stays readable.
+    - Reduced versions: no clock (everything still); foil rests as a still sheen and only follows the pointer; prismatic sparkles fixed; void without motes or ripple; glitch a fixed 1 px split + scanlines, with no jitter or corrupt frames. E2E checks that reduced cards don't change over time.
+  - **Badges** (`components/cardBadges.ts`; glyphs `packages/shared/src/config/badgeGlyphs.ts`): pixel lists in palette colours, drawn by **both** the DOM card (SVG overlay) and the Pixi card. In the art window's top corners: ★2/★3 amber stars top-left (★1 shows none), the First-Edition plate "1ST S‹n›" (berry) below them, and the mint plate "#‹n›" top-right (Void: night/lavender, Glitch: ink/seafoam).
+  - **Stars**: `starredCard()` / `starScaled()` (`packages/shared/src/rules/stars.ts`, +30 % / +60 %, rounded half up) scale ATK, HP and ability values; the face and the rules text show the ★ numbers. Every ★3 catalog stat still fits its badge (tested).
+  - **`cardFaceModel(card, { variant, stars, edition, mintNumber, … })`** now carries the copy look; the label adds e.g. "Void #7, 3 stars, First Edition, Season 1". The DOM backdrop split is now exactly 50 rows (`CARD_SKY_ROWS`, was 78 %); the style-guide screenshot is pixel-identical.
+  - **`<CardDetails>`** (`components/CardDetails.tsx`): the full text at body size (18 px) — name, rarity · realm · id, copy traits, ★ stats, every ability line, flavour. It's the ≥ 16 px inspect text promised in T06.
+  - **`/debug` "Card lab"**: public like `/styleguide`, not in the nav, lazy route. Every option is in the URL: `card, variant, stars, edition (0 = none), mint, fx (settings|full|reduced), stress (0/6/12/24 live cards), all (overview row), freeze (seconds, -1 = live)`. It shows the live Pixi card, the static DOM card, `CardDetails`, all five variants, and an FPS meter. T12 adds its dev forcing here.
+  - **E2E** `e2e/cards.spec.ts`: screenshots, no console errors, **Pixi = DOM pixel for pixel outside the text boxes** (3 cards, ★3 + edition), reduced = still and full = animated, and ≥ 55 fps per variant locally (≥ 25 on CI's software GL; measured 59.8–60.6).
+  - Design decisions are in GDD §29 (T11 rows). New task T20: the realm crest socket on the frame is still empty.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (290 tests), client `build` and `e2e` (10 tests) pass.
 
 ### T12 — Pack opening I: core flow + Mossgrove theme · L
 Docs: §5, §7, §16
@@ -405,6 +429,12 @@ Docs: §16, §29
 - **Done when**: the user approves the new font(s) on the style tile.
 
 ---
+
+### T20 — Realm crest in the card crest socket · S
+Docs: §4, §16, §19
+- Found in T11: the round crest socket on the frame (`CARD_FACE.crest`, 10×10 at 43,4) is still empty on every card. §4 asks for a realm crest on the face.
+- Draw a crest per enabled realm (hand-pixelled 10×10, or ask before spending PixelLab generations). Draw it in both the DOM card and the Pixi `CardView` (as a badge-like pixel list, so they keep matching), and update the style guide.
+- **Done when**: both realms show their crest, the Pixi = DOM e2e check passes, and the user has approved a screenshot.
 
 ## Later milestones
 These are broken down into tasks in a planning session at the start of each milestone.

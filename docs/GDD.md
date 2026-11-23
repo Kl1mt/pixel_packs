@@ -535,3 +535,9 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T07: on phone widths (< 720 px) the nav moves to a fixed bottom bar, icon above a Small label |
 | 2026-11-23 | T07: UI shadows are two hard ink offsets only, 2 px and 4 px (the style tile's 6 px home-fragment shadow is cut to 4 px) |
 | 2026-11-23 | T07: currency amounts are plain digits (no thousands separators) in the pixel font; an unknown balance shows "–" |
+| 2026-11-23 | T11: variant shaders work on whole art pixels (the face is shaded into a 96×128 texture and scaled by an integer) and snap every pixel they change to the master palette, so variants stay pixel art (§16). Text, ATK/HP digits and badges sit above the shader; Prismatic and Glitch leave the name/rules parchment alone for legibility |
+| 2026-11-23 | T11: "follows the cursor tilt" (§6) = the foil band eases under the pointer; the card itself doesn't rotate in 3D (rotation would break the integer pixel grid). Without a pointer it sweeps every 4.5 s |
+| 2026-11-23 | T11: reduced card effects apply when motion is reduced **or** "reduce effects" is on: no clock-driven animation, no flicker/jitter/corrupt frames; foil only follows the pointer (§18) |
+| 2026-11-23 | T11: face badges in the art window's top corners — ★2/★3 stars top-left (★1 shows none), First-Edition plate "1ST S‹n›" under them, Void/Glitch mint plate "#‹n›" top-right; full wording in inspect (`CardDetails`) |
+| 2026-11-23 | T11: a ★2/★3 copy shows its boosted ATK, HP and ability values on the face and in inspect (+30 % / +60 %, rounded half up, `starredCard`) |
+| 2026-11-23 | T11: the card renderer is WebGL-only (GLSL that also runs on WebGL1); without WebGL the static DOM card is shown. `/debug` (Card lab) is public like `/styleguide` and not in the nav |
