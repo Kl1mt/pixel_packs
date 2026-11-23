@@ -50,3 +50,20 @@ export async function loggedIn(page: Page) {
   expect(res.status()).toBe(201);
   return who;
 }
+
+/** POSTs JSON with the CSRF token, as the page's logged-in player. */
+export async function apiPost(page: Page, path: string, data?: object) {
+  const csrf = await page.request.get('/api/auth/csrf');
+  const { csrfToken } = (await csrf.json()) as { csrfToken: string };
+  const res = await page.request.post(path, {
+    ...(data ? { data } : {}),
+    headers: { 'x-csrf-token': csrfToken },
+  });
+  expect(res.ok()).toBe(true);
+  return res;
+}
+
+/** Skips the whole onboarding (T16), as "Skip the welcome" does: Home opens straight away. */
+export async function skipOnboarding(page: Page) {
+  await apiPost(page, '/api/onboarding/advance', { stage: 'done' });
+}

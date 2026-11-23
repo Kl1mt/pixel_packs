@@ -4,6 +4,7 @@ import { App } from './App.js';
 import { sessionStore } from './auth/useSession.js';
 import { installTokens } from './design/tokens.js';
 import { economyStore } from './economy/useEconomy.js';
+import { onboardingStore } from './onboarding/useOnboarding.js';
 import './design/global.css';
 import './components/components.css';
 import './shell/shell.css';
@@ -12,12 +13,15 @@ import './auth/auth.css';
 
 installTokens();
 void sessionStore.refresh();
-// Another player (or none): drop the cached wallet and packs.
+// Another player (or none): drop the cached wallet, packs and onboarding stage.
 let userId: string | null = null;
 sessionStore.subscribe(() => {
   const s = sessionStore.get();
   const next = s.status === 'user' ? s.user.id : null;
-  if (next !== userId) economyStore.clear();
+  if (next !== userId) {
+    economyStore.clear();
+    onboardingStore.clear();
+  }
   userId = next;
 });
 
