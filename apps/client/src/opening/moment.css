@@ -1,0 +1,174 @@
+/* Reveal moments (T13, GDD §5, §6). Layers: back canvas (1) < spotlight card (2) < front (3). */
+.reveal__spotlight {
+  position: relative;
+  z-index: 2;
+}
+
+.moment__layer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.moment__layer--back {
+  z-index: 1;
+}
+
+.moment {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.moment__skip {
+  position: absolute;
+  left: 50%;
+  bottom: var(--sp-8);
+  translate: -50% 0;
+  padding: var(--sp-2) var(--sp-4);
+  border: 0;
+  background: var(--ink);
+  color: var(--moonlight);
+  font: var(--small) / 1 var(--font-body);
+  box-shadow: 0 0 0 var(--art-px) var(--dusk);
+  cursor: pointer;
+}
+
+.moment__skip:focus-visible {
+  outline: calc(2 * var(--art-px)) solid var(--sunflower);
+  outline-offset: var(--art-px);
+}
+
+/* The card waits off screen until its moment brings it in. */
+.reveal__card[data-arrival='waiting'] {
+  visibility: hidden;
+}
+
+.reveal__card[data-moment='yes']:not([data-arrival='landed']) .reveal__flip {
+  animation: none;
+}
+
+/* Legendary / Mythic: the card descends spinning, slowing as it lands (slow-mo). */
+.reveal__card[data-arrival='arriving'] .reveal__flip {
+  animation: descend-spin var(--descend-ms, 1500ms) steps(36) both;
+}
+
+@keyframes descend-spin {
+  0% {
+    translate: 0 calc(-56px * var(--card));
+    scale: 1 1;
+  }
+  8% {
+    scale: 0 1;
+  }
+  16% {
+    scale: 1 1;
+  }
+  28% {
+    scale: 0 1;
+  }
+  42% {
+    scale: 1 1;
+  }
+  62% {
+    scale: 0 1;
+  }
+  86% {
+    translate: 0 calc(-3px * var(--card));
+    scale: 1 1;
+  }
+  100% {
+    translate: 0 0;
+    scale: 1 1;
+  }
+}
+
+/* Mythic shockwave: the camera shakes (never under reduced effects). */
+.reveal[data-beat='shockwave']:not([data-reduced='true'])
+  :is(.reveal__table, .reveal__actions, .moment__layer--back) {
+  animation: camera-shake 240ms steps(1) infinite;
+}
+
+@keyframes camera-shake {
+  0% {
+    translate: calc(2px * var(--card)) 0;
+  }
+  25% {
+    translate: calc(-2px * var(--card)) 0;
+  }
+  50% {
+    translate: calc(1px * var(--card)) calc(-1px * var(--card));
+  }
+  75% {
+    translate: calc(-1px * var(--card)) calc(1px * var(--card));
+  }
+}
+
+/* Glitch stinger: the UI around the card corrupts for a moment. */
+.reveal[data-beat='glitch']:not([data-reduced='true'])
+  :is(.reveal__actions, .reveal__tray, .reveal__caption, .reveal__stack-slot) {
+  animation: ui-corrupt 360ms steps(1) infinite;
+}
+
+@keyframes ui-corrupt {
+  0% {
+    translate: calc(3 * var(--art-px)) 0;
+    clip-path: inset(0 0 55% 0);
+  }
+  20% {
+    translate: calc(-4 * var(--art-px)) 0;
+    clip-path: inset(30% 0 0 0);
+  }
+  40% {
+    translate: 0 0;
+    clip-path: none;
+  }
+  60% {
+    translate: calc(-2 * var(--art-px)) calc(var(--art-px));
+    clip-path: inset(0 40% 0 0);
+  }
+  80% {
+    translate: calc(5 * var(--art-px)) 0;
+    clip-path: inset(10% 0 40% 0);
+  }
+}
+
+.moment__err {
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  translate: -50% 0;
+  margin: 0;
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--ink);
+  color: var(--seafoam);
+  font: 24px / 1 var(--font-heading);
+  letter-spacing: 0.08em;
+  box-shadow:
+    calc(-2 * var(--art-px)) 0 0 var(--rose),
+    calc(2 * var(--art-px)) 0 0 var(--seafoam);
+  text-shadow:
+    calc(-1 * var(--art-px)) 0 var(--rose),
+    var(--art-px) 0 var(--indigo);
+  pointer-events: none;
+}
+
+.reveal:not([data-reduced='true']) .moment__err {
+  animation: err-jitter 300ms steps(1) infinite;
+}
+
+@keyframes err-jitter {
+  0% {
+    translate: -50% 0;
+  }
+  33% {
+    translate: calc(-50% + 3 * var(--art-px)) 0;
+    clip-path: inset(0 0 45% 0);
+  }
+  66% {
+    translate: calc(-50% - 2 * var(--art-px)) var(--art-px);
+  }
+}

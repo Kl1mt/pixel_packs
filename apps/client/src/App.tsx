@@ -41,6 +41,12 @@ const router = createBrowserRouter([
         hydrateFallbackElement: <p className="on-ground">Loading the card lab…</p>,
         lazy: () => import('./pages/DebugPage.js').then((m) => ({ Component: m.DebugPage })),
       },
+      {
+        // Moment lab (T13): every reveal moment and tear, replayable and freezable.
+        path: 'moments',
+        hydrateFallbackElement: <p className="on-ground">Loading the moment lab…</p>,
+        lazy: () => import('./pages/MomentLab.js').then((m) => ({ Component: m.MomentLab })),
+      },
     ],
   },
   {

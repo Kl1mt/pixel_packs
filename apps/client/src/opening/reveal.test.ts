@@ -97,6 +97,9 @@ describe('opening helpers', () => {
       packMood(
         opening([card(1, 'common'), ...[2, 3, 4].map((s) => card(s, 'common')), card(5, 'mythic')]),
       ),
+    ).toBe('mythic');
+    expect(
+      packMood(opening([...[1, 2, 3, 4].map((s) => card(s, 'common')), card(5, 'legendary')])),
     ).toBe('golden');
   });
 
