@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { loggedIn } from './helpers.js';
+import { completeOnboarding, loggedIn } from './helpers.js';
 
 interface AudioProbe {
   unlocked: boolean;
@@ -23,6 +23,7 @@ test.describe('audio', () => {
       if (m.type() === 'error') errors.push(m.text());
     });
     await loggedIn(page);
+    await completeOnboarding(page);
     await page.goto('/settings');
     expect((await probe(page)).unlocked).toBe(false);
 

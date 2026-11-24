@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { OUT, PASSWORD, newIdentity, settle } from './helpers.js';
+import { newIdentity, OUT, PASSWORD, settle } from './helpers.js';
 
 test('a new player registers, logs out and logs back in', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -22,8 +22,9 @@ test('a new player registers, logs out and logs back in', async ({ page }) => {
   await page.getByLabel('Username').fill(who.username);
   await page.getByLabel('Password').fill(who.password);
   await page.getByRole('button', { name: 'Sign up' }).click();
-  await expect(page).toHaveURL(/\/binder$/);
-  await expect(page.getByRole('heading', { name: 'Nothing tucked in yet' })).toBeVisible();
+  // Onboarding is mandatory (T22): a new player starts with the courier, not the binder.
+  await expect(page).toHaveURL(/\/welcome$/);
+  await expect(page.getByRole('heading', { name: 'Welcome to the Wandering Post' })).toBeVisible();
   await expect(page.getByText(`We sent a letter to ${who.email}`)).toBeVisible();
   // The starter satchel's wallet replaces the unknown "–" badges.
   await expect(page.getByLabel('Wallet')).not.toContainText('–');

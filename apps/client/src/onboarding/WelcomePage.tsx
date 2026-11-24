@@ -18,7 +18,7 @@ export const BINDER_TOUR = '/binder?tour=1';
 /**
  * The onboarding flow (GDD §17): the courier, the two scripted packs, then the binder
  * tour (on the binder page) and the five starter cards. The server keeps the stage, so
- * a reload continues where the player left. Every step, and the whole flow, can be skipped.
+ * a reload continues where the player left. It is mandatory: nothing can be skipped (T22).
  */
 export function WelcomePage() {
   const onboarding = useOnboarding();
@@ -53,14 +53,6 @@ export function WelcomePage() {
     <div className="welcome">
       <div className="welcome__head">
         <h1 className="page-title">Welcome to the Wandering Post</h1>
-        <button
-          type="button"
-          className="welcome__skip-all small"
-          disabled={busy}
-          onClick={() => void advance('done', HOME_AFTER_WELCOME)}
-        >
-          Skip the welcome
-        </button>
       </div>
       {error && <Notice tone="error">{error}</Notice>}
       {stage === 'courier' && <Courier busy={busy} onDone={() => void advance('packs')} />}
@@ -77,7 +69,7 @@ export function WelcomePage() {
                 await advance('tour', BINDER_TOUR);
             })();
           }}
-          onSkip={() => void advance('tour', BINDER_TOUR)}
+          onContinue={() => void advance('tour', BINDER_TOUR)}
         />
       )}
       {stage === 'starter' && (

@@ -30,7 +30,8 @@ function findTarget(selectors: readonly string[]): HTMLElement | null {
 
 /**
  * The binder tour: a parchment note under the element it explains, which gets a
- * dashed frame. Finishing or skipping moves onboarding on to the starter cards.
+ * dashed frame. Finishing it moves onboarding on to the starter cards
+ * (it cannot be skipped, T22).
  */
 export function BinderTour() {
   const navigate = useNavigate();
@@ -119,16 +120,6 @@ export function BinderTour() {
         >
           {last ? 'Got it' : 'Next'}
         </Button>
-        {!last && (
-          <button
-            type="button"
-            className="welcome__skip-all small"
-            disabled={busy}
-            onClick={() => void finish()}
-          >
-            Skip the tour
-          </button>
-        )}
       </div>
     </div>
   );

@@ -464,14 +464,8 @@ html[data-motion='reduced'] .binder__leaf {
   font-size: var(--small);
 }
 
-.tilt {
-  perspective: 900px;
+.tilt--inspect {
   padding: var(--sp-4);
-}
-
-.tilt__card {
-  transform: rotateX(var(--tilt-x, 0)) rotateY(var(--tilt-y, 0));
-  transition: transform var(--motion-fast) ease-out;
 }
 
 /* Copies list (windowed) */

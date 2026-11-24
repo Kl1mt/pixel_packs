@@ -54,16 +54,6 @@ export function Courier({ busy, onDone }: CourierProps) {
           <span className="small muted" aria-hidden="true">
             {line + 1} / {COURIER_LINES.length}
           </span>
-          {!last && (
-            <button
-              type="button"
-              className="welcome__skip-all small"
-              disabled={busy}
-              onClick={onDone}
-            >
-              Skip
-            </button>
-          )}
         </div>
       </Panel>
     </div>

@@ -25,7 +25,7 @@ export interface BadgeTraits {
 
 const P = MASTER_PALETTE;
 const WIN = CARD_FACE.art;
-/** Badges sit 2 art px inside the art window's top corners. */
+/** Badges sit 2 art px inside the art window's corners. */
 const INSET = 2;
 const STAR_SIZE = 7;
 
@@ -50,6 +50,28 @@ function plate(text: string, x: number, y: number, fill: string, ink: string): F
     }
   // Text pixels come last so they win when the renderer paints in order.
   for (const p of badgeTextPixels(text, x + 2, y + 2)) out.push({ ...p, colour: ink });
+  return out;
+}
+
+/**
+ * The First-Edition stamp (T22): smaller than a plate — no outline ring, just the fill
+ * with 1 px padding and a 1 px ink drop shadow right and below, so it reads on any art.
+ */
+export function editionStampSize(text: string): { w: number; h: number } {
+  return { w: badgeTextWidth(text) + 3, h: BADGE_GLYPH_HEIGHT + 3 };
+}
+
+function stamp(text: string, x: number, y: number, fill: string, ink: string): FacePixel[] {
+  const { w, h } = editionStampSize(text);
+  const out: FacePixel[] = [];
+  for (let dy = 0; dy < h; dy++)
+    for (let dx = 0; dx < w; dx++) {
+      const shadow = dx === w - 1 || dy === h - 1;
+      // The shadow's corner pixels stay clear, like a stamp lifted off the page.
+      if (shadow && ((dx === w - 1 && dy === 0) || (dy === h - 1 && dx === 0))) continue;
+      out.push({ x: x + dx, y: y + dy, colour: shadow ? P.ink : fill });
+    }
+  for (const p of badgeTextPixels(text, x + 1, y + 1)) out.push({ ...p, colour: ink });
   return out;
 }
 
@@ -87,28 +109,22 @@ export function editionText(e: EditionStamp): string {
 }
 
 /**
- * Badge pixels for one copy (GDD §6), in the art window's top corners:
- * ★2/★3 stars top-left (★1 shows none), the First-Edition stamp under them,
- * and the Void/Glitch mint plate top-right.
+ * Badge pixels for one copy (GDD §6) in the art window: ★2/★3 stars top-left (★1 shows
+ * none), the Void/Glitch mint plate top-right, and the First-Edition stamp bottom-right
+ * (T22; it was under the stars).
  */
 export function cardBadgePixels(t: BadgeTraits): FacePixel[] {
   const out: FacePixel[] = [];
   const top = WIN.y + INSET;
-  let leftY = top;
-  if (t.stars > 1) {
+  if (t.stars > 1)
     for (let i = 0; i < t.stars; i++) out.push(...star(WIN.x + INSET + i * STAR_SIZE, top));
-    leftY += STAR_SIZE + 1;
+  if (t.edition) {
+    const text = editionText(t.edition);
+    const { w, h } = editionStampSize(text);
+    const x = WIN.x + WIN.w - INSET - w;
+    const y = WIN.y + WIN.h - INSET - h;
+    out.push(...stamp(text, x, y, EDITION_PLATE.fill, EDITION_PLATE.text));
   }
-  if (t.edition)
-    out.push(
-      ...plate(
-        editionText(t.edition),
-        WIN.x + INSET,
-        leftY,
-        EDITION_PLATE.fill,
-        EDITION_PLATE.text,
-      ),
-    );
   const mint = MINT_PLATE[t.variant];
   if (mint && t.mintNumber !== null) {
     const text = mintText(t.mintNumber);

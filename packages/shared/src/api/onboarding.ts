@@ -20,6 +20,10 @@ export const OnboardingStateSchema = z.object({
 });
 export type OnboardingState = z.infer<typeof OnboardingStateSchema>;
 
-/** Moves to `stage` (a no-op if already there or past it). Reaching `starter` or `done` grants the starter cards once. */
+/**
+ * Moves to `stage`: only the next stage, and out of `packs` only after both scripted packs
+ * (T22, onboarding is mandatory). The current or an earlier stage is a no-op. Reaching
+ * `starter` or `done` grants the starter cards once.
+ */
 export const AdvanceOnboardingRequestSchema = z.object({ stage: OnboardingStageSchema });
 export type AdvanceOnboardingRequest = z.infer<typeof AdvanceOnboardingRequestSchema>;
