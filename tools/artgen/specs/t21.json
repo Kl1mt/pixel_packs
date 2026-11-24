@@ -1,0 +1,19 @@
+{
+  "id": "t21",
+  "description": "T21 Mythic pack art (GDD §7, §19): one style-matched call using the two approved realm packs as style images, so the Mythic satchel sits on the same shelf.",
+  "jobs": [
+    {
+      "id": "pack-mythic",
+      "endpoint": "generate-with-style-v2",
+      "palette": "master",
+      "seed": 21001,
+      "styleImages": [
+        "apps/client/public/assets/packs/mossgrove.png",
+        "apps/client/public/assets/packs/starhollow.png"
+      ],
+      "styleDescription": "Cozy whimsical storybook pixel art of a single sealed card pack as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy palette. Transparent background, no ground, no shadow, no text.",
+      "description": "a sealed card pack shaped like a plump little cloth satchel of deep midnight velvet with teal and seafoam starmetal trim, crimped and stitched top seam, a band of small glowing carved runes running around the middle, a chunky golden padlock with a keyhole hanging on the front clasp, slightly bulging with cards inside, upright, centered, front view, precious and magical but cozy, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+      "outDir": "tools/artgen/candidates/t21/pack-mythic"
+    }
+  ]
+}

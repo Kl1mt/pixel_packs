@@ -96,7 +96,8 @@ export function PacksPage() {
     );
 
   const s = snap.state;
-  const realmPity = s.pity.find((m) => m.group === 'realm');
+  // Realm packs share one meter, the Mythic pack has its own (GDD §5).
+  const pity = (['realm', 'mythic'] as const).flatMap((g) => s.pity.filter((m) => m.group === g));
   const oddsPack = oddsFor && odds?.packs.find((p) => p.packTypeId === oddsFor);
 
   return (
@@ -150,9 +151,11 @@ export function PacksPage() {
             </p>
           )}
         </Panel>
-        {realmPity && (
+        {pity.length > 0 && (
           <Panel className="shop-pity" aria-label="Pity meter">
-            <PityMeter meter={realmPity} />
+            {pity.map((m) => (
+              <PityMeter key={m.group} meter={m} />
+            ))}
           </Panel>
         )}
       </div>

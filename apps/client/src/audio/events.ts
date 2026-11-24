@@ -1,5 +1,6 @@
 import type { OpenedCard, Rarity, Variant, Wallet } from '@pixel-packs/shared';
 import type { Beat } from '../opening/moment.js';
+import { UNLOCK_AT } from '../opening/mythicSeal.js';
 import type { PackMood } from '../opening/reveal.js';
 import type { Settings } from '../settings/settings.js';
 import type { SfxId } from './sfxSprite.js';
@@ -50,6 +51,16 @@ export function beatSounds(beat: Beat, card: Pick<OpenedCard, 'rarity'>): SfxId[
 export function tearStepSound(theme: { id: string; clasp: boolean }): SfxId | null {
   if (theme.clasp) return 'open.clasp';
   return theme.id === 'mossgrove' ? 'open.rustle' : null;
+}
+
+/**
+ * The Mythic seal's sounds as its seam tears (T21): the padlock clicks open at
+ * `UNLOCK_AT`, then each eighth of the tear past it ticks as more runes light.
+ */
+export function sealSounds(prev: number, next: number): SfxId[] {
+  if (next <= prev) return [];
+  if (prev < UNLOCK_AT && next >= UNLOCK_AT) return ['open.clasp'];
+  return next > UNLOCK_AT && crossedTearStep(prev, next, 8) ? ['moment.tick'] : [];
 }
 
 /** True when tear progress crosses one of `steps` evenly spaced marks (not the end). */

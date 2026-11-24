@@ -7,17 +7,18 @@ const SEGMENTS = 20;
 export function PityMeter({ meter }: { meter: Meter }) {
   const { left, fill } = pityProgress(meter);
   const lit = Math.round(fill * SEGMENTS);
+  const pack = meter.group === 'mythic' ? 'Mythic pack' : 'realm pack';
   return (
-    <div className="pity" data-left={left}>
+    <div className="pity" data-left={left} data-group={meter.group}>
       <p className="pity__label">
         {left === 1
-          ? 'Your next realm pack brings a Legendary or better.'
-          : `Legendary or better within ${String(left)} realm packs.`}
+          ? `Your next ${pack} brings a Legendary or better.`
+          : `Legendary or better within ${String(left)} ${pack}s.`}
       </p>
       <div
         className="pity__bar"
         role="meter"
-        aria-label="Legendary guarantee"
+        aria-label={`Legendary guarantee, ${pack}s`}
         aria-valuemin={0}
         aria-valuemax={meter.legendaryHardPity}
         aria-valuenow={meter.packsSinceLegendaryPlus}
