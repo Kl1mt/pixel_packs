@@ -512,7 +512,7 @@ Docs: §4, §16, §19
   - **Style guide**: the frames row now shows MOS-012 and STA-003 on all six frames. Screenshots: `docs/cards/crests-{mossgrove,starhollow}.png` (written by `e2e/styleguide.spec.ts`), plus the refreshed `docs/styleguide/` and `docs/cards/` shots.
   - The static T06 style tile (`artgen style-tile`) is unchanged; it still shows the empty socket.
   - **CI fix (T13 code)**: the reduced-moment stillness check in `e2e/moments.spec.ts` failed on and off, on main too. Root cause: `RevealMoment`'s `cardBox()` read the transformed rect while the card's `flip-in` (scaleX) ran, so the moment slid sideways within one beat. It now anchors on the card's centre and untransformed width.
-  - **CI fix (T12/T14 tests)**: `getByRole('button', { name: 'Skip' })` also matched "Skip animation" whenever a random pull had a moment, so the locator is now `exact: true` in the audio, opening and moments specs.
+  - **CI fix (T12/T14 tests)**: `getByRole('button', { name: 'Skip' })` also matched "Skip animation" whenever a random pull had a moment, so the locator is now `exact: true` in the audio, opening, moments and mythic specs.
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test`, client `e2e`.
 
 
