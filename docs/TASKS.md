@@ -518,11 +518,19 @@ Docs: §4, §16, §19
 
 ---
 
-### T21 — Mythic pack on the shelf + staged opening · M · budget ≤ 15
+### T21 — Mythic pack on the shelf + staged opening · M · budget ≤ 15 · done
 Docs: §5, §7, §19
 - Found in T12: the Mythic pack (300 gems) is enabled on the server but has no pack art, so the shelf leaves it out.
 - Pack art (PixelLab, ask before spending), a shelf spot that shows gems, and its staged opening (lock → runes → burst, §7) as a `PackTheme` in `apps/client/src/opening/themes.ts`.
 - **Done when**: a Mythic pack can be bought, opened and revealed end to end, with screenshots.
+- **Handoff notes (2026-11-24)**:
+  - **Spend: 10 of 15 generations** (balance 760 → 750): one `/generate-with-style-v2` call (16 candidates; spec `tools/artgen/specs/t21.json`, manifest `t21/pack-mythic`), the approved Mossgrove and Starhollow packs as style images, master palette. The output copies each style image's silhouette (odd numbers Mossgrove's, even Starhollow's). The user picked **#10** (marked `approved`, promoted to `apps/client/public/assets/packs/mythic.png`). Candidates, sheet and an opening preview strip are in `tools/artgen/candidates/t21/`.
+  - **Screenshots** (`e2e/mythic.spec.ts` rewrites them): `docs/opening/mythic/{shelf,tear-1-locked,tear-2-rattle,tear-3-runes,tear-4-burst,summary,click-fallback}.png`.
+  - **Shelf**: `ShopShelf` lists `SHELF_PACKS` (enabled realm packs, then `mythic`) with `packPrice(id)`; Buy checks the right currency and its label names it ("Buy a Mythic pack for 300 gems"). `packArt()` (`opening/themes.ts`) is the one source of pack sprites. `PityMeter` words itself by group; the Packs page shows realm + Mythic meters (meter names "Legendary guarantee, realm packs" / "…, Mythic packs").
+  - **Opening** (`opening/mythicSeal.ts`, pure parts tested in `mythicSeal.test.ts`): `MYTHIC_THEME` in `themes.ts` with the new `PackTheme` fields `seal` (lock box + rune rows, measured on the sprite) and `autoTearMs` (1800 for Mythic, 450 otherwise). `analyseSeal` reads the padlock (warm pixels + touching ink), fills its hole with the velvet colour and groups the runes into glyphs (nearest the lock first); `sealStage` (unlock at 30 %, runes lit by 80 %), `lockOffset` (rattle, hop, fall), `runePixels`, `sigilPixels`. `MythicSeal` holds the lock-less body canvas and is drawn by `TearScene`. `packMask` moved to `opening/packMask.ts`.
+  - **Sound**: `sealSounds` (`audio/events.ts`): `open.clasp` when the lock gives, `moment.tick` per eighth of the tear while the runes light.
+  - **Dev**: `/debug` "Dev forcing" has "+1000 gems" and "+5 Mythic"; the moment lab takes `pack=mythic` (`/debug/moments?scene=tear&pack=mythic&fx=full`).
+  - Design decisions are in GDD §29 (T21 rows).
 
 ## Later milestones
 These are broken down into tasks in a planning session at the start of each milestone.

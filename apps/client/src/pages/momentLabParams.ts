@@ -17,6 +17,8 @@ const MomentLabSchema = z.object({
   scene: z.enum(['reveal', 'tear']).catch('reveal'),
   rarity: RaritySchema.catch('legendary'),
   variant: VariantSchema.catch('normal'),
+  /** Which pack the tear shows: the realm's pack, or the Mythic pack (T21). */
+  pack: z.enum(['realm', 'mythic']).catch('realm'),
   realm: RealmSchema.refine((r) => ENABLED_REALMS.includes(r)).catch('starhollow'),
   fx: z.enum(['settings', 'full', 'reduced']).catch('settings'),
   /** Hold the moment at this many ms; -1 plays it live. */
@@ -29,6 +31,7 @@ export function parseMomentLab(q: URLSearchParams): MomentLabParams {
     scene: q.get('scene') ?? undefined,
     rarity: q.get('rarity') ?? undefined,
     variant: q.get('variant') ?? undefined,
+    pack: q.get('pack') ?? undefined,
     realm: q.get('realm') ?? undefined,
     fx: q.get('fx') ?? undefined,
     at: q.get('at') ?? undefined,

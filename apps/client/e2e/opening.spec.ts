@@ -52,7 +52,9 @@ test.describe('pack opening', () => {
     await page.goto('/packs');
     const moss = page.getByRole('listitem', { name: 'Mossgrove pack' });
     await expect(moss.getByLabel('1 owned')).toBeVisible();
-    await expect(page.getByRole('meter', { name: 'Legendary guarantee' })).toBeVisible();
+    await expect(
+      page.getByRole('meter', { name: 'Legendary guarantee, realm packs' }),
+    ).toBeVisible();
     await settle(page);
     await shot(page, 'shelf');
 

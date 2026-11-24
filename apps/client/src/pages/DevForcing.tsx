@@ -135,6 +135,13 @@ export function DevForcing() {
         >
           +1000 gold
         </Button>
+        <Button
+          onClick={() => {
+            grant({ gems: 1000 }, '1000 gems');
+          }}
+        >
+          +1000 gems
+        </Button>
         {ENABLED_REALMS.map((realm) => (
           <Button
             key={realm}
@@ -145,6 +152,13 @@ export function DevForcing() {
             +5 {realm}
           </Button>
         ))}
+        <Button
+          onClick={() => {
+            grant({ packs: { packTypeId: 'mythic', count: 5 } }, '5 Mythic packs');
+          }}
+        >
+          +5 Mythic
+        </Button>
         <Link to="/packs">To the shop →</Link>
       </div>
       <p className="lab__status" role="status">

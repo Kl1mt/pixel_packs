@@ -1,4 +1,6 @@
 import { MASTER_PALETTE as P } from '@pixel-packs/shared';
+import { MythicSeal } from './mythicSeal.js';
+import { packMask } from './packMask.js';
 import { ambientPetal, burstPetal, petalPixels, stepPetals, type Petal } from './petals.js';
 import { claspPixels, Stardust } from './starhollow.js';
 import { SEAM_REACH, SeamTear, TEAR_DONE } from './tear.js';
@@ -20,7 +22,6 @@ export interface TearSceneOptions {
 const PACK = 64;
 const BURST_MS = 700;
 const BURST_MS_REDUCED = 250;
-const AUTO_TEAR_MS = 450;
 /** Half-widths of the mound rows under the pack. */
 const MOUND = [24, 29, 31, 30, 27, 21] as const;
 const LEAK: Record<TearSceneOptions['mood'], readonly string[]> = {
@@ -53,6 +54,7 @@ export class TearScene {
   private torn = false;
   private spawn = 0;
   private readonly dust: Stardust | null;
+  private readonly seal: MythicSeal | null;
 
   constructor(
     private readonly canvas: HTMLCanvasElement,
@@ -64,6 +66,7 @@ export class TearScene {
     this.seam = new SeamTear(o.theme.seam.x0, o.theme.seam.x1);
     this.wrap = o.theme.wrap(packMask(o.packImage));
     this.dust = o.theme.stardust > 0 ? new Stardust(o.theme.stardust, Math.random) : null;
+    this.seal = o.theme.seal ? new MythicSeal(o.packImage, o.theme.seal, PACK) : null;
     canvas.addEventListener('pointerdown', this.onDown);
     canvas.addEventListener('pointermove', this.onMove);
     canvas.addEventListener('pointerup', this.onUp);
@@ -165,7 +168,7 @@ export class TearScene {
     this.last = now;
     this.clock += dt * 1000;
     if (this.autoFrom !== null && this.burstAt === null) {
-      this.seam.tearTo(this.o.reduced ? 1 : (this.clock - this.autoFrom) / AUTO_TEAR_MS);
+      this.seam.tearTo(this.o.reduced ? 1 : (this.clock - this.autoFrom) / this.o.theme.autoTearMs);
       this.progressed();
     }
     const burstMs = this.o.reduced ? BURST_MS_REDUCED : BURST_MS;
@@ -254,7 +257,11 @@ export class TearScene {
     // The pack below the seam, and the top flap flying off once it bursts.
     this.stardust(o, true);
     const cut = seam.y + 1;
-    ctx.drawImage(img, 0, cut, PACK, PACK - cut, o.x, o.y + cut, PACK, PACK - cut);
+    const body = this.seal?.body ?? img;
+    ctx.drawImage(body, 0, cut, PACK, PACK - cut, o.x, o.y + cut, PACK, PACK - cut);
+    if (this.seal)
+      for (const c of this.seal.pixels(this.seam.progress, this.clock, this.burstK(), opts.reduced))
+        this.px(o.x + c.x, o.y + c.y, c.colour);
     if (opts.theme.clasp)
       for (const c of claspPixels(this.seam.progress / TEAR_DONE, k > 0))
         this.px(o.x + c.x, o.y + c.y, c.colour);
@@ -292,17 +299,4 @@ export class TearScene {
     for (const petal of this.petals)
       for (const [x, y] of petalPixels(petal)) this.px(x, y, petal.colour);
   }
-}
-
-/** Which pack-local pixels the sprite covers (so vines hug the silhouette). */
-function packMask(img: HTMLImageElement): (x: number, y: number) => boolean {
-  const c = document.createElement('canvas');
-  c.width = PACK;
-  c.height = PACK;
-  const ctx = c.getContext('2d');
-  if (!ctx) return () => true;
-  ctx.drawImage(img, 0, 0);
-  const data = ctx.getImageData(0, 0, PACK, PACK).data;
-  return (x, y) =>
-    x >= 0 && y >= 0 && x < PACK && y < PACK && (data[(y * PACK + x) * 4 + 3] ?? 0) > 0;
 }
