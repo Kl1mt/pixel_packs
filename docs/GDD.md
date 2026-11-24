@@ -168,6 +168,7 @@ Each realm also has a sub-palette (§19), a village building (§11) and realm ba
   - Drag across the seal to tear it (mouse or touch), or click.
   - Cards are revealed in ascending rarity, featured slot last. "Reveal all" and "Skip" are available.
   - Afterwards comes a results summary with NEW badges and "Dust extras".
+  - The spotlight card and the result cards tilt towards the pointer like inspect (§12; T22).
 - **Themes**: each realm pack has its own tear animation (§3). The Mythic pack opens in stages (lock → runes → burst); event packs use an event theme.
 
 ## 8. Economy
@@ -243,7 +244,7 @@ Each realm also has a sub-palette (§19), a village building (§11) and realm ba
 - **Binder**: a book with page turns and realm tabs.
   - Missing cards show as silhouettes; copies are stacked.
   - Filters for rarity, variant, stars, owned, edition and minted, plus sorting; the grid is virtualised.
-- **Card inspect**: 3D tilt with the card's shader, lore, the traits of each copy, and fuse / dust / wishlist / showcase actions.
+- **Card inspect**: 3D tilt with the card's shader (the pack reveal tilts too, T22), lore, the traits of each copy, and fuse / dust / wishlist / showcase actions.
 - **Collection log**: completion per realm and per variant.
   - Rewards: card backs, binder themes, titles, animated profile frames (e.g. for a full Glitch row).
 - **Pull history**: every opening, filterable.
@@ -314,13 +315,13 @@ Goal: simple, intuitive and modern with eye-candy, and clearly hand-crafted, **n
 **Device**: desktop-first, responsive down to phone width.
 
 ## 17. Onboarding (first ~90 s)
-1. Register; a moth courier from the Wandering Post delivers your first satchel (3 short lines, skippable).
+1. Register; a moth courier from the Wandering Post delivers your first satchel (3 short lines).
 2. **Pack 1 (scripted)**: an Epic in the featured slot, which teaches the anticipation glow.
 3. **Pack 2 (scripted)**: the featured card is a Foil, which teaches variants and tilt.
 4. A binder tour (2 tooltips), then 5 account-bound starter cards, which form a ready caravan for M4.
 5. Home, with the free-pack timer highlighted.
 
-Every step can be skipped. In scripted packs only the forced slot is scripted; everything else rolls normally. Scripted packs don't count towards pity or the best-pull leaderboard.
+Onboarding is mandatory: no step can be skipped, and the server keeps the step so a reload resumes it (T22). In scripted packs only the forced slot is scripted; everything else rolls normally. Scripted packs don't count towards pity or the best-pull leaderboard.
 
 ## 18. Accessibility & performance
 - Rarity is readable without colour (pips, frame material, label), and the rarity hues are checked for colour-blind safety.
@@ -578,3 +579,8 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T17: measured cost 1 generation per `/create-character-v3` call and 1 per `/characters/animations` direction at this size (≈ 5 per critter), well under the §19 M4 estimate |
 | 2026-11-24 | T21: Mythic pack art = candidate #10 of one `/generate-with-style-v2` call (the two realm packs as style images, master palette; user pick): a midnight-velvet satchel with a teal rune band and a gold heart padlock, `packs/mythic.png`. It sits last on the shop shelf with its gem price; the Packs page shows a second pity meter for the Mythic group under the realm one. |
 | 2026-11-24 | T21: the Mythic staged opening (§7 lock → runes → burst) follows the seam tear: up to 30 % the padlock rattles harder, at 30 % it clicks open, hops and drops off the satchel, showing a rune sigil (code-drawn) where it hung; from 30 % to the breaking point (80 %) the sigil and the band's rune glyphs light gold outward from the centre (a tick per step); the burst adds a gold shockwave from the sigil and rune sparks. Lock and runes are read off the sprite (warm pixels in the lock box, teal pixels in the band rows), so new art only needs re-measured rects. The click fallback takes 1.8 s (450 ms for realm packs) so all stages show; reduced effects keep the lock still and drop the hop, shockwave and sparks. |
+| 2026-11-24 | T22 (user feedback): onboarding is mandatory. No "Skip", "Save it for later", "Skip the tour" or "Skip the welcome". The server only moves to the next stage and leaves the packs step only after both scripted packs are open (`409 onboardingOrder`; "Continue" remains only for an empty satchel). Until it is done, `/packs`, `/binder` and `/binder/history` send the player to `/welcome` (the binder stays open for its tour). E2E specs finish it through the dev-only `POST /api/dev/onboarding/complete` (no route in production). Replaces the T16 skipping row |
+| 2026-11-24 | T22 (user feedback): the 3D tilt (≤ 8°, pointer-driven, flat at rest, off under reduced motion) also applies to the reveal's spotlight card (held flat while a moment plays around it) and the result cards. Extends the T15 row; every other card still never rotates |
+| 2026-11-24 | T22 (user feedback): the Mossgrove tear drops small petal sprites drawn in code instead of 2 px pixels: blossom, round and slim petals (blush/rose, cream/blush, rose/berry) and small leaves (sprout/leaf, lichen/moss), ≤ 4×4 px, tumbling (quarter turns plus flipping edge-on to a shaded back). Starhollow keeps its 2 px motes. No PixelLab spend |
+| 2026-11-24 | T22 (user feedback): the results page scrolls as before (wheel, touch, keyboard; the dialog takes focus) but shows no scroll bar |
+| 2026-11-24 | T22 (user feedback): the First-Edition badge is a smaller stamp (berry fill, 1 px padding, ink drop shadow right and below: 24×8 px, was a 25×9 outlined plate) in the art window's bottom-right corner. Stars stay top-left and the mint plate top-right. Replaces the T11 placement "under the stars" |

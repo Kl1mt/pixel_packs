@@ -81,10 +81,11 @@ Both need a session (`401`). Schemas: `packages/shared/src/api/onboarding.ts`. T
 | Method & path | Body | Success | Errors |
 |---|---|---|---|
 | `GET /api/onboarding` | — | `200 { stage, scriptedPacksOpened, starterCards }` | — |
-| `POST /api/onboarding/advance` | `{ stage }` | `200` the same shape; moves forward only (an earlier stage is a no-op) | `400 badRequest` |
+| `POST /api/onboarding/advance` | `{ stage }` | `200` the same shape; only to the next stage (the current or an earlier stage is a no-op) | `400 badRequest`, `409 onboardingOrder` |
 
-- `stage` is `courier → packs → tour → starter → done` (GDD §17). The client shows `/welcome` until `done`.
-- The first time a player reaches `starter` or `done` (skipping counts), the five account-bound starter cards (`STARTER_CARDS`, `rules/onboarding.ts`) are granted in one transaction: plain, ★1, no stamp, `source: 'starter'`, `accountBound: true`, ledger reason `starterCards`. `starterCards` lists them (in caravan order) from then on, else `null`. They are granted once per account, even after `pnpm admin reset-onboarding` (which sets the stage back to `courier` and the scripted packs to 0).
+- `stage` is `courier → packs → tour → starter → done` (GDD §17). The client shows `/welcome` until `done`, and `/packs`, `/binder` and `/binder/history` send an unfinished player there (the binder only stays open for the `tour` step).
+- Onboarding is mandatory (T22): jumping over a stage, or leaving `packs` before both scripted packs are open (unless no realm pack is left), is `409 onboardingOrder`. Tests finish it with the dev-only `POST /api/dev/onboarding/complete`.
+- The first time a player reaches `starter` (or `done` through the dev route), the five account-bound starter cards (`STARTER_CARDS`, `rules/onboarding.ts`) are granted in one transaction: plain, ★1, no stamp, `source: 'starter'`, `accountBound: true`, ledger reason `starterCards`. `starterCards` lists them (in caravan order) from then on, else `null`. They are granted once per account, even after `pnpm admin reset-onboarding` (which sets the stage back to `courier` and the scripted packs to 0).
 
 ### Admin CLI (`tools/admin`)
 ```sh
@@ -96,12 +97,13 @@ pnpm admin odds-override <user> <packs> [rarity] [variant]   # dev only, packs 0
 It uses `DATABASE_URL`, or else the server's PGlite directory (`PGLITE_DIR`, default `apps/server/.data/pglite`), which only one process can open: stop `pnpm dev` first. Odds overrides act like a scripted pack (no pity) and are ignored by a server with `NODE_ENV=production`.
 
 ### Dev routes (T12)
-Only on a server with dev overrides allowed (`NODE_ENV` ≠ `production`); production has no `/api/dev`, so they answer `404`. Both act on the logged-in player (`401` otherwise). Schemas: `packages/shared/src/api/dev.ts`. The `/debug` page's "Dev forcing" panel uses them.
+Only on a server with dev overrides allowed (`NODE_ENV` ≠ `production`); production has no `/api/dev`, so they answer `404`. They act on the logged-in player (`401` otherwise). Schemas: `packages/shared/src/api/dev.ts`. The `/debug` page's "Dev forcing" panel uses them.
 
 | Method & path | Body | Success |
 |---|---|---|
 | `POST /api/dev/odds-override` | `{ packs (0–50), rarity?, variant? }` | `204`; forces the featured slot of the next `packs` non-scripted packs, `packs: 0` clears |
 | `POST /api/dev/grant` | `{ gold?, gems?, packs? { packTypeId, count } }` (at least one) | `200 EconomyState` |
+| `POST /api/dev/onboarding/complete` | — | `200 OnboardingState`; onboarding `done` at once, starter cards granted (for e2e specs, T22) |
 
 ### curl (after logging in as above)
 ```sh

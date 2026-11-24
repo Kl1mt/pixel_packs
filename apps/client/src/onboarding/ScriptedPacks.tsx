@@ -39,11 +39,12 @@ export interface ScriptedPacksProps {
   busy: boolean;
   /** A reveal reached its results and was closed. */
   onOpened: () => void;
-  onSkip: () => void;
+  /** Moves on when the satchel holds no realm pack (nothing left to open). */
+  onContinue: () => void;
 }
 
 /** The two scripted onboarding packs, torn open in the full opening scene. */
-export function ScriptedPacks({ economy, opened, busy, onOpened, onSkip }: ScriptedPacksProps) {
+export function ScriptedPacks({ economy, opened, busy, onOpened, onContinue }: ScriptedPacksProps) {
   const [scene, setScene] = useState<{ opening: PackOpening; resumed: boolean } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [working, setWorking] = useState(false);
@@ -104,11 +105,14 @@ export function ScriptedPacks({ economy, opened, busy, onOpened, onSkip }: Scrip
             Open the {packName(pack)}
           </Button>
         ) : (
-          <p>The satchel is empty.</p>
+          <>
+            <p>The satchel is empty.</p>
+            {/* Only here, so an empty satchel cannot trap the player; packs cannot be skipped (T22). */}
+            <Button disabled={busy || working} onClick={onContinue}>
+              Continue
+            </Button>
+          </>
         )}
-        <Button disabled={busy || working} onClick={onSkip}>
-          {pack ? 'Save it for later' : 'Continue'}
-        </Button>
       </div>
       {scene && (
         <Suspense fallback={<div className="opening opening--loading" />}>

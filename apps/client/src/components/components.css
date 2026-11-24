@@ -153,3 +153,13 @@
   font-style: italic;
   font-size: var(--small);
 }
+
+/* Tilt (T15, T22): a card leaning towards the pointer, at most 8°; flat at rest. */
+.tilt {
+  perspective: 900px;
+}
+
+.tilt__card {
+  transform: rotateX(var(--tilt-x, 0)) rotateY(var(--tilt-y, 0));
+  transition: transform var(--motion-fast) ease-out;
+}

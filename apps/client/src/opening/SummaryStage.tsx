@@ -3,6 +3,7 @@ import type { DustExtrasPreview, PackOpening } from '@pixel-packs/shared';
 import { Button } from '../components/Button.js';
 import { CurrencyBadge } from '../components/CurrencyBadge.js';
 import { Notice } from '../components/Notice.js';
+import { Tilt } from '../components/Tilt.js';
 import { economyApi } from '../economy/api.js';
 import { economyStore } from '../economy/useEconomy.js';
 import { ApiError } from '../http.js';
@@ -84,7 +85,9 @@ export function SummaryStage({
       <ul className="summary__cards" aria-label="Cards in this pack">
         {opening.cards.map((c) => (
           <li key={c.slot} className="summary__card" data-featured={c.featured}>
-            <OpenedFace card={c} />
+            <Tilt>
+              <OpenedFace card={c} />
+            </Tilt>
             <NewTag card={c} />
           </li>
         ))}

@@ -4,6 +4,7 @@ import { beatSounds } from '../audio/events.js';
 import type { OpenedCard } from '@pixel-packs/shared';
 import { Button } from '../components/Button.js';
 import { Card, CardBack } from '../components/Card.js';
+import { Tilt } from '../components/Tilt.js';
 import { cardFaceModel } from '../components/cardFace.js';
 import { CardStage } from '../render/CardStage.js';
 import { cardShown, momentPlan, type BeatAt } from './moment.js';
@@ -145,7 +146,10 @@ export function RevealStage(p: RevealStageProps) {
               }
             >
               <div ref={flip} className="reveal__flip">
-                <OpenedFace card={current} />
+                {/* Flat while a moment is drawn around the card (its canvases match its box). */}
+                <Tilt disabled={playing}>
+                  <OpenedFace card={current} />
+                </Tilt>
               </div>
               <figcaption className="reveal__caption">
                 <span className="reveal__name">{catalogName(current)}</span>

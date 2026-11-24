@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { OUT, loggedIn, settle, skipOnboarding } from './helpers.js';
+import { completeOnboarding, loggedIn, OUT, settle } from './helpers.js';
 
 test('style guide renders the approved style-tile parts', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -20,7 +20,7 @@ test('style guide renders the approved style-tile parts', async ({ page }) => {
 test('app shell: navigation, routing and the phone layout', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await loggedIn(page);
-  await skipOnboarding(page);
+  await completeOnboarding(page);
   await page.goto('/');
   await settle(page);
   const nav = page.getByRole('navigation', { name: 'Main' });

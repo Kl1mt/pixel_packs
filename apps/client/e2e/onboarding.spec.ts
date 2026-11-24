@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { loggedIn, newIdentity, settle, skipOnboarding } from './helpers.js';
+import { loggedIn, newIdentity, settle, completeOnboarding } from './helpers.js';
 
 const OUT = '../../docs/onboarding';
 const shot = (page: Page, name: string) =>
@@ -108,31 +108,36 @@ test.describe('onboarding', () => {
     console.log(`onboarding took ${seconds.toFixed(1)} s`);
   });
 
-  test('every step can be skipped, and the packs wait on the shelf', async ({ page }) => {
+  test('nothing can be skipped, and a reload resumes the current step (T22)', async ({ page }) => {
     await loggedIn(page);
     await page.goto('/');
     await expect(page).toHaveURL(/\/welcome$/);
-    // Step by step: the courier's lines, the packs ("later"), the tour, the starter cards.
-    await page.getByRole('button', { name: 'Skip', exact: true }).click();
-    await page.getByRole('button', { name: 'Save it for later' }).click();
-    await expect(page).toHaveURL(/\/binder\?tour=1$/);
-    await page.getByRole('button', { name: 'Skip the tour' }).click();
-    await expect(page.getByRole('heading', { name: 'Five friends for the road' })).toBeVisible();
-    await page.getByRole('button', { name: 'Take them home' }).click();
-    await expect(page).toHaveURL(/\/\?welcome=1$/);
-    await page.goto('/packs');
-    const moss = page.getByRole('listitem', { name: 'Mossgrove pack' });
-    await expect(moss.getByLabel('1 owned')).toBeVisible();
-  });
+    const skips = page.getByRole('button', { name: /skip|later/i });
+    await expect(page.getByRole('button', { name: 'Next' })).toBeVisible();
+    await expect(skips).toHaveCount(0);
+    // The game pages send an unfinished player back to the welcome flow.
+    for (const path of ['/packs', '/binder', '/binder/history']) {
+      await page.goto(path);
+      await expect(page).toHaveURL(/\/welcome$/);
+    }
+    // The server refuses to jump ahead too.
+    const csrf = (await (await page.request.get('/api/auth/csrf')).json()) as { csrfToken: string };
+    const jump = await page.request.post('/api/onboarding/advance', {
+      data: { stage: 'done' },
+      headers: { 'x-csrf-token': csrf.csrfToken },
+    });
+    expect(jump.status()).toBe(409);
 
-  test('"Skip the welcome" goes straight Home with the starter cards', async ({ page }) => {
-    await loggedIn(page);
-    await page.goto('/welcome');
-    await page.getByRole('button', { name: 'Skip the welcome' }).click();
-    await expect(page).toHaveURL(/\/\?welcome=1$/);
-    await page.goto('/binder');
-    // The Mossgrove page shows its three starters (the other two are on Starhollow's).
-    await expect(page.locator('.pocket--owned')).toHaveCount(3);
+    for (let i = 0; i < 2; i += 1) await page.getByRole('button', { name: 'Next' }).click();
+    await page.getByRole('button', { name: 'Take the satchel' }).click();
+    await expect(page.getByRole('heading', { name: 'Your first pack' })).toBeVisible();
+    await expect(skips).toHaveCount(0);
+    await page.reload();
+    await expect(page.getByRole('heading', { name: 'Your first pack' })).toBeVisible();
+    await openScripted(page, 'Mossgrove', 'On to the next pack');
+    await page.reload();
+    await expect(page.getByRole('heading', { name: 'One more' })).toBeVisible();
+    await expect(skips).toHaveCount(0);
   });
 });
 
@@ -141,7 +146,7 @@ test.describe('home', () => {
 
   test('free pack, daily calendar and the satchel counter', async ({ page }) => {
     await loggedIn(page);
-    await skipOnboarding(page);
+    await completeOnboarding(page);
     await page.goto('/');
     const satchel = page.getByRole('region', { name: 'Your packs' });
     await expect(satchel).toContainText('2 packs are waiting');

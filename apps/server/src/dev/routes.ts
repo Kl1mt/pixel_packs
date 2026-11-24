@@ -8,6 +8,7 @@ import { grantCurrency, grantPacks, setOddsOverride } from '../admin/index.js';
 import { requireAuth } from '../auth/plugin.js';
 import type { EconomyCtx } from '../economy/context.js';
 import { economyState } from '../economy/state.js';
+import { completeOnboarding } from '../onboarding/service.js';
 
 /**
  * Dev-only HTTP routes for the `/debug` page (T12), on top of the admin helpers.
@@ -25,6 +26,11 @@ export function registerDevRoutes(app: FastifyInstance, ctx: EconomyCtx): void {
     });
     return reply.status(204).send();
   });
+
+  // Specs start at Home through this, since the player-facing flow cannot be skipped (T22).
+  app.post('/api/dev/onboarding/complete', (req) =>
+    completeOnboarding(ctx, requireAuth(req).user.id),
+  );
 
   app.post('/api/dev/grant', async (req): Promise<EconomyState> => {
     const { user } = requireAuth(req);

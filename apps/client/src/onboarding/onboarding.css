@@ -15,21 +15,6 @@
   margin-top: var(--sp-4);
 }
 
-/* A quiet text button: skipping is always there, never shouting. */
-.welcome__skip-all {
-  padding: var(--sp-1) 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  font-family: inherit;
-}
-
-.welcome > .welcome__head .welcome__skip-all {
-  color: var(--role-textOnWoodMuted);
-}
-
 /* The courier: the Mail Moth perched on the letter's top edge. */
 .courier {
   position: relative;

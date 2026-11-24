@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { apiPost, loggedIn, settle } from './helpers.js';
+import { apiPost, completeOnboarding, loggedIn, settle } from './helpers.js';
 
 const OUT = '../../docs/opening/mythic';
 
@@ -42,6 +42,7 @@ test.describe('the Mythic pack', () => {
       if (m.type() === 'error') errors.push(m.text());
     });
     await loggedIn(page);
+    await completeOnboarding(page);
     await page.goto('/packs');
     const mythic = page.getByRole('listitem', { name: 'Mythic pack' });
     const buy = mythic.getByRole('button', { name: 'Buy a Mythic pack for 300 gems' });

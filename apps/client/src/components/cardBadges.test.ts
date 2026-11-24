@@ -14,9 +14,10 @@ describe('card badges (GDD §6)', () => {
   });
 
   it('keeps the largest badge set inside the art window, in palette colours, without overlap', () => {
-    const left = cardBadgePixels({
+    const left = cardBadgePixels({ variant: 'normal', stars: 3, edition: null, mintNumber: null });
+    const stamp = cardBadgePixels({
       variant: 'normal',
-      stars: 3,
+      stars: 1,
       edition: { season: 9 },
       mintNumber: null,
     });
@@ -26,15 +27,36 @@ describe('card badges (GDD §6)', () => {
       edition: null,
       mintNumber: 99999,
     });
-    for (const p of [...left, ...right]) {
+    for (const p of [...left, ...right, ...stamp]) {
       expect(p.x).toBeGreaterThanOrEqual(W.x);
       expect(p.x).toBeLessThan(W.x + W.w);
       expect(p.y).toBeGreaterThanOrEqual(W.y);
+      expect(p.y).toBeLessThan(W.y + W.h);
       expect(PALETTE.has(p.colour)).toBe(true);
     }
     const leftMax = Math.max(...left.map((p) => p.x));
     const rightMin = Math.min(...right.map((p) => p.x));
     expect(leftMax).toBeLessThan(rightMin);
+  });
+
+  it('puts the First-Edition stamp bottom-right, smaller than a plate, clear of stars and mint (T22)', () => {
+    const stamp = cardBadgePixels({
+      variant: 'normal',
+      stars: 1,
+      edition: { season: 1 },
+      mintNumber: null,
+    });
+    const xs = stamp.map((p) => p.x);
+    const ys = stamp.map((p) => p.y);
+    // 2 px inside the art window's bottom-right corner.
+    expect(Math.max(...xs)).toBe(W.x + W.w - 3);
+    expect(Math.max(...ys)).toBe(W.y + W.h - 3);
+    // 24×8 (was a 25×9 plate).
+    expect(Math.max(...xs) - Math.min(...xs) + 1).toBe(24);
+    expect(Math.max(...ys) - Math.min(...ys) + 1).toBe(8);
+    const top = cardBadgePixels({ variant: 'void', stars: 3, edition: null, mintNumber: 99999 });
+    // The stars and the mint plate stay in the top rows, well above the stamp.
+    expect(Math.max(...top.map((p) => p.y))).toBeLessThan(Math.min(...ys));
   });
 
   it('shows mint plates only for minted variants', () => {
