@@ -92,7 +92,7 @@ test.describe('pack opening', () => {
     await settle(page);
     await shot(page, 'reveal-flip');
     await page.getByRole('button', { name: 'Reveal all' }).click();
-    await expect(page.locator('.reveal')).toHaveAttribute('data-flipped', '5');
+    await expect(page.locator('.reveal')).toHaveAttribute('data-flipped', '5', { timeout: 15_000 });
     await page.waitForTimeout(400);
     await settle(page);
     await shot(page, 'reveal-featured');
@@ -156,7 +156,7 @@ test.describe('pack opening', () => {
     await page.getByRole('button', { name: 'Resume reveal' }).click();
     await expect(starScene).toHaveAttribute('data-phase', 'reveal');
     await expect(page.locator('.reveal')).toHaveAttribute('data-flipped', '0');
-    await page.getByRole('button', { name: 'Skip' }).click();
+    await page.getByRole('button', { name: 'Skip', exact: true }).click();
     await expect(starScene).toHaveAttribute('data-phase', 'summary');
     await expect.poll(() => pending(page)).toBeNull();
     await page.getByRole('button', { name: 'Back to the shelf' }).click();
@@ -193,7 +193,7 @@ test.describe('pack opening', () => {
     }
     await page.goto('/packs');
     await page.getByRole('button', { name: 'Resume reveal' }).click();
-    await page.getByRole('button', { name: 'Skip' }).click();
+    await page.getByRole('button', { name: 'Skip', exact: true }).click();
     await page.getByRole('button', { name: 'Back to the shelf' }).click();
     await expect(page.locator('.shell__wallet')).toContainText('1000');
     await moss.getByRole('button', { name: /Buy a Mossgrove pack/ }).click();

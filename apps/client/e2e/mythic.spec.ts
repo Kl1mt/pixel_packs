@@ -82,7 +82,7 @@ test.describe('the Mythic pack', () => {
 
     // The reveal (the featured slot rolls Epic or better on the server).
     await expect(scene).toHaveAttribute('data-phase', 'reveal');
-    await page.getByRole('button', { name: 'Skip' }).click();
+    await page.getByRole('button', { name: 'Skip', exact: true }).click();
     await expect(scene).toHaveAttribute('data-phase', 'summary');
     await expect(page.locator('.summary__card')).toHaveCount(5);
     await expect(page.locator('.summary__card[data-featured="true"]')).toHaveCount(1);

@@ -17,18 +17,18 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T06 | Frames, packs, UI art + style tile | T04 | done |
 | T07 | Client design system & app shell | T06 | done |
 | T08 | Database & email auth (API) | T02 | done |
-| T09 | Auth screens + Discord login | T07, T08 | todo |
+| T09 | Auth screens + Discord login | T07, T08 | done |
 | T10 | Economy & pack API | T03, T08 | done |
 | T11 | Card renderer & variant shaders | T05, T07 | done |
 | T12 | Pack opening I: core flow + Mossgrove theme | T10, T11 | done |
-| T13 | Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers | T12 | todo |
+| T13 | Pack opening II: Starhollow, Legendary/Mythic reveals, variant stingers | T12 | done |
 | T14 | Audio | T12 | done |
-| T15 | Binder, card inspect & pull history | T10, T11 | todo |
+| T15 | Binder, card inspect & pull history | T10, T11 | done |
 | T16 | Home & onboarding | T09, T12, T15 | done |
-| T17 | Character & idle-animation trial | T05 | todo |
-| T18 | M1 QA & polish | all M1 | todo |
+| T17 | Character & idle-animation trial | T05 | done |
+| T18 | M1 QA & polish | all M1 | in progress |
 | T20 | Realm crest in the card crest socket | T11 | todo |
-| T21 | Mythic pack on the shelf + staged opening | T12, T13 | todo |
+| T21 | Mythic pack on the shelf + staged opening | T12, T13 | done |
 | T22 | M1 feedback polish | T11–T16 | done |
 
 ---
