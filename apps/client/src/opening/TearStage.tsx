@@ -91,9 +91,13 @@ export function TearStage({ theme, packSrc, packName, mood, reduced, onTorn }: T
       </div>
       <div className="tear__controls">
         <p className="tear__hint" aria-live="polite">
-          {pct === 0
-            ? 'Drag across the stitched seam to tear it open.'
-            : `Tearing… ${String(pct)} %`}
+          {pct === 0 ? (
+            'Drag across the stitched seam to tear it open.'
+          ) : (
+            <>
+              Tearing…<span aria-hidden="true"> {String(pct)} %</span>
+            </>
+          )}
         </p>
         <Button
           onClick={() => {

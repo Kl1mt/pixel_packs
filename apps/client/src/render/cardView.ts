@@ -162,8 +162,8 @@ export class CardView {
       text: this.model.rules.join('\n'),
       style: {
         fontFamily: FONT_STACKS.body,
-        fontSize: 13,
-        lineHeight: 13 * 1.25,
+        fontSize: this.model.rulesSize,
+        lineHeight: this.model.rulesSize * 1.15,
         align: 'center',
         wordWrap: true,
         wordWrapWidth: r.w * s,

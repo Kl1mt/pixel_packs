@@ -98,6 +98,8 @@ body {
 
 .page-title {
   color: var(--glow);
+  /* Long usernames ("Welcome home, …") wrap instead of widening the page. */
+  overflow-wrap: anywhere;
   text-shadow: var(--art-px) var(--art-px) 0 var(--ink);
   margin-bottom: var(--sp-8);
 }
