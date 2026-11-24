@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { abilityRulesText, cardRulesText, isAbilityTargetValid } from './rulesText.js';
+import { CARD_CATALOG } from '../data/cards/index.js';
+import {
+  abilityFaceText,
+  abilityRulesText,
+  cardFaceRulesText,
+  cardRulesText,
+  isAbilityTargetValid,
+} from './rulesText.js';
+import { starredCard } from './stars.js';
 
 describe('abilityRulesText', () => {
   it('writes self effects as verbs', () => {
@@ -69,5 +77,60 @@ describe('abilityRulesText', () => {
       ],
     });
     expect(lines).toEqual(['On enter: gain 2 thorns.', 'When hurt: gain +1 ATK.']);
+  });
+});
+
+describe('abilityFaceText (compact card-face wording, T24)', () => {
+  it('uses short triggers and targets, "dmg" and no articles', () => {
+    expect(
+      abilityFaceText({
+        trigger: 'startOfBattle',
+        effect: 'weaken',
+        target: 'enemyFront',
+        value: 2,
+      }),
+    ).toBe('Battle start: front enemy −2 ATK.');
+    expect(
+      abilityFaceText({
+        trigger: 'onAllyFaint',
+        effect: 'damage',
+        target: 'randomEnemy',
+        value: 2,
+      }),
+    ).toBe('Ally faints: 2 dmg to random enemy.');
+    expect(
+      abilityFaceText({ trigger: 'onHurt', effect: 'buffAtk', target: 'self', value: 1 }),
+    ).toBe('Hurt: +1 ATK.');
+    expect(
+      abilityFaceText({ trigger: 'onEnter', effect: 'shield', target: 'self', value: 2 }),
+    ).toBe('Enter: +2 shield.');
+    expect(
+      abilityFaceText({ trigger: 'onFaint', effect: 'heal', target: 'allAllies', value: 3 }),
+    ).toBe('Faint: heal all allies 3 HP.');
+    expect(
+      abilityFaceText({ trigger: 'onFaint', effect: 'buffHp', target: 'behind', value: 2 }),
+    ).toBe('Faint: ally behind +2 HP.');
+    const support = { trigger: 'support', effect: 'heal', target: 'front', value: 1 } as const;
+    expect(abilityFaceText({ ...support, every: 3 })).toBe('Every 3 ticks: heal front ally 1 HP.');
+    expect(abilityFaceText({ ...support, every: 1 })).toBe('Every tick: heal front ally 1 HP.');
+  });
+
+  it('rejects invalid targets like the full text', () => {
+    expect(() =>
+      abilityFaceText({ trigger: 'onEnter', effect: 'damage', target: 'self', value: 1 }),
+    ).toThrow();
+  });
+
+  it('is never longer than the full sentence, for every card and star level', () => {
+    for (const card of CARD_CATALOG)
+      for (const stars of [1, 2, 3] as const) {
+        const played = starredCard(card, stars);
+        const face = cardFaceRulesText(played);
+        const full = cardRulesText(played);
+        expect(face).toHaveLength(full.length);
+        face.forEach((line, i) => {
+          expect(line.length, card.id).toBeLessThanOrEqual(full[i]?.length ?? 0);
+        });
+      }
   });
 });

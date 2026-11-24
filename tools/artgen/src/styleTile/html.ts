@@ -7,7 +7,7 @@ import {
   RARITIES,
   REALM_PALETTES,
   cardNameSize,
-  cardRulesText,
+  cardFaceRulesText,
   iconFile,
   realmPaletteHex,
   statDigitPixels,
@@ -50,7 +50,7 @@ function card(id: string, opts: CardOptions, input: StyleTileInput): string {
   const [sky, ground] = BACKDROP[c.realm] ?? [MASTER_PALETTE.cream, MASTER_PALETTE.straw];
   const drop = input.artDrop[id] ?? 0;
   const s = (n: number) => `calc(${String(n)}px * var(--card))`;
-  const rules = cardRulesText(c);
+  const rules = cardFaceRulesText(c);
   // ATK/HP: chunky ink digits in art pixels, centred in the badge circles (shared statDigitPixels).
   const stats = [...statDigitPixels(atk, CARD_FACE.atk), ...statDigitPixels(hp, CARD_FACE.hp)];
   return `<figure class="card" style="--bd-sky:${sky};--bd-ground:${ground}" aria-label="${esc(c.name)}, ${r}, attack ${String(atk)}, health ${String(hp)}">

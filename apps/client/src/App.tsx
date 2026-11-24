@@ -48,6 +48,12 @@ const router = createBrowserRouter([
         hydrateFallbackElement: <p className="on-ground">Loading the moment lab…</p>,
         lazy: () => import('./pages/MomentLab.js').then((m) => ({ Component: m.MomentLab })),
       },
+      {
+        // Rules-fit lab (T24): every card face × star level, measured by e2e/rulesFit.spec.ts.
+        path: 'rules',
+        hydrateFallbackElement: <p className="on-ground">Loading the rules lab…</p>,
+        lazy: () => import('./pages/RulesLab.js').then((m) => ({ Component: m.RulesLab })),
+      },
     ],
   },
   {
