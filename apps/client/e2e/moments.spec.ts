@@ -128,7 +128,7 @@ test.describe('reveal moments', () => {
     // The first two packs are the scripted onboarding packs: open and skip them.
     for (const realm of ['Mossgrove', 'Starhollow']) {
       await open(realm);
-      await page.getByRole('button', { name: 'Skip' }).click();
+      await page.getByRole('button', { name: 'Skip', exact: true }).click();
       await page.getByRole('button', { name: 'Back to the shelf' }).click();
     }
 

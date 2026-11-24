@@ -53,7 +53,7 @@ test.describe('audio', () => {
     const opened = (await probe(page)).log;
     expect(opened).toEqual(expect.arrayContaining(['open.tear', 'open.slide', 'open.flip']));
     expect(opened.some((id) => id.startsWith('rarity.'))).toBe(true);
-    await page.getByRole('button', { name: 'Skip' }).click();
+    await page.getByRole('button', { name: 'Skip', exact: true }).click();
     await page.getByRole('button', { name: 'Back to the shelf' }).click();
     await expect(scene).toBeHidden();
     await expect.poll(async () => (await probe(page)).music).toBe('home');
