@@ -12,6 +12,7 @@ import './debug.css';
 
 const OPTIONS = {
   scene: ['reveal', 'tear'],
+  pack: ['realm', 'mythic'],
   rarity: RARITIES,
   variant: VARIANTS,
   realm: ENABLED_REALMS,
@@ -34,7 +35,12 @@ export function MomentLab() {
     setQ(next, { replace: true });
   };
   const sequence = labSequence(p);
-  const packTypeId = p.realm === 'mossgrove' ? 'realm:mossgrove' : 'realm:starhollow';
+  const packTypeId =
+    p.pack === 'mythic'
+      ? 'mythic'
+      : p.realm === 'mossgrove'
+        ? 'realm:mossgrove'
+        : 'realm:starhollow';
 
   return (
     <div
@@ -75,10 +81,10 @@ export function MomentLab() {
       </form>
       {p.scene === 'tear' ? (
         <TearStage
-          key={`${String(run)}-${p.realm}-${p.rarity}`}
+          key={`${String(run)}-${p.pack}-${p.realm}-${p.rarity}`}
           theme={themeFor(packTypeId)}
           packSrc={packArt(packTypeId)}
-          packName={`${p.realm} pack`}
+          packName={p.pack === 'mythic' ? 'Mythic pack' : `${p.realm} pack`}
           mood={labMood(p.rarity)}
           reduced={reduced}
           onTorn={() => undefined}

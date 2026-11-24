@@ -7,6 +7,7 @@ import {
   crossedTearStep,
   flipSounds,
   moodLayers,
+  sealSounds,
   tearStepSound,
   walletGainSounds,
 } from './events.js';
@@ -61,6 +62,12 @@ describe('audio events', () => {
     expect(crossedTearStep(0.3, 0.4)).toBe(false);
     expect(crossedTearStep(0.8, 1)).toBe(false);
     expect(crossedTearStep(0.5, 0.4)).toBe(false);
+    // The Mythic seal: the padlock clicks open, then the runes tick.
+    expect(sealSounds(0.1, 0.2)).toEqual([]);
+    expect(sealSounds(0.25, 0.32)).toEqual(['open.clasp']);
+    expect(sealSounds(0.36, 0.4)).toEqual(['moment.tick']);
+    expect(sealSounds(0.4, 0.45)).toEqual([]);
+    expect(sealSounds(0.5, 0.4)).toEqual([]);
   });
 
   it('adds opening-music layers by pack mood', () => {

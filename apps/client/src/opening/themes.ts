@@ -1,4 +1,5 @@
 import { MASTER_PALETTE as P, type PackTypeId } from '@pixel-packs/shared';
+import type { SealArt } from './mythicSeal.js';
 
 /** One pixel of a pack wrapping (pack-local art px), `t` ∈ [0, 1] along its vine. */
 export interface WrapPixel {
@@ -14,7 +15,8 @@ export interface WrapPixel {
 /**
  * How a pack opens (GDD §3, §7). The framework draws the pack, the tear, the light and
  * the particles; a theme adds its wrapping and colours. Mossgrove (T12): vines and
- * petals. Starhollow (T13): the moon clasp turns and stardust swirls.
+ * petals. Starhollow (T13): the moon clasp turns and stardust swirls. Mythic (T21):
+ * the padlock gives, the runes light, the pack bursts.
  */
 export interface PackTheme {
   id: string;
@@ -35,9 +37,13 @@ export interface PackTheme {
   clasp: boolean;
   /** Stardust motes swirling round the pack (0 = none). */
   stardust: number;
+  /** The staged Mythic seal (lock → runes → burst), or none. */
+  seal: SealArt | null;
+  /** How long the click fallback takes to rip the seam (ms). */
+  autoTearMs: number;
 }
 
-/** Plain stitched-seam opening (the Mythic pack until T21). */
+/** Plain stitched-seam opening (a fallback for packs without a theme). */
 export const PLAIN_THEME: PackTheme = {
   id: 'plain',
   seam: { y: 17, x0: 13, x1: 52 },
@@ -49,6 +55,8 @@ export const PLAIN_THEME: PackTheme = {
   ground: null,
   clasp: false,
   stardust: 0,
+  seal: null,
+  autoTearMs: 450,
 };
 
 /** Starhollow: the moon clasp turns as the seam tears, stardust swirls and flies up. */
@@ -122,19 +130,36 @@ export const MOSSGROVE_THEME: PackTheme = {
   ground: [P.leaf, P.moss],
   clasp: false,
   stardust: 0,
+  seal: null,
+  autoTearMs: 450,
+};
+
+/**
+ * The Mythic pack (GDD §7): it opens in stages as the seam tears. The padlock rattles
+ * and springs open, the rune band lights up glyph by glyph, then the pack bursts in
+ * gold and starmetal sparks. Rects are measured on `packs/mythic.png`.
+ */
+export const MYTHIC_THEME: PackTheme = {
+  ...PLAIN_THEME,
+  id: 'mythic',
+  petals: [P.sunflower, P.seafoam, P.moonlight, P.glow],
+  burst: 34,
+  ground: [P.teal, P.tealDeep],
+  seal: { lock: { x0: 25, y0: 27, x1: 47, y1: 52 }, runes: { x0: 5, y0: 38, x1: 58, y1: 46 } },
+  // Slow enough that the click fallback still shows all three stages.
+  autoTearMs: 1800,
 };
 
 export function themeFor(packTypeId: PackTypeId): PackTheme {
   if (packTypeId === 'realm:mossgrove') return MOSSGROVE_THEME;
   if (packTypeId === 'realm:starhollow') return STARHOLLOW_THEME;
+  if (packTypeId === 'mythic') return MYTHIC_THEME;
   return PLAIN_THEME;
 }
 
-/** The pack sprite of a pack type (the Mythic pack has no art yet, see TASKS). */
+/** The pack sprite of a pack type. */
 export function packArt(packTypeId: PackTypeId): string {
-  return packTypeId === 'mythic'
-    ? '/assets/packs/starhollow.png'
-    : `/assets/packs/${packTypeId.slice(6)}.png`;
+  return `/assets/packs/${packTypeId === 'mythic' ? 'mythic' : packTypeId.slice(6)}.png`;
 }
 
 /** Unwrap front of vine `i` for a tear progress `p` (0 = wrapped, 1 = gone). */

@@ -190,3 +190,8 @@
 .shop-pack__tag .currency {
   color: var(--ink);
 }
+
+/* Realm and Mythic meters, one under the other (T21). */
+.pity + .pity {
+  margin-top: var(--sp-4);
+}
