@@ -1,10 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { CARD_CATALOG, CARD_FACE, MASTER_PALETTE, statDigitPixels } from '@pixel-packs/shared';
 import { MAX_NAV_ITEMS, NAV_ITEMS } from '../shell/nav.js';
-import { cardFaceModel } from './cardFace.js';
+import { cardFaceModel, RULES_LONG, rulesTextSize } from './cardFace.js';
 import { formatAmount } from './CurrencyBadge.js';
 
 describe('card face model', () => {
+  it('steps the rules text down to 12 px only for the longest texts (T18)', () => {
+    expect(rulesTextSize(['On enter: gain a 2 shield.'])).toBe(13);
+    expect(rulesTextSize(['x'.repeat(RULES_LONG + 1)])).toBe(12);
+    const small = CARD_CATALOG.filter((c) => cardFaceModel(c).rulesSize === 12).map((c) => c.id);
+    expect(small).toEqual(['STA-010', 'STA-012']);
+  });
+
   it('builds every catalog card: frame, art, bottom-aligned drop, name size, label', () => {
     for (const c of CARD_CATALOG) {
       const m = cardFaceModel(c);

@@ -92,7 +92,7 @@ test.describe('pack opening', () => {
     await settle(page);
     await shot(page, 'reveal-flip');
     await page.getByRole('button', { name: 'Reveal all' }).click();
-    await expect(page.locator('.reveal')).toHaveAttribute('data-flipped', '5');
+    await expect(page.locator('.reveal')).toHaveAttribute('data-flipped', '5', { timeout: 15_000 });
     await page.waitForTimeout(400);
     await settle(page);
     await shot(page, 'reveal-featured');

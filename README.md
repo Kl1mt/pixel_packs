@@ -2,7 +2,7 @@
 
 A cozy pixel-fantasy pack-opening and collecting game for the browser. Rip open themed packs, chase Void and Glitch variants, fill your binder, trade with friends, and (later) send your critters into auto-battles.
 
-**Status:** pre-production.
+**Status:** M1 (pack-opening vertical slice) in QA.
 
 - Game design document: [`docs/GDD.md`](docs/GDD.md)
 - Task board: [`docs/TASKS.md`](docs/TASKS.md)
@@ -71,7 +71,7 @@ Then set `DATABASE_URL=postgres://pixel:pixel@localhost:5432/pixel_packs` in `.e
 | `pnpm test` | All Vitest projects |
 | `pnpm format` | Prettier write |
 | `pnpm db:migrate` | Apply Drizzle migrations (PGlite, or `DATABASE_URL`) |
-| `pnpm --filter @pixel-packs/client e2e` | Playwright: auth flow + style-guide screenshots (starts its own server on an in-memory DB) |
+| `pnpm --filter @pixel-packs/client e2e` | Playwright: the M1 flow end to end + screenshots into `docs/` (starts its own server on an in-memory DB; once per machine run `pnpm --filter @pixel-packs/client exec playwright install chromium`) |
 | `pnpm admin <command>` | Admin CLI: grant gold/packs, reset onboarding, dev odds override (`docs/api.md`) |
 
 ## Layout

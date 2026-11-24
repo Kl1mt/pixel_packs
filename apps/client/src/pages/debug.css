@@ -4,6 +4,15 @@
   gap: var(--sp-8);
 }
 
+/* The live stage keeps its integer-scale canvas and scrolls inside the page (T18). */
+.lab > * {
+  min-width: 0;
+}
+
+.lab .card-stage {
+  overflow-x: auto;
+}
+
 .lab__head {
   display: flex;
   align-items: baseline;

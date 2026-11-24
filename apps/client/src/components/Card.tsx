@@ -62,7 +62,11 @@ export function Card({ card, className, scale = CARD_SCALE, ...overrides }: Card
         </div>
       )}
       {text.rules && (
-        <div className="card__rules" style={at(CARD_FACE.rules)} aria-hidden="true">
+        <div
+          className="card__rules"
+          style={{ ...at(CARD_FACE.rules), fontSize: m.rulesSize }}
+          aria-hidden="true"
+        >
           {m.rules.map((line) => (
             <span key={line}>{line}</span>
           ))}

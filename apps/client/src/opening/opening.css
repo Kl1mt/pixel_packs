@@ -65,6 +65,9 @@
 
 .tear__hint {
   margin: 0;
+  /* As wide as the longest hint, so the button stays put while the % ticks up (T18). */
+  min-width: min(100%, 24em);
+  text-align: center;
 }
 
 /* ---- Reveal ---- */

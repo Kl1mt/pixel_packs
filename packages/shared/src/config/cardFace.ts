@@ -23,8 +23,8 @@ export const CARD_FACE = {
   crest: { x: 42, y: 4, w: 11, h: 11 },
   /** Name banner text box. */
   name: { x: 10, y: 83, w: 76, h: 9 },
-  /** Rules text box. */
-  rules: { x: 9, y: 96, w: 78, h: 13 },
+  /** Rules text box: the parchment inside the frame (it narrows below y 110). */
+  rules: { x: 12, y: 95, w: 72, h: 15 },
   /** ATK (left) and HP (right) badge sockets: the cream interior of each circle. */
   atk: { x: 7, y: 114, w: 10, h: 11 },
   hp: { x: 79, y: 114, w: 10, h: 11 },

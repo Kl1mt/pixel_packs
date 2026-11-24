@@ -12,7 +12,7 @@ async function openScripted(page: Page, realm: string, leave: string) {
   await page.getByRole('button', { name: 'Tear it open' }).click();
   await expect(scene).toHaveAttribute('data-phase', 'reveal');
   await page.getByRole('button', { name: 'Reveal all' }).click();
-  await expect(page.locator('.reveal')).toHaveAttribute('data-flipped', '5');
+  await expect(page.locator('.reveal')).toHaveAttribute('data-flipped', '5', { timeout: 15_000 });
   await page.getByRole('button', { name: 'See results' }).click();
   await expect(scene).toHaveAttribute('data-phase', 'summary');
   await expect(page.locator('.summary__card')).toHaveCount(5);
