@@ -10,12 +10,15 @@ import {
   Sprite,
   Text,
   Texture,
+  type TextStyleOptions,
   UniformGroup,
 } from 'pixi.js';
 import { CARD_FACE, MASTER_PALETTE, variantRank, type Card } from '@pixel-packs/shared';
 import {
   cardFaceModel,
   faceText,
+  RULES_LINE_HEIGHT,
+  RULES_SIZE,
   type CardFaceModel,
   type CardFaceOverrides,
 } from '../components/cardFace.js';
@@ -28,6 +31,22 @@ import { foilLight } from './motion.js';
 /** One card to draw: the catalog card plus the copy's look (variant, stars, badges). */
 export interface CardSpec extends CardFaceOverrides {
   card: Card;
+}
+
+/** The face rules as one Pixi string: one line per ability, wrapped to the parchment. */
+export const rulesTextLines = (m: Pick<CardFaceModel, 'rules'>): string => m.rules.join('\n');
+
+/** Pixi style of the face rules text (same size, line height and box as the DOM card). */
+export function rulesTextStyle(scale: number): TextStyleOptions {
+  return {
+    fontFamily: FONT_STACKS.body,
+    fontSize: RULES_SIZE,
+    lineHeight: RULES_SIZE * RULES_LINE_HEIGHT,
+    align: 'center',
+    wordWrap: true,
+    wordWrapWidth: CARD_FACE.rules.w * scale,
+    fill: MASTER_PALETTE.ink,
+  };
 }
 
 export interface CardViewOptions {
@@ -159,18 +178,7 @@ export class CardView {
     });
     name.anchor.set(0.5);
     name.position.set((n.x + n.w / 2) * s, (n.y + n.h / 2) * s);
-    const rules = new Text({
-      text: this.model.rules.join('\n'),
-      style: {
-        fontFamily: FONT_STACKS.body,
-        fontSize: this.model.rulesSize,
-        lineHeight: this.model.rulesSize * 1.15,
-        align: 'center',
-        wordWrap: true,
-        wordWrapWidth: r.w * s,
-        fill: MASTER_PALETTE.ink,
-      },
-    });
+    const rules = new Text({ text: rulesTextLines(this.model), style: rulesTextStyle(s) });
     rules.anchor.set(0.5);
     rules.position.set((r.x + r.w / 2) * s, (r.y + r.h / 2) * s);
     return [...(face.name ? [name] : []), ...(face.rules ? [rules] : [])];

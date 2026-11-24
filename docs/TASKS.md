@@ -31,6 +31,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T21 | Mythic pack on the shelf + staged opening | T12, T13 | done |
 | T22 | M1 feedback polish | T11–T16 | done |
 | T23 | M1 visual polish backlog (from T18 QA) | T18 | todo |
+| T24 | Fix card-face rules text overflow | T03, T11, T18 | done |
 
 ---
 
@@ -638,6 +639,26 @@ Found in the T18 screenshot review; none blocks M1. Ask the user to pick and ord
   - straight apostrophe in the odds text ("pack's");
   - the "Settings" nav link is tiny and low-contrast.
 - **Done when**: the picked items are in, screenshots are updated, and the user approves.
+
+---
+
+### T24 — Fix card-face rules text overflow · S · done
+Docs: §16, §29
+- Found by the user after T18: Lady Lunamoth's (STA-012) rules text still runs below the parchment box at 3× ("When an ally faints: deal 2 damage to a…" is cut off). The full sentences don't fit 72×15 art px.
+- **Compact face wording** in the rules-text generator (`rules/rulesText.ts`), used only on the card face: short trigger labels (Battle start / Enter / Faint / Hurt / Ally faints / Every 3 ticks), short targets, "dmg", no articles; readable English, no icons. Card inspect keeps the full sentences at ≥ 16 px.
+- Back to 13 px for every card (drop T18's 12 px step-down). If a card still can't fit at 13 px, ask before going smaller.
+- A test that measures every catalog card's face text at ★1–★3 in the real font and asserts it fits the box (lines × line height ≤ box height, every line ≤ box width), for both the DOM and the Pixi card.
+- Don't change fonts (T19).
+- **Done when**: the fit test passes, GDD §29 records the decision, and screenshots of STA-012, STA-010 and other two-ability cards are updated.
+- **Handoff notes (2026-11-24)**:
+  - **No PixelLab spend.** Fonts unchanged (T19).
+  - **Compact wording** (`packages/shared/src/rules/rulesText.ts`): `abilityFaceText(ability)` and `cardFaceRulesText(card)`, next to the full `abilityRulesText` / `cardRulesText`. Triggers: Battle start, Enter, Hurt, Faint, Ally faints, Every N ticks (Every tick). Targets without articles (front ally, ally behind, all allies, front enemy, back enemy, random enemy). Self effects are a bare change ("Hurt: +1 ATK.", "Enter: +2 shield.", "+1 regen"), others name the target first ("front enemy −2 ATK", "all allies +2 thorns", "heal front ally 1 HP"), damage is "2 dmg to random enemy". Tested per effect, plus "never longer than the full sentence" for every card at ★1–★3.
+  - **Face**: `cardFaceModel().rules` is now the compact wording; its `label` (screen readers) and `CardDetails` (inspect, 18 px) keep the full sentences. The style tile (`artgen style-tile`) uses it too; `public/style-tile.html` is regenerated (it also picks up T18's 72×15 box). `docs/style-tile/style-tile.png` was not re-shot.
+  - **13 px for every card**: `rulesTextSize` / `RULES_LONG` / `rulesSize` are gone; `RULES_SIZE` (13) and `RULES_LINE_HEIGHT` (1.15) in `components/cardFace.ts` (the CSS repeats them). Pixi takes its style from `rulesTextStyle(scale)` / `rulesTextLines(model)` (`render/cardView.ts`). Every card × ★1–★3 fits on ≤ 2 lines; the widest line is "Every 4 ticks: random enemy −1 ATK." ≈ 202 of 216 px at 13 px, measured in DejaVu Serif (the wide fallback of the body stack in headless Chromium here).
+  - **Fit test** `e2e/rulesFit.spec.ts` on the new lab page `/debug/rules` (`pages/RulesLab.tsx`, lazy, public like `/debug`; `?cards=…&stars=…&pixi=1`): for all 78 faces it checks DOM line boxes (lines × 14.95 px ≤ 45 px, every line ≤ 216 px, font 13 px, box 216×45) and Pixi's own `CanvasTextMetrics` (same limits), and that both engines break into the same number of lines. Checked that it fails on the old full sentences (STA-010: 4 lines, 59.8 px).
+  - **Screenshots**: `docs/cards/rules-fit-star1.png` and `rules-fit-star3.png` (MOS-010, MOS-012, STA-010, STA-012, STA-013; live Pixi row above the DOM row). Every other e2e screenshot was rewritten by the full run.
+  - GDD §29: T24 row (replaces T18's 12 px step-down).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (397), client `e2e` (28 passed, 1 opt-in skipped).
 
 ---
 

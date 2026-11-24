@@ -3,6 +3,7 @@ import {
   CARD_SCALE,
   CARD_FACE,
   MASTER_PALETTE,
+  cardFaceRulesText,
   cardNameSize,
   cardRulesText,
   realmCrestPixels,
@@ -38,9 +39,8 @@ export interface CardFaceModel {
   /** Art px to move the art down so it stands on the window's bottom row. */
   artDrop: number;
   nameSize: number;
+  /** Compact face wording, one entry per ability (T24); the label carries the full sentences. */
   rules: string[];
-  /** Screen px of the rules text: the longest texts step down so they fit the parchment. */
-  rulesSize: number;
   backdrop: readonly [string, string];
   /** ATK and HP digits as ink pixels on the 96×128 face. */
   statPixels: { x: number; y: number }[];
@@ -53,11 +53,12 @@ export interface CardFaceModel {
   label: string;
 }
 
-/** Rules text size: 13 px, or 12 px past `RULES_LONG` characters (3 lines on the 72 px parchment). */
-export const RULES_LONG = 90;
-export function rulesTextSize(rules: readonly string[]): number {
-  return rules.reduce((n, line) => n + line.length, 0) > RULES_LONG ? 12 : 13;
-}
+/**
+ * Face rules text: 13 px (the T06 exception to §16's 16 px) at line height 1.15 for every card, in
+ * the compact wording (T24); `e2e/rulesFit.spec.ts` checks every card fits `CARD_FACE.rules`.
+ */
+export const RULES_SIZE = 13;
+export const RULES_LINE_HEIGHT = 1.15;
 
 /** Per-copy look (GDD §4, §6); catalog values win where nothing is given. */
 export interface CardFaceOverrides {
@@ -102,7 +103,8 @@ export function cardFaceModel(card: Card, o: CardFaceOverrides = {}): CardFaceMo
   const played = starredCard(card, stars);
   const atk = o.atk ?? played.atk;
   const hp = o.hp ?? played.hp;
-  const rules = cardRulesText(played);
+  const rules = cardFaceRulesText(played);
+  const fullRules = cardRulesText(played);
   return {
     id: card.id,
     name: card.name,
@@ -114,7 +116,6 @@ export function cardFaceModel(card: Card, o: CardFaceOverrides = {}): CardFaceMo
     artDrop: CARD_ART_DROP[card.id] ?? 0,
     nameSize: cardNameSize(card.name),
     rules,
-    rulesSize: rulesTextSize(rules),
     backdrop: REALM_BACKDROP[card.realm] ?? DEFAULT_BACKDROP,
     statPixels: [...statDigitPixels(atk, CARD_FACE.atk), ...statDigitPixels(hp, CARD_FACE.hp)],
     variant,
@@ -123,7 +124,7 @@ export function cardFaceModel(card: Card, o: CardFaceOverrides = {}): CardFaceMo
     badgePixels: cardBadgePixels({ variant, stars, edition, mintNumber }),
     label: `${card.name}, ${rarity}${copyLabel(variant, stars, edition, mintNumber)}, attack ${String(
       atk,
-    )}, health ${String(hp)}${rules.length ? `. ${rules.join(' ')}` : ''}`,
+    )}, health ${String(hp)}${fullRules.length ? `. ${fullRules.join(' ')}` : ''}`,
   };
 }
 

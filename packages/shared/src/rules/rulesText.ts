@@ -88,6 +88,75 @@ export function cardRulesText(card: Pick<Card, 'abilities'>): string[] {
   return card.abilities.map(abilityRulesText);
 }
 
+/**
+ * Compact card-face wording (T24): the full sentences don't fit the 72×15 art px parchment at
+ * 13 px, so the face uses short trigger labels and targets, "dmg" and no articles. Card inspect
+ * (`CardDetails`) keeps the full `abilityRulesText` at body size.
+ */
+const FACE_TRIGGER_TEXT: Readonly<Record<Exclude<AbilityTrigger, 'support'>, string>> = {
+  startOfBattle: 'Battle start',
+  onEnter: 'Enter',
+  onHurt: 'Hurt',
+  onAllyFaint: 'Ally faints',
+  onFaint: 'Faint',
+};
+
+const FACE_TARGET_TEXT: Readonly<Record<AbilityTarget, string>> = {
+  self: 'self',
+  front: 'front ally',
+  behind: 'ally behind',
+  allAllies: 'all allies',
+  enemyFront: 'front enemy',
+  enemyBack: 'back enemy',
+  randomEnemy: 'random enemy',
+};
+
+function faceTriggerText(ability: Ability): string {
+  if (ability.trigger === 'support') {
+    const n = ability.every ?? 1;
+    return n === 1 ? 'Every tick' : `Every ${String(n)} ticks`;
+  }
+  return FACE_TRIGGER_TEXT[ability.trigger];
+}
+
+/** Self effects read as a bare change ("+1 ATK"); others name the target first ("front enemy −2 ATK"). */
+function faceEffectText(effect: AbilityEffect, target: AbilityTarget, v: number): string {
+  const n = String(v);
+  const t = target === 'self' ? '' : `${FACE_TARGET_TEXT[target]} `;
+  switch (effect) {
+    case 'damage':
+      return `${n} dmg to ${FACE_TARGET_TEXT[target]}`;
+    case 'weaken':
+      return `${t}−${n} ATK`;
+    case 'heal':
+      return `heal ${t}${n} HP`;
+    case 'buffAtk':
+      return `${t}+${n} ATK`;
+    case 'buffHp':
+      return `${t}+${n} HP`;
+    case 'shield':
+      return `${t}+${n} shield`;
+    case 'thorns':
+      return `${t}+${n} thorns`;
+    case 'regen':
+      return `${t}+${n} regen`;
+  }
+}
+
+/** One ability in compact card-face wording, e.g. "Ally faints: 2 dmg to random enemy." */
+export function abilityFaceText(ability: Ability): string {
+  if (!isAbilityTargetValid(ability)) {
+    throw new Error(`invalid target ${ability.target} for ${ability.effect}`);
+  }
+  const body = faceEffectText(ability.effect, ability.target, ability.value);
+  return `${faceTriggerText(ability)}: ${body}.`;
+}
+
+/** The card face's compact rules text, one entry per ability. */
+export function cardFaceRulesText(card: Pick<Card, 'abilities'>): string[] {
+  return card.abilities.map(abilityFaceText);
+}
+
 /** Short reminder text for keyword effects, for tooltips. */
 export const KEYWORD_REMINDERS: Readonly<Partial<Record<AbilityEffect, string>>> = {
   shield: 'Shield N: absorbs the next N damage.',
