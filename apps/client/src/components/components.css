@@ -108,9 +108,9 @@
   overflow: hidden;
 }
 
-/* Compact rules text: the 13 px exception to the 16 px minimum (GDD §29, T06). */
+/* Compact rules text: the 13 px exception to the 16 px minimum (GDD §29, T06, T24;
+   `RULES_SIZE` / `RULES_LINE_HEIGHT` in cardFace.ts). */
 .card__rules {
-  /* Size set per card (`rulesSize`); the line height follows it. */
   font: 13px / 1.15 var(--font-body);
   text-align: center;
   display: grid;

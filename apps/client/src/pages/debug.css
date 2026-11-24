@@ -87,3 +87,17 @@
   display: grid;
   gap: var(--sp-1);
 }
+
+/* Rules-fit lab (T24): every card face × star level, wrapping. */
+.rules-lab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+}
+
+.rules-lab__item {
+  margin: 0;
+  display: grid;
+  gap: var(--sp-2);
+  justify-items: center;
+}
