@@ -78,11 +78,17 @@ Written in T04 (2026-11-23) from `https://api.pixellab.ai/v2/llms.txt`, selected
 ### `POST /generate-with-style-v2` receipt (T06)
 - **Measured: 10 per call** at 64×64 (2 pack calls). This confirms the documented price.
 
+### `POST /create-character-v3` + `POST /characters/animations` (T17, measured)
+- **Measured: 1 per character** (64×64 `reference_image`, `n_directions: 4`) and **1 per animation direction** (mode `v3`, 4–6 frames). 24 calls in T17, 24 generations.
+- `create-character-v3` → `{ background_job_id, character_id }`. Poll the job, then `GET /characters/{id}` until `rotation_urls.south` is set; `rotation_urls` are CDN PNG URLs (64×64).
+- `characters/animations` body: `character_id`, `mode: "v3"`, `action_description`, `frame_count` (4–16, even), `directions: ["east"]`, `keep_first_frame: false` (store exactly `frame_count` frames), `target_palette`, `seed`, `animation_name`. → `{ background_job_ids: [one per direction], animation_group_id }`. Poll each job, then read `GET /characters/{id}` → `animations[].directions[].frames` (URLs).
+- Animation frames come on a **wider canvas** than the character (84 or 88 px square for a 64 px character) so motion has room.
+- Other modes: `template` (skeleton, 1 per direction), `skeleton-v3` (2–4), `pixminimax` (64×64 × 8 frames = 1), `pro` (10–25 per direction, legacy).
+- Code: `tools/artgen/src/character/` (`artgen character`, `character-board`, `character-lane`).
+
 ## Other endpoints (for later tasks — documented costs, unverified)
 | Endpoint | Use | Cost (generations) |
 |---|---|---|
-| `POST /create-character-v3` | character from a 64×64 `reference_image` (T17) | ceil(w·h·8/65536), so 64×64 → 1; from text: 2 at 16–90 px |
-| `POST /characters/animations` (v3) | battle animations per direction (T17) | ceil(w·h·frames/65536) per direction, so 64 px × 8 frames ≈ 1 |
 | `POST /create-character-pro` | Pro character redraw | 10 / 15 / 25 by art size |
 | `/vfx` | battle VFX | look up before use |
 
