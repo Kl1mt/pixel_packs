@@ -97,7 +97,12 @@ test.describe('pack opening', () => {
     await settle(page);
     await shot(page, 'reveal-featured');
 
-    // The spotlight card leans towards the pointer (≤ 8°, T22) and rests flat again.
+    // The spotlight card leans towards the pointer (≤ 8°, T22) and rests flat again. It is
+    // held flat while a reveal moment plays (a random pull can have one), and "See results"
+    // unlocks once that moment is over, so wait for it before moving the pointer.
+    await expect(page.getByRole('button', { name: 'See results' })).toBeEnabled({
+      timeout: 15_000,
+    });
     const spot = page.locator('.reveal__card .tilt');
     await expect(spot).not.toHaveAttribute('data-tilting', 'true');
     const box = await spot.boundingBox();
