@@ -558,11 +558,22 @@ Docs: §16, §29
 
 ---
 
-### T20 — Realm crest in the card crest socket · S
+### T20 — Realm crest in the card crest socket · S · done (awaiting the user's screenshot approval)
 Docs: §4, §16, §19
 - Found in T11: the round crest socket on the frame (`CARD_FACE.crest`, 10×10 at 43,4) is still empty on every card. §4 asks for a realm crest on the face.
 - Draw a crest per enabled realm (hand-pixelled 10×10, or ask before spending PixelLab generations). Draw it in both the DOM card and the Pixi `CardView` (as a badge-like pixel list, so they keep matching), and update the style guide.
 - **Done when**: both realms show their crest, the Pixi = DOM e2e check passes, and the user has approved a screenshot.
+- **Handoff notes (2026-11-23)**:
+  - **No PixelLab spend** (balance 760). The crests are hand-pixelled 11×11 grids in `packages/shared/src/config/realmCrests.ts`, redrawn from the centre motif of T13's `moments/crest-{mossgrove,starhollow}.png` in palette colours: Mossgrove a veined leaf (sprout/leaf/lichen/moss/mossDeep, bark stem) on the socket's cream, Starhollow a crescent and a twinkle (glow/mist) on a night disc filling the socket. The frame's ink ring is the rim.
+  - **Geometry**: `CARD_FACE.crest` is now the socket's measured cream interior, `{ x: 42, y: 4, w: 11, h: 11 }` (was 43,4 10×10). `CREST_SOCKET` lists its first/last column per row; `crestSocket.test.ts` (artgen) checks that mask against all six frame PNGs, and `realmCrests.test.ts` that crests stay inside it, use palette colours, and exist for every `ENABLED_REALMS` realm.
+  - **Rendering**: `cardFaceModel()` gains `crestPixels` (`realmCrestPixels(card.realm)`); the DOM `Card` paints them in its SVG overlay and the Pixi `CardView` in its `Graphics` overlay, above the shader like the badges (variants don't tint the crest). Pixi = DOM e2e passes unchanged. Realms without cards get no crest (empty list) until they get their cards.
+  - **Style guide**: the frames row now shows MOS-012 and STA-003 on all six frames. Screenshots: `docs/cards/crests-{mossgrove,starhollow}.png` (written by `e2e/styleguide.spec.ts`), plus the refreshed `docs/styleguide/` and `docs/cards/` shots.
+  - The static T06 style tile (`artgen style-tile`) is unchanged; it still shows the empty socket.
+  - Merged after T17, T21, T22, T18 and T24: T22's First-Edition stamp (art window bottom-right) is far from the crest; `cardBadges.test.ts` checks that no badge combination covers a crest pixel. Screenshots were regenerated after the merge.
+  - **CI fix (T13 code)**: the reduced-moment stillness check in `e2e/moments.spec.ts` failed on and off, on main too. Root cause: `RevealMoment`'s `cardBox()` read the transformed rect while the card's `flip-in` (scaleX) ran, so the moment slid sideways within one beat. It now anchors on the card's centre and untransformed width.
+  - **CI fix (T12/T14 tests)**: `getByRole('button', { name: 'Skip' })` also matched "Skip animation" whenever a random pull had a moment, so the locator is now `exact: true` in the audio, opening, moments and mythic specs.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test`, client `e2e`.
+
 
 ---
 

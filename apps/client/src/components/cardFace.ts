@@ -6,6 +6,7 @@ import {
   cardFaceRulesText,
   cardNameSize,
   cardRulesText,
+  realmCrestPixels,
   starredCard,
   statDigitPixels,
   type Card,
@@ -45,6 +46,8 @@ export interface CardFaceModel {
   statPixels: { x: number; y: number }[];
   variant: Variant;
   stars: Stars;
+  /** Realm crest in the frame's crest socket (T20), in palette colours. */
+  crestPixels: FacePixel[];
   /** Star, edition and mint badges in palette colours, painted in order. */
   badgePixels: FacePixel[];
   label: string;
@@ -117,6 +120,7 @@ export function cardFaceModel(card: Card, o: CardFaceOverrides = {}): CardFaceMo
     statPixels: [...statDigitPixels(atk, CARD_FACE.atk), ...statDigitPixels(hp, CARD_FACE.hp)],
     variant,
     stars,
+    crestPixels: realmCrestPixels(card.realm),
     badgePixels: cardBadgePixels({ variant, stars, edition, mintNumber }),
     label: `${card.name}, ${rarity}${copyLabel(variant, stars, edition, mintNumber)}, attack ${String(
       atk,

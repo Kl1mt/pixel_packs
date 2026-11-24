@@ -94,5 +94,17 @@ describe('card face model with copy traits', () => {
       hp: card.hp,
       badgePixels: [],
     });
+    expect(m.crestPixels.length).toBeGreaterThan(0);
+  });
+
+  it('never covers the realm crest (T20), whatever the badges', () => {
+    const crest = new Set(
+      cardFaceModel(card).crestPixels.map((p) => `${String(p.x)},${String(p.y)}`),
+    );
+    for (const variant of VARIANTS)
+      for (const stars of [1, 2, 3] as const) {
+        const px = cardBadgePixels({ variant, stars, edition: { season: 9 }, mintNumber: 9999 });
+        expect(px.filter((p) => crest.has(`${String(p.x)},${String(p.y)}`))).toEqual([]);
+      }
   });
 });

@@ -43,6 +43,7 @@ export * from './config/cardFace.js';
 export * from './config/uiArt.js';
 export * from './config/statDigits.js';
 export * from './config/badgeGlyphs.js';
+export * from './config/realmCrests.js';
 export { CARD_ART_DROP } from './data/cards/artLayout.js';
 export * from './rules/binder.js';
 export * from './rules/onboarding.js';

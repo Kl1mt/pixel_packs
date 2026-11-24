@@ -20,7 +20,7 @@ export interface CardProps extends CardFaceOverrides {
 /**
  * DOM card face at `CARD_SCALE` (GDD §4): realm backdrop, bottom-aligned art,
  * rarity frame (material + pips), name, compact rules text and chunky ATK/HP
- * digits, plus star / edition / mint badges. This is the static card: the
+ * digits, the realm crest, plus star / edition / mint badges. This is the static card: the
  * animated variant shaders live in the Pixi renderer (`src/render/`), which
  * draws the same model.
  */
@@ -76,6 +76,16 @@ export function Card({ card, className, scale = CARD_SCALE, ...overrides }: Card
       >
         {m.statPixels.map((p) => (
           <rect key={`${String(p.x)},${String(p.y)}`} x={p.x} y={p.y} width={1} height={1} />
+        ))}
+        {m.crestPixels.map((p) => (
+          <rect
+            key={`c${String(p.x)},${String(p.y)}`}
+            x={p.x}
+            y={p.y}
+            width={1}
+            height={1}
+            fill={p.colour}
+          />
         ))}
         {m.badgePixels.map((p, i) => (
           <rect key={`b${String(i)}`} x={p.x} y={p.y} width={1} height={1} fill={p.colour} />

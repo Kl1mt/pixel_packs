@@ -138,28 +138,32 @@ function Parts() {
 
 function Cards() {
   const mos = byId('MOS-012');
+  const sta = byId('STA-003');
   return (
     <Panel className="wide">
       <h2>Cards</h2>
       <div className="row">
         <Card card={mos} />
-        <Card card={byId('STA-003')} />
+        <Card card={sta} />
         <CardBack />
       </div>
       <p className="small muted">
         Cards at 3×. Rarity shows as frame material plus 1–6 pips, never by colour alone. The art is
-        bottom-aligned on the window&apos;s bottom row.
+        bottom-aligned on the window&apos;s bottom row. The realm crest sits in the round socket on
+        the top edge: a leaf for Mossgrove, a crescent moon for Starhollow.
       </p>
-      <div className="row frames">
-        {RARITIES.map((r) => (
-          <span key={r}>
-            <Card card={mos} rarity={r} />
-            <span className="cap">
-              {r} · {FRAME_MATERIALS[r].name}
+      {[mos, sta].map((c) => (
+        <div className="row frames" key={c.id} data-testid={`frames-${c.realm}`}>
+          {RARITIES.map((r) => (
+            <span key={r}>
+              <Card card={c} rarity={r} />
+              <span className="cap">
+                {r} · {FRAME_MATERIALS[r].name}
+              </span>
             </span>
-          </span>
-        ))}
-      </div>
+          ))}
+        </div>
+      ))}
     </Panel>
   );
 }
