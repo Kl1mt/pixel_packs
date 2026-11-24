@@ -30,6 +30,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T20 | Realm crest in the card crest socket | T11 | todo |
 | T21 | Mythic pack on the shelf + staged opening | T12, T13 | done |
 | T22 | M1 feedback polish | T11–T16 | done |
+| T23 | M1 visual polish backlog (from T18 QA) | T18 | todo |
 
 ---
 
@@ -507,6 +508,42 @@ Docs: §16, §18, §26
 - Bug fixes and an econ-sim re-run.
 - An M1 retrospective in the handoff notes.
 - **Done when**: the user signs off M1. Next comes the M2 planning session.
+- **Handoff notes (2026-11-24)**: status stays `in progress` until the user signs off M1.
+  - **No PixelLab spend.** Balance 750 of 2 000 (Tier 1 plan). The roadmap estimate (~1 190) still exceeds it unless the allotment renews (§27).
+  - **E2E reliability**:
+    - The non-exact `'Skip'` locators in `moments`, `mythic` and `opening` also matched the moment's "Skip animation" button whenever a Legendary or Mythic pull played (a strict-mode failure, likely on Mythic packs). All are now `exact: true`.
+    - "Reveal all" waits 320 ms per card plus any moment or stinger. The `data-flipped='5'` checks in `onboarding` and `opening` now allow 15 s; a scripted pack with a Legendary or variant extra could pass 5 s.
+    - `moments.spec` reduced stillness: the canvas draws a new beat in the rAF callback, but `data-beat` only changes on React's next render. A pair now counts only when a third sample 60 ms later shows the same beat (not `none`), and at least one pair must be compared, so the check can't pass vacuously.
+    - Afterwards: the full suite passed 4 times in a row (26 passed, 1 opt-in skipped), `moments` key frames passed ×8, five opening specs passed ×3, and the onboarding no-skip test passed ×15.
+  - **Fixes**:
+    - Card rules text now fits the frame's parchment (`CARD_FACE.rules` 72×15 at (12, 95), was 78×13 at (9, 96) and ran over the side leaves). Line height is 1.15. `rulesTextSize` (`components/cardFace.ts`) gives 12 px past 90 characters (STA-010 and STA-012; tested) in both the DOM and Pixi cards. A browser check confirmed that all 26 cards fit, and the Pixi = DOM e2e check passes. GDD §29.
+    - `.page-title` wraps long usernames (Home was 467 px wide at 390). Plain links inherit their panel's text colour (`:where(a:not(.btn))`, no browser blue). `/debug` no longer widens the page: the 1536 px Pixi stage scrolls inside `.lab`. The tear hint keeps its width so "Tear it open" stays put, and its percentage is `aria-hidden` so screen readers don't hear every tick.
+    - Windows: `tools/artgen`'s `NODE_USE_ENV_PROXY=1 tsx …` is POSIX-only. `shellEmulator: true` in `pnpm-workspace.yaml` runs scripts through pnpm's cross-platform shell. The README now has the e2e row plus the one-off `playwright install chromium`, and the status line is updated.
+    - The task table had stale statuses (T09, T13, T15, T17, T21 showed `todo`). Fixed.
+  - **Checked, OK**:
+    - typecheck, lint, 394 unit tests, build.
+    - Clean clone: `pnpm install` (~3 s) then `pnpm dev`, with `/api/health` OK. The server migrates PGlite itself on start, so the README needs no `db:migrate` step.
+    - First screen (`/login`, production build): ~0.6 MB decoded over 22 requests (target < 2 MB). Pixi and the opening scenes are lazy chunks.
+    - fps (headless, software GL): binder with 1 200 copies (hover 60.6, page turn 61.2, inspect 60.4); each variant ~60.3; Legendary, Mythic (both realms) and glitch moments 60.0–60.8; Mossgrove, Starhollow and Mythic tears 60.2–60.4.
+    - Keyboard only: Home → Packs → Open → Tear it open → Reveal all → See results → Back to the shelf → Binder. Global dashed focus ring. `outline: none` only on containers focused by script.
+    - econ-sim (`pnpm --filter @pixel-packs/econ-sim start`, unchanged): 3.50 packs/day. 12 non-Mythic cards: median 8 days, p90 16. All 13: median 19, p90 33. Medians meet §8; p90 stays open in §27.
+    - §16 sweep of the CSS (no blurred shadows, rounded corners, emoji, Inter or Roboto; the only gradients are hard-stop binder overlays in palette colours) and a review of all 50 e2e screenshots. Findings not fixed here are listed in T23.
+  - **Not testable here**: Discord login against the real Discord. The user still needs to create the app (README → "Optional: Discord login"); the code paths are covered by tests with a fake Discord. Audio levels were never checked by ear.
+  - **M1 retrospective**:
+    - *Went well*:
+      - One task per session with handoff notes kept each session small, and every later session could pick up the context.
+      - Shared pure rules plus a server-authoritative economy meant QA found no rule or economy bugs.
+      - The DOM = Pixi card check caught every face change (T20, T22, T18).
+      - The art budget held: card art went to the Pro style endpoint after the user's choice; the PixelLab balance is 750.
+    - *Went less well*:
+      - E2E flakes recurred across 3+ sessions, each patched locally. The cause was almost always timing: React state lagging behind canvas or rAF, and auto-flip pauses. Loose role locators were the other cause.
+      - Visual review happened per task, so layout robustness was never checked across the board (long usernames, long rules text, phone widths) until now.
+      - The PixelLab cost per call (10 per `/generate-*-v2`) was learned in T04/T05 and pushed the roadmap estimate over the allotment.
+    - *Carry into M2*:
+      - Give every e2e wait on animation a reason-sized timeout and exact locators.
+      - Add a "long content" fixture (longest name, rules and username) to the screenshot specs.
+      - Run the full e2e suite 3× before every PR that touches the opening.
+      - Re-estimate the art budget against the 10-per-call price at M2 planning.
 
 ### T19 — Revisit UI/card fonts · S
 Docs: §16, §29
@@ -567,6 +604,31 @@ The user's feedback on M1 (each design change goes into GDD §29):
   - **Screenshots**: `docs/cards/badges.png` (stamp bottom-right), new `docs/opening/reveal-tilt.png`, `docs/opening/t22-mossgrove-petals.gif` and `t22-reveal-tilt.gif` (made by hand from e2e frames), `docs/onboarding/courier.png` (no skip). Every e2e screenshot was rewritten.
   - **Flaky**: `moments.spec` "key frames … reduced" failed once in the full run (reduced frame changed within the same beat) and passed twice alone. It looks timing-related and existed before T22 (no moment code changed).
   - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (375), client `e2e` (24 passed, 1 opt-in skipped).
+
+---
+
+### T23 — M1 visual polish backlog (from T18 QA) · M
+Docs: §16, §18
+Found in the T18 screenshot review; none blocks M1. Ask the user to pick and order them first.
+- **Compact cards** (binder thumbnails, tour, starter cards): the empty parchment rules box looks broken next to full cards. Show a short glyph line, or shrink the box art at < 3× (T15 decided to drop the text).
+- **Form controls**: `<select>` and checkboxes (binder filters, `/debug`) are plain browser controls. Make pixel-styled ones.
+- **Contrast**: captions and filter labels (straw on wood, e.g. "Rarity", "Variant", style-guide captions) and the disabled "Locked" button are hard to read. Check WCAG AA.
+- **Void stinger** covers the pulled-card list and "See results" while it plays. Keep the side list above it, or dim it less there.
+- **Tilt resampling**: the T22 tilt rotates by fractions of a degree, so the pixels are resampled (§16 integer scale). Ask the user whether to snap the tilt to whole steps or accept it.
+- **Tear effects**: streaks and particles use a smaller pixel size than the pack sprite. Use one pixel scale (§16).
+- **Mythic pack contrast**: the dark velvet bag on the navy stage shows mostly as an outline. Lighten the stage or add a rim light.
+- **Prismatic frame** replaces the rarity material (only the pips show rarity), and Glitch smears the pips. Keep the rarity material readable (§18).
+- **Mythic summary**: a whitish smudge in some cards' top-left corner (the variant sheen?). Check it.
+- **Nits**:
+  - card back size vs face size (style guide, reveal);
+  - "HP." wraps on its own line in the reveal list;
+  - courier and tour popover spacing;
+  - inspect wording ("Maxed: 879 ★1-equivalents…");
+  - straight apostrophe in the odds text ("pack's");
+  - the "Settings" nav link is tiny and low-contrast.
+- **Done when**: the picked items are in, screenshots are updated, and the user approves.
+
+---
 
 ## Later milestones
 These are broken down into tasks in a planning session at the start of each milestone.
