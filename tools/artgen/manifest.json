@@ -5057,7 +5057,8 @@
         {
           "index": 10,
           "file": "tools/artgen/candidates/t21/pack-mythic/10.png",
-          "review": "pending"
+          "review": "approved",
+          "note": "user pick (T21)"
         },
         {
           "index": 11,

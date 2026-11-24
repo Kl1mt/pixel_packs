@@ -48,7 +48,9 @@ test.describe('the Mythic pack', () => {
     // On the shelf with its gem price; no gems yet.
     await expect(mythic.getByText('300')).toBeVisible();
     await expect(buy).toBeDisabled();
-    await expect(page.getByRole('meter', { name: 'Legendary guarantee, Mythic packs' })).toBeVisible();
+    await expect(
+      page.getByRole('meter', { name: 'Legendary guarantee, Mythic packs' }),
+    ).toBeVisible();
 
     await apiPost(page, '/api/dev/grant', { gems: 300 });
     await page.reload();
