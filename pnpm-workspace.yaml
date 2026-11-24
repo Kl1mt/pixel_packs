@@ -4,3 +4,5 @@ packages:
   - tools/*
 onlyBuiltDependencies:
   - esbuild
+# Run package scripts through pnpm's cross-platform shell, so `FOO=1 cmd` works on Windows too.
+shellEmulator: true

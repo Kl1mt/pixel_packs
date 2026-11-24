@@ -58,6 +58,13 @@ p {
   color: var(--role-textMuted);
 }
 
+/* Plain links take the text colour of their panel (no browser blue, §16). */
+:where(a:not(.btn)) {
+  color: inherit;
+  text-decoration-thickness: var(--art-px);
+  text-underline-offset: var(--art-px);
+}
+
 a,
 button,
 input,

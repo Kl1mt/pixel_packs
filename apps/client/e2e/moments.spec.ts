@@ -69,10 +69,20 @@ test.describe('reveal moments', () => {
             pixels: canvases.map((c) => c.toDataURL()).join(),
           };
         });
-      const a = await frame();
-      await page.waitForTimeout(120);
-      const b = await frame();
-      if (a.beat === b.beat) expect(b.pixels).toBe(a.pixels);
+      // The canvas draws a new beat at once, but data-beat follows on React's next render,
+      // so a pair only counts when a third sample 60 ms later still shows the same beat.
+      let compared = false;
+      for (let tries = 0; tries < 6 && !compared; tries++) {
+        const a = await frame();
+        await page.waitForTimeout(120);
+        const b = await frame();
+        await page.waitForTimeout(60);
+        const c = await frame();
+        if (a.beat === 'none' || a.beat !== b.beat || b.beat !== c.beat) continue;
+        expect(b.pixels).toBe(a.pixels);
+        compared = true;
+      }
+      expect(compared, `${name}: no beat held still long enough to compare`).toBe(true);
       await lab(page, `${q}&fx=reduced`);
       await shot(page, name);
     }
@@ -134,7 +144,7 @@ test.describe('reveal moments', () => {
     // The first two packs are the scripted onboarding packs: open and skip them.
     for (const realm of ['Mossgrove', 'Starhollow']) {
       await open(realm);
-      await page.getByRole('button', { name: 'Skip' }).click();
+      await page.getByRole('button', { name: 'Skip', exact: true }).click();
       await page.getByRole('button', { name: 'Back to the shelf' }).click();
     }
 
