@@ -7,6 +7,7 @@ import {
 } from '@pixel-packs/shared';
 import { Button } from '../components/Button.js';
 import { CurrencyBadge } from '../components/CurrencyBadge.js';
+import { packArt } from '../opening/themes.js';
 
 export const REALM_NAME: Record<Realm, string> = {
   hearthfire: 'Hearthfire',
@@ -31,19 +32,32 @@ export interface ShopShelfProps {
   onOdds: (id: PackTypeId) => void;
 }
 
-/** The shop counter's shelf (GDD §16): each realm pack with how many you own, open, buy and "?". */
+/** Every pack on the shelf: the enabled realm packs, then the Mythic pack (GDD §7). */
+export const SHELF_PACKS: readonly PackTypeId[] = [
+  ...ENABLED_REALMS.map((realm) => `realm:${realm}` as const),
+  'mythic',
+];
+
+export const packPrice = (id: PackTypeId) =>
+  id === 'mythic' ? PACK_PRICES.mythic : PACK_PRICES.realm;
+
+/** The shop counter's shelf (GDD §16): each pack with how many you own, open, buy and "?". */
 export function ShopShelf({ state, busy, onOpen, onBuy, onOdds }: ShopShelfProps) {
-  const price = PACK_PRICES.realm;
   return (
     <ul className="shop-shelf">
-      {ENABLED_REALMS.map((realm) => {
-        const id = `realm:${realm}` as const;
+      {SHELF_PACKS.map((id) => {
+        const price = packPrice(id);
         const owned = ownedCount(state, id);
         const name = packName(id);
         return (
-          <li key={id} className="shop-pack" data-pack={id} aria-label={name}>
+          <li
+            key={id}
+            className={id === 'mythic' ? 'shop-pack shop-pack--mythic' : 'shop-pack'}
+            data-pack={id}
+            aria-label={name}
+          >
             <div className="shop-pack__art">
-              <img src={`/assets/packs/${realm}.png`} alt="" width={192} height={192} />
+              <img src={packArt(id)} alt="" width={192} height={192} />
               {owned > 0 && (
                 <span className="shop-pack__count" aria-label={`${String(owned)} owned`}>
                   ×{owned}
@@ -74,8 +88,8 @@ export function ShopShelf({ state, busy, onOpen, onBuy, onOdds }: ShopShelfProps
                 Open
               </Button>
               <Button
-                disabled={busy || state.wallet.gold < price.amount}
-                aria-label={`Buy a ${name} for ${String(price.amount)} gold`}
+                disabled={busy || state.wallet[price.currency] < price.amount}
+                aria-label={`Buy a ${name} for ${String(price.amount)} ${price.currency}`}
                 onClick={() => {
                   onBuy(id);
                 }}

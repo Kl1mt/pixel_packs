@@ -4949,6 +4949,150 @@
       ]
     },
     {
+      "id": "t21/pack-mythic",
+      "spec": "t21",
+      "job": "pack-mythic",
+      "endpoint": "generate-with-style-v2",
+      "params": {
+        "description": "a sealed card pack shaped like a plump little cloth satchel of deep midnight velvet with teal and seafoam starmetal trim, crimped and stitched top seam, a band of small glowing carved runes running around the middle, a chunky golden padlock with a keyhole hanging on the front clasp, slightly bulging with cards inside, upright, centered, front view, precious and magical but cozy, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery",
+        "seed": 21001,
+        "no_background": true,
+        "target_palette": {
+          "name": "Pixel Packs master",
+          "colors": [
+            "#1e1a26",
+            "#5e5463",
+            "#8c8191",
+            "#bdb3b8",
+            "#e8e0d5",
+            "#fff8ec",
+            "#3d2a22",
+            "#5c3d2e",
+            "#8a5a3c",
+            "#b5804f",
+            "#d9ad74",
+            "#26402c",
+            "#3e6b3a",
+            "#6a9a45",
+            "#a3c25e",
+            "#d4e39a",
+            "#6e2236",
+            "#a8344a",
+            "#d95f5f",
+            "#f2a0a0",
+            "#e8a33d",
+            "#f6d36b",
+            "#2c5e6b",
+            "#4f9a9a",
+            "#8fd0c2",
+            "#1f2148",
+            "#343a7a",
+            "#5a5fae",
+            "#8f87d1",
+            "#c3b5ec",
+            "#a9b8d6",
+            "#dfe6f5"
+          ]
+        },
+        "style_images": [
+          "apps/client/public/assets/packs/mossgrove.png",
+          "apps/client/public/assets/packs/starhollow.png"
+        ],
+        "style_description": "Cozy whimsical storybook pixel art of a single sealed card pack as a 64x64 game sprite. Chunky, readable silhouette with round friendly shapes. Clean 1 px dark plum outline, soft 2-3 step shading lit from the top-left, small bright highlights, clean pixel clusters without dithering noise or blur. Muted, earthy palette. Transparent background, no ground, no shadow, no text."
+      },
+      "seed": 21001,
+      "status": "completed",
+      "backgroundJobId": "7718d63e-9919-4888-8e11-a5e527abfe77",
+      "cost": {
+        "generations": 10,
+        "usd": 0.08163150832388136
+      },
+      "createdAt": "2026-11-23T23:51:54.949Z",
+      "outputs": [
+        {
+          "index": 1,
+          "file": "tools/artgen/candidates/t21/pack-mythic/01.png",
+          "review": "pending"
+        },
+        {
+          "index": 2,
+          "file": "tools/artgen/candidates/t21/pack-mythic/02.png",
+          "review": "pending"
+        },
+        {
+          "index": 3,
+          "file": "tools/artgen/candidates/t21/pack-mythic/03.png",
+          "review": "pending"
+        },
+        {
+          "index": 4,
+          "file": "tools/artgen/candidates/t21/pack-mythic/04.png",
+          "review": "pending"
+        },
+        {
+          "index": 5,
+          "file": "tools/artgen/candidates/t21/pack-mythic/05.png",
+          "review": "pending"
+        },
+        {
+          "index": 6,
+          "file": "tools/artgen/candidates/t21/pack-mythic/06.png",
+          "review": "pending"
+        },
+        {
+          "index": 7,
+          "file": "tools/artgen/candidates/t21/pack-mythic/07.png",
+          "review": "pending"
+        },
+        {
+          "index": 8,
+          "file": "tools/artgen/candidates/t21/pack-mythic/08.png",
+          "review": "pending"
+        },
+        {
+          "index": 9,
+          "file": "tools/artgen/candidates/t21/pack-mythic/09.png",
+          "review": "pending"
+        },
+        {
+          "index": 10,
+          "file": "tools/artgen/candidates/t21/pack-mythic/10.png",
+          "review": "approved",
+          "note": "user pick (T21)"
+        },
+        {
+          "index": 11,
+          "file": "tools/artgen/candidates/t21/pack-mythic/11.png",
+          "review": "pending"
+        },
+        {
+          "index": 12,
+          "file": "tools/artgen/candidates/t21/pack-mythic/12.png",
+          "review": "pending"
+        },
+        {
+          "index": 13,
+          "file": "tools/artgen/candidates/t21/pack-mythic/13.png",
+          "review": "pending"
+        },
+        {
+          "index": 14,
+          "file": "tools/artgen/candidates/t21/pack-mythic/14.png",
+          "review": "pending"
+        },
+        {
+          "index": 15,
+          "file": "tools/artgen/candidates/t21/pack-mythic/15.png",
+          "review": "pending"
+        },
+        {
+          "index": 16,
+          "file": "tools/artgen/candidates/t21/pack-mythic/16.png",
+          "review": "pending"
+        }
+      ]
+    },
+    {
       "id": "t17/mos-012-low",
       "spec": "t17",
       "job": "mos-012-low",

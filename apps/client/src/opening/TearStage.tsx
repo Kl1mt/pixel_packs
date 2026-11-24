@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { audio } from '../audio/audio.js';
-import { crossedTearStep, tearStepSound } from '../audio/events.js';
+import { crossedTearStep, sealSounds, tearStepSound } from '../audio/events.js';
 import { Button } from '../components/Button.js';
 import { TearScene, type TearSceneOptions } from './tearScene.js';
 import type { PackTheme } from './themes.js';
@@ -31,7 +31,8 @@ export function TearStage({ theme, packSrc, packName, mood, reduced, onTorn }: T
   const stepped = useRef(0);
   useEffect(() => {
     const step = tearStepSound(theme);
-    if (step && crossedTearStep(stepped.current, progress)) audio.play(step);
+    if (theme.seal) for (const id of sealSounds(stepped.current, progress)) audio.play(id);
+    else if (step && crossedTearStep(stepped.current, progress)) audio.play(step);
     stepped.current = progress;
   }, [progress, theme]);
   const torn = useRef(onTorn);
