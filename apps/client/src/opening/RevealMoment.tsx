@@ -84,7 +84,11 @@ export function RevealMoment(p: RevealMomentProps) {
           if (!el) return null;
           const r = el.getBoundingClientRect();
           const o = b.getBoundingClientRect();
-          return new DOMRect(r.left - o.left, r.top - o.top, r.width, r.height);
+          // The flip-in scales X about the centre: anchor on the centre and the untransformed
+          // width, so the moment doesn't slide while the card lands.
+          const w = el.offsetWidth || r.width;
+          const left = r.left + r.width / 2 - w / 2;
+          return new DOMRect(left - o.left, r.top - o.top, w, r.height);
         },
         onBeat: (at) => {
           setBeat(at);
