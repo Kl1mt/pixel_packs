@@ -1,4 +1,5 @@
 import { MASTER_PALETTE as P, type PackTypeId } from '@pixel-packs/shared';
+import { motes, type PetalLook } from './petals.js';
 
 /** One pixel of a pack wrapping (pack-local art px), `t` ∈ [0, 1] along its vine. */
 export interface WrapPixel {
@@ -23,8 +24,8 @@ export interface PackTheme {
   wrap: (inside: (x: number, y: number) => boolean) => WrapPixel[];
   /** Unwrap window of each vine within the tear progress (start, end). */
   vineWindows: readonly (readonly [number, number])[];
-  /** Falling petal colours; none means no petals. */
-  petals: readonly string[];
+  /** What falls: petal sprites or motes (T22); none means nothing falls. */
+  petals: readonly PetalLook[];
   /** Ambient petals per second while the scene is open. */
   ambient: number;
   /** Petals thrown out when the pack bursts open. */
@@ -55,7 +56,7 @@ export const PLAIN_THEME: PackTheme = {
 export const STARHOLLOW_THEME: PackTheme = {
   ...PLAIN_THEME,
   id: 'starhollow',
-  petals: [P.lavender, P.moonlight, P.silver],
+  petals: motes([P.lavender, P.moonlight, P.silver]),
   burst: 18,
   ground: [P.lilac, P.indigo],
   clasp: true,
@@ -116,7 +117,16 @@ export const MOSSGROVE_THEME: PackTheme = {
     [0, 0.7],
     [0.3, 1],
   ],
-  petals: [P.blush, P.rose, P.lichen, P.sprout, P.glow],
+  // Petal sprites in blossom pinks and cream, and a few small leaves (T22).
+  petals: [
+    { colour: P.blush, shade: P.rose, shape: 'blossom' },
+    { colour: P.blush, shade: P.rose, shape: 'round' },
+    { colour: P.rose, shade: P.berry, shape: 'slim' },
+    { colour: P.glow, shade: P.blush, shape: 'blossom' },
+    { colour: P.glow, shade: P.blush, shape: 'round' },
+    { colour: P.sprout, shade: P.leaf, shape: 'leaf' },
+    { colour: P.lichen, shade: P.moss, shape: 'leaf' },
+  ],
   ambient: 6,
   burst: 28,
   ground: [P.leaf, P.moss],

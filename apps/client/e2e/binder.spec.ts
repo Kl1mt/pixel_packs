@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { CARD_CATALOG, VARIANTS, type CollectionCopy } from '@pixel-packs/shared';
-import { loggedIn, settle } from './helpers.js';
+import { loggedIn, pretendOnboarded, settle } from './helpers.js';
 
 const OUT = '../../docs/binder';
 
@@ -71,6 +71,7 @@ function bigCollection(): CollectionCopy[] {
 
 test('binder: starter pulls, inspect, dust and pull history', async ({ page }) => {
   await loggedIn(page);
+  await pretendOnboarded(page);
   await openStarterPacks(page);
   const errors: string[] = [];
   page.on('console', (m) => {
@@ -121,6 +122,7 @@ test('binder: starter pulls, inspect, dust and pull history', async ({ page }) =
 test('binder with 1 200 copies stays at 60 fps', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await loggedIn(page);
+  await pretendOnboarded(page);
   const copies = bigCollection();
   const stack = copies.filter((c) => c.cardId === 'MOS-001').length;
   await page.route('/api/cards', (route) => route.fulfill({ json: { copies } }));
@@ -182,6 +184,7 @@ test('binder with 1 200 copies stays at 60 fps', async ({ page }) => {
 test('binder on a phone: one page, 1× cards', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await loggedIn(page);
+  await pretendOnboarded(page);
   const copies = bigCollection();
   await page.route('/api/cards', (route) => route.fulfill({ json: { copies } }));
   await page.goto('/binder');

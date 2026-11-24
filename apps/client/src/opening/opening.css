@@ -22,6 +22,16 @@
   outline: none;
 }
 
+/* The results still scroll (wheel, touch, keyboard: the dialog takes focus), but without
+   a visible scroll bar (T22). */
+.opening[data-phase='summary'] {
+  scrollbar-width: none;
+}
+
+.opening[data-phase='summary']::-webkit-scrollbar {
+  display: none;
+}
+
 /* ---- Tear ---- */
 .tear {
   flex: 1;

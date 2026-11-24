@@ -16,9 +16,40 @@ export const STARTER_CARDS: readonly string[] = [
 /** Stages from `courier` to `done` as 0–4. */
 export const stageIndex = (stage: OnboardingStage): number => ONBOARDING_STAGES.indexOf(stage);
 
-/** Forward-only move: the later of the two stages. */
-export function advanceStage(current: OnboardingStage, to: OnboardingStage): OnboardingStage {
-  return stageIndex(to) > stageIndex(current) ? to : current;
+/** Scripted packs a player opens in the `packs` stage before the binder tour. */
+export const SCRIPTED_PACKS = 2;
+
+/** What the player has done so far, as far as the stage order cares. */
+export interface OnboardingProgress {
+  scriptedPacksOpened: number;
+  /** Realm packs still in the satchel (if none are left, the pack step cannot block). */
+  realmPacksOwned: number;
+}
+
+/**
+ * Onboarding is mandatory (GDD §17, T22): a move is `ok` only to the very next stage,
+ * and out of `packs` only once both scripted packs are open (or no realm pack is left).
+ * A move to the current or an earlier stage is a `noop` (a retried request). Anything
+ * else is refused: `skip` jumps over a stage, `packsFirst` leaves packs unopened.
+ */
+export type AdvanceCheck = 'ok' | 'noop' | 'skip' | 'packsFirst';
+
+export function checkAdvance(
+  current: OnboardingStage,
+  to: OnboardingStage,
+  progress: OnboardingProgress,
+): AdvanceCheck {
+  const from = stageIndex(current);
+  const target = stageIndex(to);
+  if (target <= from) return 'noop';
+  if (target > from + 1) return 'skip';
+  if (
+    current === 'packs' &&
+    progress.scriptedPacksOpened < SCRIPTED_PACKS &&
+    progress.realmPacksOwned > 0
+  )
+    return 'packsFirst';
+  return 'ok';
 }
 
 /** True once the player has reached a stage that hands out the starter cards. */

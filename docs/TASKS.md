@@ -29,6 +29,7 @@ Each task lists the GDD sections to read (§ = section of `docs/GDD.md`) and its
 | T18 | M1 QA & polish | all M1 | todo |
 | T20 | Realm crest in the card crest socket | T11 | todo |
 | T21 | Mythic pack on the shelf + staged opening | T12, T13 | todo |
+| T22 | M1 feedback polish | T11–T16 | done |
 
 ---
 
@@ -513,6 +514,32 @@ Docs: §5, §7, §19
 - Found in T12: the Mythic pack (300 gems) is enabled on the server but has no pack art, so the shelf leaves it out.
 - Pack art (PixelLab, ask before spending), a shelf spot that shows gems, and its staged opening (lock → runes → burst, §7) as a `PackTheme` in `apps/client/src/opening/themes.ts`.
 - **Done when**: a Mythic pack can be bought, opened and revealed end to end, with screenshots.
+
+---
+
+### T22 — M1 feedback polish · M · budget ≤ 5 (pixflux, optional) · done
+Docs: §12, §16, §17, §18
+The user's feedback on M1 (each design change goes into GDD §29):
+1. **Onboarding is mandatory.** No skip options in `/welcome` (courier "Skip", "Save it for later", "Skip the tour", "Skip the welcome"); the player must finish it. Server-side resume stays. E2E specs use a test-only path instead of the UI skip, never exposed in production.
+2. **Card tilt** stays in inspect and is added to the pack-opening reveal (spotlight card and results cards): ≤ 8°, flat at rest, off under reduced motion.
+3. **Mossgrove tear**: vines and petals stay, but the falling single pixels become small petal sprites (a few shapes, palette colours, tumbling).
+4. **Results page**: same layout and scrolling, but no visible scroll bar (wheel/touch/keyboard still scroll; stays accessible).
+5. **First-Edition plate**: a bit smaller, bottom-right of the art window (stars stay top-left, mint plate stays unless it collides), in both the DOM and the Pixi card; tests and screenshots updated.
+- **Done when**: all five are in, typecheck/lint/tests/e2e pass, and screenshots are in the handoff notes.
+- **Handoff notes (2026-11-24)**:
+  - **No PixelLab spend (0 of ≤ 5).** The petals are drawn in code.
+  - **Mandatory onboarding**:
+    - Shared `checkAdvance` (`rules/onboarding.ts`, tested) replaces `advanceStage`: `ok` only to the next stage, `noop` for the current or an earlier one, `skip` or `packsFirst` (leaving `packs` before both scripted packs, unless no realm pack is left) → `409 onboardingOrder` (new error code).
+    - Server: `onboarding/service.ts` (`moveTo` grants the starter cards on reaching `starter`; `completeOnboarding` for the dev route). Dev-only `POST /api/dev/onboarding/complete` (`dev/routes.ts`; 404 in production, tested).
+    - Client: all four skip buttons and `.welcome__skip-all` are gone; "Continue" shows only when the satchel is empty. New `OnboardingGate` (layout route in `App.tsx`) sends unfinished players from `/packs`, `/binder`, `/binder/history` to `/welcome`; the binder stays for `?tour=1` in the tour stage. Settings stay reachable.
+    - E2E: `helpers.ts` `completeOnboarding` (dev route) replaces `skipOnboarding`, and `pretendOnboarded` mocks `GET /api/onboarding` where a spec must not get starter cards (binder: it dusts its pulls). `auth.spec` now lands on `/welcome` after sign-up. `onboarding.spec` checks that no skip button exists, the gate, the server's 409, and resuming after reloads.
+  - **Tilt**: new `components/Tilt.tsx` (`MAX_TILT` 8, `useReducedMotion`, `disabled`); `TiltCard` (inspect) uses it; `.tilt` CSS moved to `components.css`. The reveal spotlight card (`RevealStage`, held flat while a moment plays because the moment canvases match its box) and each results card (`SummaryStage`) are wrapped.
+  - **Petals** (`opening/petals.ts`, `petals.test.ts`): `PETAL_SHAPES` (blossom, round, slim, leaf; `#` face, `+` shade). `petalFrame` tumbles them: quarter turns plus flipping edge-on to a shaded back. A `PetalLook` is `{ colour, shade, shape }`; `motes()` keeps Starhollow's 2 px motes. Mossgrove's looks are in `themes.ts`.
+  - **Results**: `.opening[data-phase='summary']` has `scrollbar-width: none` and a hidden WebKit scroll bar. It scrolls by wheel, touch and keyboard (the dialog is focused on each phase). E2E checks this at a 420 px tall viewport.
+  - **First-Edition stamp** (`cardBadges.ts`): `stamp()` is 24×8 (fill + 1 px padding + ink drop shadow), 2 px inside the art window's bottom-right. DOM and Pixi share the pixel list; the Pixi = DOM e2e check passes.
+  - **Screenshots**: `docs/cards/badges.png` (stamp bottom-right), new `docs/opening/reveal-tilt.png`, `docs/opening/t22-mossgrove-petals.gif` and `t22-reveal-tilt.gif` (made by hand from e2e frames), `docs/onboarding/courier.png` (no skip). Every e2e screenshot was rewritten.
+  - **Flaky**: `moments.spec` "key frames … reduced" failed once in the full run (reduced frame changed within the same beat) and passed twice alone. It looks timing-related and existed before T22 (no moment code changed).
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (375), client `e2e` (24 passed, 1 opt-in skipped).
 
 ## Later milestones
 These are broken down into tasks in a planning session at the start of each milestone.

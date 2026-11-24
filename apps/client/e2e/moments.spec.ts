@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { loggedIn, settle } from './helpers.js';
+import { completeOnboarding, loggedIn, settle } from './helpers.js';
 
 const OUT = '../../docs/opening/moments';
 
@@ -106,6 +106,7 @@ test.describe('reveal moments', () => {
     page,
   }) => {
     await loggedIn(page);
+    await completeOnboarding(page);
     await page.goto('/debug');
     const forcing = page.getByRole('region', { name: 'Dev forcing' });
     await forcing.getByRole('button', { name: '+5 starhollow' }).click();

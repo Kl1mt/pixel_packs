@@ -111,6 +111,8 @@ export const ApiErrorCodeSchema = z.enum([
   'idempotencyConflict',
   'packDisabled',
   'cannotDust',
+  // Onboarding (T22)
+  'onboardingOrder',
 ]);
 export type ApiErrorCode = z.infer<typeof ApiErrorCodeSchema>;
 

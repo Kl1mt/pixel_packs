@@ -58,6 +58,7 @@ describe('dev routes', () => {
     const { c } = await newPlayer(prod.app);
     expect((await c.post('/api/dev/grant', { gold: 1 })).statusCode).toBe(404);
     expect((await c.post('/api/dev/odds-override', { packs: 1 })).statusCode).toBe(404);
+    expect((await c.post('/api/dev/onboarding/complete')).statusCode).toBe(404);
     const { c: guest } = await newPlayer(t.app);
     await guest.post('/api/auth/logout');
     expect((await guest.post('/api/dev/grant', { gold: 1 })).statusCode).toBe(401);

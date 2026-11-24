@@ -168,6 +168,7 @@ Each realm also has a sub-palette (§19), a village building (§11) and realm ba
   - Drag across the seal to tear it (mouse or touch), or click.
   - Cards are revealed in ascending rarity, featured slot last. "Reveal all" and "Skip" are available.
   - Afterwards comes a results summary with NEW badges and "Dust extras".
+  - The spotlight card and the result cards tilt towards the pointer like inspect (§12; T22).
 - **Themes**: each realm pack has its own tear animation (§3). The Mythic pack opens in stages (lock → runes → burst); event packs use an event theme.
 
 ## 8. Economy
@@ -243,7 +244,7 @@ Each realm also has a sub-palette (§19), a village building (§11) and realm ba
 - **Binder**: a book with page turns and realm tabs.
   - Missing cards show as silhouettes; copies are stacked.
   - Filters for rarity, variant, stars, owned, edition and minted, plus sorting; the grid is virtualised.
-- **Card inspect**: 3D tilt with the card's shader, lore, the traits of each copy, and fuse / dust / wishlist / showcase actions.
+- **Card inspect**: 3D tilt with the card's shader (the pack reveal tilts too, T22), lore, the traits of each copy, and fuse / dust / wishlist / showcase actions.
 - **Collection log**: completion per realm and per variant.
   - Rewards: card backs, binder themes, titles, animated profile frames (e.g. for a full Glitch row).
 - **Pull history**: every opening, filterable.
@@ -314,13 +315,13 @@ Goal: simple, intuitive and modern with eye-candy, and clearly hand-crafted, **n
 **Device**: desktop-first, responsive down to phone width.
 
 ## 17. Onboarding (first ~90 s)
-1. Register; a moth courier from the Wandering Post delivers your first satchel (3 short lines, skippable).
+1. Register; a moth courier from the Wandering Post delivers your first satchel (3 short lines).
 2. **Pack 1 (scripted)**: an Epic in the featured slot, which teaches the anticipation glow.
 3. **Pack 2 (scripted)**: the featured card is a Foil, which teaches variants and tilt.
 4. A binder tour (2 tooltips), then 5 account-bound starter cards, which form a ready caravan for M4.
 5. Home, with the free-pack timer highlighted.
 
-Every step can be skipped. In scripted packs only the forced slot is scripted; everything else rolls normally. Scripted packs don't count towards pity or the best-pull leaderboard.
+Onboarding is mandatory: no step can be skipped, and the server keeps the step so a reload resumes it (T22). In scripted packs only the forced slot is scripted; everything else rolls normally. Scripted packs don't count towards pity or the best-pull leaderboard.
 
 ## 18. Accessibility & performance
 - Rarity is readable without colour (pips, frame material, label), and the rarity hues are checked for colour-blind safety.
@@ -567,3 +568,8 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T16: Home = the satchel (realm packs with counts + "Open packs" → Packs), the free-pack timer (big "Ready"/countdown, 16-segment stepped bar, "Take <realm>"), the daily post (7 tiles, claimed ones stamped "Got it") and the purse. Right after onboarding the timer gets a dashed frame and an "Every 8 hours!" note (3 small nudges). Quests and the season bar wait for their milestones |
 | 2026-11-23 | T14: PixelLab audio needs a tier 2 plan (`/music` per its docs; `/sound-effects` answered 403 although the docs say tier 1), so M1 music and SFX are written in code: a Web Audio chiptune synth for music (home loop 84 bpm F major, opening loop 100 bpm D minor with `epic` and `golden` layers by the pack's best rarity) and an offline sfxr-style synth for the SFX (§20's 20 plus 7 for T13's moments and tears) (rendered by `artgen sfx-synth` into one Howler sprite). 0 generations spent. The PixelLab path (`artgen sfx`, `sfx-sprite`) is kept for a later plan upgrade. The user has not yet chosen between this and upgrading the plan |
 | 2026-11-23 | T14: settings gain `muted` (mute keeps the volume levels). UI sounds come from one delegated listener for `.btn`, nav links and `[data-sound="press"]` (hover only for mouse pointers, throttled). Flips play flip → rarity stinger (+90 ms); T13's moment beats carry the rest (swell, rays, whoosh, tick, boom; the Legendary/Mythic stinger at the crest; variant stingers on their beat). The tear clicks the Starhollow clasp or rustles the Mossgrove vines at each quarter. "Skip" is silent. Currency gains (gold, gems, dust) play their sound whenever the wallet goes up. Fusion has its sound but no event until fusion exists |
+| 2026-11-24 | T22 (user feedback): onboarding is mandatory. No "Skip", "Save it for later", "Skip the tour" or "Skip the welcome". The server only moves to the next stage and leaves the packs step only after both scripted packs are open (`409 onboardingOrder`; "Continue" remains only for an empty satchel). Until it is done, `/packs`, `/binder` and `/binder/history` send the player to `/welcome` (the binder stays open for its tour). E2E specs finish it through the dev-only `POST /api/dev/onboarding/complete` (no route in production). Replaces the T16 skipping row |
+| 2026-11-24 | T22 (user feedback): the 3D tilt (≤ 8°, pointer-driven, flat at rest, off under reduced motion) also applies to the reveal's spotlight card (held flat while a moment plays around it) and the result cards. Extends the T15 row; every other card still never rotates |
+| 2026-11-24 | T22 (user feedback): the Mossgrove tear drops small petal sprites drawn in code instead of 2 px pixels: blossom, round and slim petals (blush/rose, cream/blush, rose/berry) and small leaves (sprout/leaf, lichen/moss), ≤ 4×4 px, tumbling (quarter turns plus flipping edge-on to a shaded back). Starhollow keeps its 2 px motes. No PixelLab spend |
+| 2026-11-24 | T22 (user feedback): the results page scrolls as before (wheel, touch, keyboard; the dialog takes focus) but shows no scroll bar |
+| 2026-11-24 | T22 (user feedback): the First-Edition badge is a smaller stamp (berry fill, 1 px padding, ink drop shadow right and below: 24×8 px, was a 25×9 outlined plate) in the art window's bottom-right corner. Stars stay top-left and the mint plate top-right. Replaces the T11 placement "under the stars" |

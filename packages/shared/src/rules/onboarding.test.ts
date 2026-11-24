@@ -1,13 +1,35 @@
 import { describe, expect, it } from 'vitest';
 import { CARD_CATALOG } from '../data/cards/index.js';
-import { STARTER_CARDS, advanceStage, grantsStarterCards } from './onboarding.js';
+import { STARTER_CARDS, checkAdvance, grantsStarterCards } from './onboarding.js';
 
 describe('onboarding', () => {
-  it('only moves forward', () => {
-    expect(advanceStage('courier', 'tour')).toBe('tour');
-    expect(advanceStage('tour', 'packs')).toBe('tour');
-    expect(advanceStage('done', 'courier')).toBe('done');
-    expect(advanceStage('packs', 'packs')).toBe('packs');
+  const fresh = { scriptedPacksOpened: 0, realmPacksOwned: 2 };
+  const opened = { scriptedPacksOpened: 2, realmPacksOwned: 1 };
+
+  it('moves one stage at a time and never skips (T22)', () => {
+    expect(checkAdvance('courier', 'packs', fresh)).toBe('ok');
+    expect(checkAdvance('courier', 'tour', fresh)).toBe('skip');
+    expect(checkAdvance('courier', 'done', fresh)).toBe('skip');
+    expect(checkAdvance('tour', 'starter', opened)).toBe('ok');
+    expect(checkAdvance('starter', 'done', opened)).toBe('ok');
+  });
+
+  it('treats the current or an earlier stage as a retry', () => {
+    expect(checkAdvance('packs', 'packs', fresh)).toBe('noop');
+    expect(checkAdvance('tour', 'packs', opened)).toBe('noop');
+    expect(checkAdvance('done', 'courier', opened)).toBe('noop');
+  });
+
+  it('leaves the packs only once both scripted packs are open', () => {
+    expect(checkAdvance('packs', 'tour', fresh)).toBe('packsFirst');
+    expect(checkAdvance('packs', 'tour', { scriptedPacksOpened: 1, realmPacksOwned: 1 })).toBe(
+      'packsFirst',
+    );
+    expect(checkAdvance('packs', 'tour', opened)).toBe('ok');
+    // An empty satchel cannot trap the player.
+    expect(checkAdvance('packs', 'tour', { scriptedPacksOpened: 1, realmPacksOwned: 0 })).toBe(
+      'ok',
+    );
   });
 
   it('grants the starter cards from the starter stage on', () => {

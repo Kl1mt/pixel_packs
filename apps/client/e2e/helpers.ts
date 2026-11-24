@@ -65,7 +65,21 @@ export async function apiPost(page: Page, path: string, data?: object) {
   return res;
 }
 
-/** Skips the whole onboarding (T16), as "Skip the welcome" does: Home opens straight away. */
-export async function skipOnboarding(page: Page) {
-  await apiPost(page, '/api/onboarding/advance', { stage: 'done' });
+/**
+ * Finishes the whole onboarding at once, starter cards included, so a spec starts at Home.
+ * Onboarding cannot be skipped by players (T22); this uses the dev-only route
+ * `POST /api/dev/onboarding/complete`, which a production server does not have.
+ */
+export async function completeOnboarding(page: Page) {
+  await apiPost(page, '/api/dev/onboarding/complete');
+}
+
+/**
+ * Lets the client believe onboarding is done (a mocked `GET /api/onboarding`) without
+ * changing the server: no starter cards are granted, so a spec sees only what it pulled.
+ */
+export async function pretendOnboarded(page: Page) {
+  await page.route('/api/onboarding', (route) =>
+    route.fulfill({ json: { stage: 'done', scriptedPacksOpened: 2, starterCards: null } }),
+  );
 }

@@ -7,6 +7,7 @@ import { RegisterPage } from './auth/RegisterPage.js';
 import { ResetPasswordPage } from './auth/ResetPasswordPage.js';
 import { VerifyEmailPage } from './auth/VerifyEmailPage.js';
 import { AppShell } from './shell/AppShell.js';
+import { OnboardingGate } from './onboarding/OnboardingGate.js';
 import { HomePage } from './pages/HomePage.js';
 import { NotFoundPage } from './pages/NotFoundPage.js';
 import { PacksPage } from './pages/PacksPage.js';
@@ -60,16 +61,23 @@ const router = createBrowserRouter([
         lazy: () =>
           import('./onboarding/WelcomePage.js').then((m) => ({ Component: m.WelcomePage })),
       },
-      { path: '/packs', element: <PacksPage /> },
       {
-        // Binder, inspect and pull history (T15): lazy, so their chunk loads on first visit.
-        path: '/binder',
-        hydrateFallbackElement: <p className="on-ground">Opening the binder…</p>,
-        lazy: () => import('./binder/BinderPage.js').then((m) => ({ Component: m.BinderPage })),
-      },
-      {
-        path: '/binder/history',
-        lazy: () => import('./binder/HistoryPage.js').then((m) => ({ Component: m.HistoryPage })),
+        // Until onboarding is done these send the player back to /welcome (T22).
+        element: <OnboardingGate />,
+        children: [
+          { path: '/packs', element: <PacksPage /> },
+          {
+            // Binder, inspect and pull history (T15): lazy, so their chunk loads on first visit.
+            path: '/binder',
+            hydrateFallbackElement: <p className="on-ground">Opening the binder…</p>,
+            lazy: () => import('./binder/BinderPage.js').then((m) => ({ Component: m.BinderPage })),
+          },
+          {
+            path: '/binder/history',
+            lazy: () =>
+              import('./binder/HistoryPage.js').then((m) => ({ Component: m.HistoryPage })),
+          },
+        ],
       },
       { path: '/settings', element: <SettingsPage /> },
       { path: '*', element: <NotFoundPage /> },

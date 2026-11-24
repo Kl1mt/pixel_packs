@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { loggedIn, settle } from './helpers.js';
+import { completeOnboarding, loggedIn, settle } from './helpers.js';
 
 const OUT = '../../docs/opening';
 
@@ -49,6 +49,7 @@ test.describe('pack opening', () => {
       if (m.type() === 'error') errors.push(m.text());
     });
     await loggedIn(page);
+    await completeOnboarding(page);
     await page.goto('/packs');
     const moss = page.getByRole('listitem', { name: 'Mossgrove pack' });
     await expect(moss.getByLabel('1 owned')).toBeVisible();
@@ -94,6 +95,21 @@ test.describe('pack opening', () => {
     await settle(page);
     await shot(page, 'reveal-featured');
 
+    // The spotlight card leans towards the pointer (≤ 8°, T22) and rests flat again.
+    const spot = page.locator('.reveal__card .tilt');
+    await expect(spot).not.toHaveAttribute('data-tilting', 'true');
+    const box = await spot.boundingBox();
+    if (box) await page.mouse.move(box.x + box.width * 0.9, box.y + box.height * 0.1);
+    await expect(spot).toHaveAttribute('data-tilting', 'true');
+    const tiltY = await spot
+      .locator('.tilt__card')
+      .evaluate((el) => parseFloat(el.style.getPropertyValue('--tilt-y')));
+    expect(Math.abs(tiltY)).toBeGreaterThan(0);
+    expect(Math.abs(tiltY)).toBeLessThanOrEqual(8);
+    await shot(page, 'reveal-tilt');
+    await page.mouse.move(2, 2);
+    await expect(spot).not.toHaveAttribute('data-tilting', 'true');
+
     // Results: the reveal is reported finished.
     await page.getByRole('button', { name: 'See results' }).click();
     await expect(scene).toHaveAttribute('data-phase', 'summary');
@@ -101,6 +117,19 @@ test.describe('pack opening', () => {
     await expect(page.locator('.summary__card')).toHaveCount(5);
     await settle(page);
     await shot(page, 'summary');
+    // The results tilt too, and scroll without a visible scroll bar (T22).
+    const result = page.locator('.summary__card .tilt').first();
+    await result.hover({ position: { x: 4, y: 4 } });
+    await expect(result).toHaveAttribute('data-tilting', 'true');
+    await page.mouse.move(2, 2);
+    expect(await scene.evaluate((el) => getComputedStyle(el).scrollbarWidth)).toBe('none');
+    await page.setViewportSize({ width: 1280, height: 420 });
+    await scene.focus();
+    const scrolled = await scene.evaluate((el) => el.scrollHeight > el.clientHeight);
+    expect(scrolled).toBe(true);
+    await page.keyboard.press('End');
+    await expect.poll(() => scene.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    await page.setViewportSize({ width: 1280, height: 860 });
     await expect.poll(() => pending(page)).toBeNull();
     await page.getByRole('button', { name: 'Back to the shelf' }).click();
     await expect(scene).toBeHidden();
@@ -130,6 +159,7 @@ test.describe('pack opening', () => {
 
   test('buying, the free pack and dev forcing from /debug', async ({ page }) => {
     await loggedIn(page);
+    await completeOnboarding(page);
     await page.goto('/packs');
     const moss = page.getByRole('listitem', { name: 'Mossgrove pack' });
     // No gold yet; the free pack goes to the inventory.

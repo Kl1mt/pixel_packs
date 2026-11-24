@@ -290,7 +290,7 @@ export class TearScene {
 
     this.stardust(o, false);
     for (const petal of this.petals)
-      for (const [x, y] of petalPixels(petal)) this.px(x, y, petal.colour);
+      for (const [x, y, colour] of petalPixels(petal)) this.px(x, y, colour);
   }
 }
 
