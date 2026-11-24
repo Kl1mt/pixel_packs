@@ -54,6 +54,11 @@ test.describe('reveal moments', () => {
       await page.goto(`/debug/moments?${q.replace(/&at=\d+/, '')}&fx=reduced`);
       const moment = page.getByTestId('moment');
       await expect(moment).not.toHaveAttribute('data-beat', 'none');
+      // The front layer follows the card's box, so let fonts and images settle first.
+      await settle(page);
+      await page.evaluate(
+        () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
+      );
       const frame = () =>
         page.evaluate(() => {
           const canvases = Array.from(

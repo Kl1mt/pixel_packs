@@ -472,7 +472,7 @@ Docs: §16, §17
   - **For T13/T14**: the welcome flow uses `OpeningScene` unchanged apart from `doneLabel`, so new reveals and sounds show up in onboarding too.
   - Design decisions are in GDD §29 (T16 rows).
 
-### T17 — Character & idle-animation trial · M · budget ≤ 30
+### T17 — Character & idle-animation trial · M · budget ≤ 30 · done
 Docs: §19
 - Take the Mossgrove Legendary and the Starhollow Mythic and make a character for each from its card art with `/create-character-v3`.
 - Generate a south idle loop (binder) and the east idle/walk/attack/hurt animations using the §19 spec.
@@ -480,6 +480,25 @@ Docs: §19
 - **User decides**: keep or drop the binder idle loops.
 - Lock the battle-sprite spec (view, canvas, baseline) in GDD §19.
 - **Done when**: the decision is recorded in GDD §29.
+- **Handoff notes (2026-11-23)**:
+  - **Spend**: 24 of 30 generations (balance 788 → 764). 4 × `/create-character-v3` and 20 × `/characters/animations`, each measured at 1. Logged in `tools/artgen/manifest.json` under `t17/*`.
+  - **Decisions (GDD §19/§29)**:
+    - binder idle loops are **dropped**;
+    - battle sprites use `view: "low top-down"` (the user picked it from the mock battle lanes);
+    - animation frames keep the API's canvas (84–88 px, mostly 88×88);
+    - the game aligns each critter by one anchor: the bbox centre x and bottom row of east idle frame 1, on a shared ground line.
+  - **Tool**: `tools/artgen/src/character/` with these commands:
+    - `artgen character <spec> --budget n`: characters, then animations; the manifest entry is written even when a job fails after it was submitted;
+    - `character-board <spec> <out.png>`: animated side-by-side board plus the consistency stats (feet rows per frame, bbox ranges, colour count, edge contact);
+    - `character-lane <spec> <outDir> <left> <right>…`: mock battle lane at 3×, enemy mirrored.
+    - Previews are APNG, made by a small encoder in `apng.ts` (no new dependency).
+  - **Spec**: `tools/artgen/specs/t17.json`. Seeds 1701–1704 for the characters and seed × 10 + n for the animations. It holds the §19 constraint text and the per-animation actions; M4 can copy it.
+  - **Trial output**: `tools/artgen/candidates/t17/` (≈ 2 MB), with a README and measured stats, `board.png`, and `lanes/`. Characters stay on the PixelLab account (ids in the manifest `extra.characterId`); the low top-down ones can be reused in M4.
+  - **Watch in M4**:
+    - Umbra's low top-down hurt recoil touches the canvas edge, despite "nothing leaves the canvas". Check `TOUCHES EDGE` in the stats and retry those (1 generation each).
+    - Some first frames are not exactly the base pose. The side-view Morel hurt starts in the recoil.
+    - The Morel low top-down east animations came on 84×84 and the rest on 88×88, so position by the anchor, never by canvas size.
+  - Verified: `pnpm typecheck`, `pnpm lint`, `pnpm test` (379 tests) pass.
 
 ### T18 — M1 QA & polish · M
 Docs: §16, §18, §26

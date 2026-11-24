@@ -14,6 +14,7 @@ import { uiSplit } from './ui.js';
 import { composeT06, T06_PACK_NUMBERS } from './compose/t06.js';
 import { buildStyleTile } from './styleTile/build.js';
 import { writeArtLayout } from './artLayout/artLayout.js';
+import { characterBoardCommand, characterCommand, characterLaneCommand } from './character/cli.js';
 import { sfxCommand, sfxSpriteCommand, sfxSynthCommand } from './sfx/cli.js';
 
 const USAGE = `artgen <command>
@@ -37,6 +38,11 @@ const USAGE = `artgen <command>
   sfx-synth <spec.json>                    render the spec's clips with the code synth (free) and
                                            build the sprite + docs/audio/sfx previews (ffmpeg)
   ui-split <entry>                         split a create-ui-asset template into elements (free)
+  character <spec.json> --budget <n> [--only a,b] [--dry-run]
+                                           create characters + animations (T17, /create-character-v3)
+  character-board <spec.json> <out.png>    animated side-by-side APNG of a character spec (free)
+  character-lane <spec.json> <outDir> <left> <right> […]
+                                           mock battle lane APNGs per character pair (free)
   spend                                    total generations logged in the manifest`;
 
 const log = (msg: string) => {
@@ -169,6 +175,19 @@ async function main(argv: string[]): Promise<void> {
       const [entryId] = rest;
       if (!entryId) throw new Error(USAGE);
       await uiSplit(client, await readManifest(), entryId, log);
+      return;
+    }
+    case 'character': {
+      const args = { rest, budget: values.budget, only: values.only, dryRun: values['dry-run'] };
+      await characterCommand(client, args, log);
+      return;
+    }
+    case 'character-lane': {
+      await characterLaneCommand(rest, log);
+      return;
+    }
+    case 'character-board': {
+      await characterBoardCommand(rest, log);
       return;
     }
     case 'sfx': {

@@ -14,6 +14,9 @@ pnpm --filter @pixel-packs/artgen start spend
 pnpm --filter @pixel-packs/artgen start ui-split <entry>      # cut a create-ui-asset template into elements (free)
 pnpm --filter @pixel-packs/artgen start compose-t06           # T06 frames/packs/UI/icons/font → apps/client/public/assets
 pnpm --filter @pixel-packs/artgen start style-tile            # writes apps/client/public/style-tile.html
+pnpm --filter @pixel-packs/artgen start character tools/artgen/specs/t17.json --budget 30 [--only a,b] [--dry-run]
+pnpm --filter @pixel-packs/artgen start character-board tools/artgen/specs/t17.json tools/artgen/candidates/t17/board.png
+pnpm --filter @pixel-packs/artgen start character-lane tools/artgen/specs/t17.json tools/artgen/candidates/t17/lanes mos-012-low sta-013-low
 pnpm --filter @pixel-packs/artgen start sfx-synth tools/artgen/specs/t14-sfx.json   # code synth → SFX sprite (free)
 pnpm --filter @pixel-packs/artgen start sfx tools/artgen/specs/t14-sfx.json --budget 40 [--only a,b] [--retake] [--dry-run]
 pnpm --filter @pixel-packs/artgen start sfx-sprite tools/artgen/specs/t14-sfx.json  # PixelLab takes → SFX sprite
@@ -26,3 +29,4 @@ pnpm --filter @pixel-packs/artgen start sfx-sprite tools/artgen/specs/t14-sfx.js
 - The key is injected by the cloud proxy (`NODE_USE_ENV_PROXY=1` in the start script makes Node's `fetch` use it). Locally, set `PIXELLAB_API_KEY`.
 - Approved style anchors and their `style_description`: `anchors.json`.
 - **Audio (T14, GDD §20)**: `specs/t14-sfx.json` lists the 20 SFX (sprite key, prompt, seconds). `sfx-synth` renders them with the sfxr-style synth in `src/sfx/synth/` (one `SoundDef` per key in `sounds.ts`). It writes MP3 previews to `docs/audio/sfx/`, `apps/client/public/assets/audio/sfx.{webm,mp3}` and the offsets module `apps/client/src/audio/sfxSprite.ts`; it needs `ffmpeg`. `sfx` / `sfx-sprite` do the same from PixelLab `/sound-effects` takes (logged in the manifest, approved take or newest; trimmed and loudness-matched), which needs a tier 2 PixelLab plan.
+- **Characters** (`src/character/`, spec schema in `src/character/spec.ts`): `/create-character-v3` from the card art, then one `/characters/animations` call per animation and direction. The view and canvas are locked in GDD §19. `character-board` and `character-lane` write APNG previews and print consistency stats. Both are free.

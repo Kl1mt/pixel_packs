@@ -344,9 +344,14 @@ Onboarding is mandatory: no step can be skipped, and the server keeps the step s
 - **Card-art prompt template** (fixed): `<critter description>, cozy whimsical fantasy critter, full body, facing the viewer in 3/4 front view, centered, feet on one ground line, transparent background, 1 px dark outline, soft shading, light from top-left, no text, no frame, no scenery`. Constants: 64×64, `no_background: true`, the realm palette, and a recorded seed.
 - **One PixelLab character per card**:
   - The approved card art is the south-facing `reference_image` for `/create-character-v3` with `n_directions: 4` (the API minimum).
-  - South = binder idle loop (Legendary/Mythic only); east = battle sprite; enemies are the east sprite mirrored.
-  - The `view` parameter, canvas size and feet baseline are chosen in the T17 trial, then locked here.
-- **Battle animation spec**, identical for every critter, made with `/characters/animations` and `directions: ["east"]` only:
+  - East = battle sprite; enemies are the east sprite mirrored. South is only the reference; there are no binder animations (T17).
+  - **Locked in T17** (`artgen character`, spec `tools/artgen/specs/t17.json`):
+    - `view: "low top-down"` (user pick over `side`, which drifted more); `template_id` by body (`mannequin` for upright critters, `bear`/`cat`/`dog`/`horse` for four-legged ones); a recorded seed.
+    - Description: `<card name>: <card artPrompt>`; the reference image carries the look.
+    - Rotations come back at 64×64. Animation frames come on the API's own wider canvas (84–88 px square, 88×88 in most cases). It is **kept as delivered**, never rescaled.
+    - **Feet baseline**: the game places every frame by one anchor per critter, the bbox centre x and bottom opaque row of east idle frame 1, on a shared ground line. Frames are not edited to fix drift.
+    - Measured cost: 1 generation per character and 1 per animation direction at this size, so ≈ 5 per critter (character + 4 animations).
+- **Battle animation spec**, identical for every critter, made with `/characters/animations` in `mode: "v3"`, `directions: ["east"]` only, `keep_first_frame: false`, and the realm palette as `target_palette`:
 
 | Animation | Frames | Rule |
 |---|---|---|
@@ -362,7 +367,7 @@ Onboarding is mandatory: no step can be skipped, and the server keeps the step s
   - no background and no ground shadow (the game adds one);
   - feet stay on the fixed baseline;
   - the first and last frame are the base pose.
-- **Binder idle loops** for Legendary/Mythic: south direction, 4–8 frames, staying inside the 64×64 window. Trialled in T17 and dropped if the consistency is poor.
+- **Binder idle loops**: **dropped** after the T17 trial (user decision, §29). Binder and card art stay static; Legendary/Mythic get their life from the T11 shaders and T13 reveals.
 
 **Other assets**
 - Pack art: `/generate-with-style-v2` with the realm anchors (64×64). Icons: `/create-image-pixflux` at 32×32 (1 generation each), reduced to 16×16 in code (T06).
@@ -460,7 +465,7 @@ The task breakdown is in `docs/TASKS.md`.
 **User to-dos** (when a task needs them)
 - Create a Discord application for OAuth and put its client ID and secret into `.env` (guide: README → "Optional: Discord login"). Until then Discord login stays hidden.
 - Domain and SMTP provider (alpha deploy).
-- Approvals: card list (T03), style anchors (T04), card art (T05), style tile (T06), idle-loop keep/scrap (T17).
+- Approvals: card list (T03), style anchors (T04), card art (T05), style tile (T06), idle-loop keep/scrap (T17, done: dropped).
 
 ## 28. Parked ideas
 - Gilded, Celestial, Inverted and Full-Art variants.
@@ -568,6 +573,10 @@ The task breakdown is in `docs/TASKS.md`.
 | 2026-11-23 | T16: Home = the satchel (realm packs with counts + "Open packs" → Packs), the free-pack timer (big "Ready"/countdown, 16-segment stepped bar, "Take <realm>"), the daily post (7 tiles, claimed ones stamped "Got it") and the purse. Right after onboarding the timer gets a dashed frame and an "Every 8 hours!" note (3 small nudges). Quests and the season bar wait for their milestones |
 | 2026-11-23 | T14: PixelLab audio needs a tier 2 plan (`/music` per its docs; `/sound-effects` answered 403 although the docs say tier 1), so M1 music and SFX are written in code: a Web Audio chiptune synth for music (home loop 84 bpm F major, opening loop 100 bpm D minor with `epic` and `golden` layers by the pack's best rarity) and an offline sfxr-style synth for the SFX (§20's 20 plus 7 for T13's moments and tears) (rendered by `artgen sfx-synth` into one Howler sprite). 0 generations spent. The PixelLab path (`artgen sfx`, `sfx-sprite`) is kept for a later plan upgrade. The user has not yet chosen between this and upgrading the plan |
 | 2026-11-23 | T14: settings gain `muted` (mute keeps the volume levels). UI sounds come from one delegated listener for `.btn`, nav links and `[data-sound="press"]` (hover only for mouse pointers, throttled). Flips play flip → rarity stinger (+90 ms); T13's moment beats carry the rest (swell, rays, whoosh, tick, boom; the Legendary/Mythic stinger at the crest; variant stingers on their beat). The tear clicks the Starhollow clasp or rustles the Mossgrove vines at each quarter. "Skip" is silent. Currency gains (gold, gems, dust) play their sound whenever the wallet goes up. Fusion has its sound but no event until fusion exists |
+| 2026-11-23 | T17: binder idle loops (south, Legendary/Mythic) are **dropped**; no binder animations (user decision after the trial) |
+| 2026-11-23 | T17: battle sprites use `/create-character-v3` with `view: "low top-down"` (user pick after a mock battle-lane comparison with `side`; low top-down kept the feet within 1 px in almost every animation, side drifted up to 3 px) |
+| 2026-11-23 | T17: battle animation frames keep the API's own canvas (84–88 px, mostly 88×88), never rescaled. The game aligns each critter by one anchor, the bbox centre x and bottom row of east idle frame 1, on a shared ground line (user deferred to the recommendation) |
+| 2026-11-23 | T17: measured cost 1 generation per `/create-character-v3` call and 1 per `/characters/animations` direction at this size (≈ 5 per critter), well under the §19 M4 estimate |
 | 2026-11-24 | T21: Mythic pack art = candidate #10 of one `/generate-with-style-v2` call (the two realm packs as style images, master palette; user pick): a midnight-velvet satchel with a teal rune band and a gold heart padlock, `packs/mythic.png`. It sits last on the shop shelf with its gem price; the Packs page shows a second pity meter for the Mythic group under the realm one. |
 | 2026-11-24 | T21: the Mythic staged opening (§7 lock → runes → burst) follows the seam tear: up to 30 % the padlock rattles harder, at 30 % it clicks open, hops and drops off the satchel, showing a rune sigil (code-drawn) where it hung; from 30 % to the breaking point (80 %) the sigil and the band's rune glyphs light gold outward from the centre (a tick per step); the burst adds a gold shockwave from the sigil and rune sparks. Lock and runes are read off the sprite (warm pixels in the lock box, teal pixels in the band rows), so new art only needs re-measured rects. The click fallback takes 1.8 s (450 ms for realm packs) so all stages show; reduced effects keep the lock still and drop the hop, shockwave and sparks. |
 | 2026-11-24 | T22 (user feedback): onboarding is mandatory. No "Skip", "Save it for later", "Skip the tour" or "Skip the welcome". The server only moves to the next stage and leaves the packs step only after both scripted packs are open (`409 onboardingOrder`; "Continue" remains only for an empty satchel). Until it is done, `/packs`, `/binder` and `/binder/history` send the player to `/welcome` (the binder stays open for its tour). E2E specs finish it through the dev-only `POST /api/dev/onboarding/complete` (no route in production). Replaces the T16 skipping row |
